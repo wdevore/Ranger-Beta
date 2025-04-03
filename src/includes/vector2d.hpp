@@ -15,9 +15,18 @@ namespace Core
         double y{};
 
         Vector2D(/* args */) = default;
-        // Don't declare this here unless you are going to make it "virtual"
+        Vector2D(double x, double y) : x(x), y(y) {}
+        // ????Don't declare this here unless you are going to make it "virtual"
         // in relation to polymorphism.
-        // ~Vector2D();
+        ~Vector2D();
+
+        void setByAngle(double radians);
+
+        double getLength();
+        inline double getLengthSqr();
+        void add(double x, double y);
+        void add(const Vector2D &vector);
+        void sub(double x, double y);
 
         // This is equivalent to toString()
         friend std::ostream &operator<<(std::ostream &os, const Vector2D &obj)

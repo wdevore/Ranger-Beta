@@ -1,23 +1,18 @@
 #pragma once
 
 #include <iostream>
-#include <string>
 
 namespace Core
 {
     class Vector2D
     {
     private:
-        // static std::unique_ptr<Vector2D> tmp = std::make_unique<Vector2D>();
-
     public:
         double x{};
         double y{};
 
         Vector2D(/* args */) = default;
         Vector2D(double x, double y) : x(x), y(y) {}
-        // ????Don't declare this here unless you are going to make it "virtual"
-        // in relation to polymorphism.
         ~Vector2D();
 
         void setByAngle(double radians);
@@ -26,7 +21,22 @@ namespace Core
         inline double getLengthSqr();
         void add(double x, double y);
         void add(const Vector2D &vector);
+        void add(const Vector2D &v1, const Vector2D &v2, Vector2D &out);
         void sub(double x, double y);
+        void sub(const Vector2D &vector);
+        void sub(const Vector2D &v1, const Vector2D &v2, Vector2D &out);
+        void scale(double s);
+        void scale(double s, const Vector2D &v, Vector2D &out);
+        void div(double s);
+
+        void normalize();
+        void setDirection(double radianAngle);
+        double vectorDistance(const Vector2D &v1, const Vector2D &v2);
+        double dot(const Vector2D &v1, const Vector2D &v2);
+        double angleBetween(const Vector2D &v1, const Vector2D &v2);
+        double cross(const Vector2D &v1, const Vector2D &v2);
+
+        void toIdentity();
 
         // This is equivalent to toString()
         friend std::ostream &operator<<(std::ostream &os, const Vector2D &obj)
@@ -35,5 +45,8 @@ namespace Core
             return os;
         }
     };
+
+    static Vector2D tmpVec1_ = Vector2D{};
+    static Vector2D tmpVec2_ = Vector2D{};
 
 }

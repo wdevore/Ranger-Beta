@@ -8,6 +8,7 @@ add_subdirectory(maths)
 
 set(CORE_SOURCES
     maths/vector2d.cpp
+    maths/matrix4.cpp
 )
 
 # Add library as a ".a" file

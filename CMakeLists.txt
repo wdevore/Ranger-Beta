@@ -7,6 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 add_executable(ranger main.cpp)
 
+# # If you don't include CTest you will get a "warning" that it
+# # can't find DartConfiguration.tcl
+# include(CTest)
 enable_testing()
 
 # The "bin" value states that we'd like the binary output of src

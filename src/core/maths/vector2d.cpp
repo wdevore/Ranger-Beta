@@ -1,7 +1,8 @@
 #include <iostream>
 #include <cmath>
 
-#include "vector2d.hpp"
+#include <vector2d.hpp>
+#include <constants.hpp>
 
 namespace Core
 {
@@ -43,9 +44,108 @@ namespace Core
         y += vector.y;
     }
 
+    void Vector2D::add(const Vector2D &v1, const Vector2D &v2, Vector2D &out)
+    {
+        out.x = v1.x + v2.x;
+        out.y = v1.y + v2.y;
+    }
+
     void Vector2D::sub(double x, double y)
     {
         this->x -= x;
         this->y -= y;
+    }
+    /// @brief Decrement by a vector
+    /// @param vector
+    void Vector2D::sub(const Vector2D &vector)
+    {
+        x -= vector.x;
+        y -= vector.y;
+    }
+
+    /// @brief out = v1 - v2
+    /// @param v1 Vector2D
+    /// @param v2 Vector2D
+    /// @param out Vector2D
+    void Vector2D::sub(const Vector2D &v1, const Vector2D &v2, Vector2D &out)
+    {
+        out.x = v1.x - v2.x;
+        out.y = v1.y - v2.y;
+    }
+
+    void Vector2D::scale(double s)
+    {
+        x *= s;
+        y *= s;
+    }
+
+    void Vector2D::scale(double s, const Vector2D &v, Vector2D &out)
+    {
+        out.x = s * v.x;
+        out.y = s * v.y;
+    }
+
+    void Vector2D::div(double s)
+    {
+        x /= s;
+        y /= s;
+    }
+
+    void Vector2D::normalize()
+    {
+        double len = getLength();
+        if (len != 0.0)
+        {
+            div(len);
+        }
+    }
+
+    void Vector2D::setDirection(double radianAngle)
+    {
+        x = cos(radianAngle);
+        y = sin(radianAngle);
+    }
+
+    double Vector2D::vectorDistance(const Vector2D &v1, const Vector2D &v2)
+    {
+        sub(v1, v2, tmpVec1_);
+        return tmpVec1_.getLength();
+    }
+
+    double Vector2D::dot(const Vector2D &v1, const Vector2D &v2)
+    {
+        return v1.x * v2.x + v1.y * v2.y;
+    }
+
+    double Vector2D::angleBetween(const Vector2D &v1, const Vector2D &v2)
+    {
+        tmpVec1_.x = v1.x;
+        tmpVec1_.y = v1.y;
+
+        tmpVec2_.x = v2.x;
+        tmpVec2_.y = v2.y;
+
+        tmpVec1_.normalize();
+        tmpVec2_.normalize();
+
+        double angl = atan2(cross(tmpVec1_, tmpVec2_), dot(tmpVec1_, tmpVec2_));
+
+        if (fabs(angl) < EPSILON)
+        {
+            return 0.0;
+        }
+
+        return angl;
+    }
+
+    double Vector2D::cross(const Vector2D &v1, const Vector2D &v2)
+    {
+        return v1.x * v2.y - v1.y * v2.x;
+    }
+
+    void Vector2D::toIdentity()
+    {
+        x = 1.0;
+        y = 1.0;
     }
 }

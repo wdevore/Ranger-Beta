@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 set(MATHS_SOURCES
     vector2d.cpp
+    matrix4.cpp
 )
 
 # Add library as a ".a" file

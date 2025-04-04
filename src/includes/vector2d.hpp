@@ -16,9 +16,9 @@ namespace Core
         ~Vector2D();
 
         void setByAngle(double radians);
+        void set(double x, double y);
+        void set(const Vector2D &vector);
 
-        double getLength();
-        inline double getLengthSqr();
         void add(double x, double y);
         void add(const Vector2D &vector);
         void add(const Vector2D &v1, const Vector2D &v2, Vector2D &out);
@@ -29,6 +29,8 @@ namespace Core
         void scale(double s, const Vector2D &v, Vector2D &out);
         void div(double s);
 
+        double getLength();
+        inline double getLengthSqr();
         void normalize();
         void setDirection(double radianAngle);
         double vectorDistance(const Vector2D &v1, const Vector2D &v2);

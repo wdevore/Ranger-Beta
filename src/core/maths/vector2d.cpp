@@ -17,6 +17,18 @@ namespace Core
         y = sin(radians);
     }
 
+    void Vector2D::set(double x, double y)
+    {
+        this->x = x;
+        this->y = y;
+    }
+
+    void Vector2D::set(const Vector2D &vector)
+    {
+        x = vector.x;
+        y = vector.y;
+    }
+
     double Vector2D::getLength()
     {
         return sqrt(getLengthSqr());
@@ -95,9 +107,7 @@ namespace Core
     {
         double len = getLength();
         if (len != 0.0)
-        {
             div(len);
-        }
     }
 
     void Vector2D::setDirection(double radianAngle)
@@ -119,11 +129,8 @@ namespace Core
 
     double Vector2D::angleBetween(const Vector2D &v1, const Vector2D &v2)
     {
-        tmpVec1_.x = v1.x;
-        tmpVec1_.y = v1.y;
-
-        tmpVec2_.x = v2.x;
-        tmpVec2_.y = v2.y;
+        tmpVec1_.set(v1);
+        tmpVec2_.set(v2);
 
         tmpVec1_.normalize();
         tmpVec2_.normalize();
@@ -131,9 +138,7 @@ namespace Core
         double angl = atan2(cross(tmpVec1_, tmpVec2_), dot(tmpVec1_, tmpVec2_));
 
         if (fabs(angl) < EPSILON)
-        {
             return 0.0;
-        }
 
         return angl;
     }

@@ -21,6 +21,7 @@ void create_zero_vector()
         std::cout << "ERROR: vector not <0,0> got: " << vector << std::endl;
         std::exit(1);
     }
+
     std::cout << "======= End Test =========\n";
 }
 

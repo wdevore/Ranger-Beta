@@ -49,9 +49,15 @@ void test_vector()
 }
 
 // ---------------- Matrix4 -------------------------
-void create_zero_matrix4();
+void zero_matrix();
+void identity_matrix();
+void set_translate_matrix();
+void get_translate_matrix();
 
 void test_matrix4()
 {
-    create_zero_matrix4();
+    zero_matrix();
+    identity_matrix();
+    set_translate_matrix();
+    get_translate_matrix();
 }

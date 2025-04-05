@@ -58,8 +58,7 @@ namespace Core
 
     void Vector2D::add(const Vector2D &v1, const Vector2D &v2, Vector2D &out)
     {
-        out.x = v1.x + v2.x;
-        out.y = v1.y + v2.y;
+        out.set(v1.x + v2.x, v1.y + v2.y);
     }
 
     void Vector2D::sub(double x, double y)

@@ -3,6 +3,7 @@
 // #define CONFIG_CATCH_MAIN
 void test_vector();
 void test_matrix4();
+void test_rectangle();
 
 int main(int argc, char *argv[])
 {
@@ -22,6 +23,10 @@ int main(int argc, char *argv[])
     {
         test_matrix4();
     }
+    else if (selectedTestSuite == "rectangle_suite")
+    {
+        test_rectangle();
+    }
     else
     {
         std::cout << "No test suite selected" << std::endl;
@@ -39,6 +44,7 @@ void vector_normalize();
 
 void test_vector()
 {
+    std::cout << "%%%%%%%%%% Vector tests %%%%%%%%%%" << std::endl;
     create_zero_vector();
     vector_add();
     vector_length();
@@ -53,11 +59,41 @@ void zero_matrix();
 void identity_matrix();
 void set_translate_matrix();
 void get_translate_matrix();
+void set_rotation_matrix();
+void rotate_vector_ccw_matrix();
+void rotate_vector_cw_matrix();
+void translate_vector_point_matrix();
+void scale_vector_matrix();
 
 void test_matrix4()
 {
+    std::cout << "%%%%%%%%%% Matrix tests %%%%%%%%%%" << std::endl;
     zero_matrix();
     identity_matrix();
     set_translate_matrix();
     get_translate_matrix();
+    set_rotation_matrix();
+    rotate_vector_ccw_matrix();
+    rotate_vector_cw_matrix();
+    translate_vector_point_matrix();
+    scale_vector_matrix();
+}
+
+// ---------------- Rectangle -------------------------
+void point_contained_rectangle();
+void point_not_contained_rectangle();
+void point_inside_rectangle();
+void point_inside_right_edge_rectangle();
+void rectangle_intersects_rectangle();
+void rectangle_not_intersects_rectangle();
+
+void test_rectangle()
+{
+    std::cout << "%%%%%%%%%% Rectangle tests %%%%%%%%%%" << std::endl;
+    point_contained_rectangle();
+    point_not_contained_rectangle();
+    point_inside_rectangle();
+    point_inside_right_edge_rectangle();
+    rectangle_intersects_rectangle();
+    rectangle_not_intersects_rectangle();
 }

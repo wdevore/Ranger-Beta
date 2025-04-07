@@ -4,6 +4,8 @@
 
 namespace Core
 {
+    class Matrix4;
+
     class Vector2D
     {
     private:
@@ -29,14 +31,16 @@ namespace Core
         void scale(double s, const Vector2D &v, Vector2D &out);
         void div(double s);
 
-        double getLength();
-        inline double getLengthSqr();
+        double getLength() const;
+        inline double getLengthSqr() const;
         void normalize();
         void setDirection(double radianAngle);
         double vectorDistance(const Vector2D &v1, const Vector2D &v2);
         double dot(const Vector2D &v1, const Vector2D &v2);
         double angleBetween(const Vector2D &v1, const Vector2D &v2);
         double cross(const Vector2D &v1, const Vector2D &v2);
+
+        void mul(const Matrix4 &m);
 
         void toIdentity();
 

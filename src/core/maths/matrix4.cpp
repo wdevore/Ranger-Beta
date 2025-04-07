@@ -1,8 +1,9 @@
 #include <cmath>
 
+#include <constants.hpp>
 #include <matrix4.hpp>
 #include <vector3.hpp>
-#include <constants.hpp>
+#include <affinetransform.hpp>
 
 namespace Core
 {
@@ -44,6 +45,26 @@ namespace Core
         e[m31] = m.e[m31];
         e[m32] = m.e[m32];
         e[m33] = m.e[m33];
+    }
+
+    void Matrix4::set(const AffineTransform &aft)
+    {
+        e[0] = aft.m[0];
+        e[1] = aft.m[1];
+        e[2] = aft.m[2];
+        e[3] = aft.m[3];
+        e[4] = aft.m[4];
+        e[5] = aft.m[5];
+        e[6] = aft.m[6];
+        e[7] = aft.m[7];
+        e[8] = aft.m[8];
+        e[9] = aft.m[9];
+        e[10] = aft.m[10];
+        e[11] = aft.m[11];
+        e[12] = aft.m[12];
+        e[13] = aft.m[13];
+        e[14] = aft.m[14];
+        e[15] = aft.m[15];
     }
 
     void Matrix4::translate(const Vector3 &v)
@@ -115,7 +136,7 @@ namespace Core
     ///      ```
     void Matrix4::setRotation(double radianAngle)
     {
-        if (radianAngle < Core::EPSILON)
+        if (fabs(radianAngle) < Core::EPSILON)
             return;
 
         toIdentity();
@@ -249,6 +270,12 @@ namespace Core
 
     void Matrix4::transformVector(const Vector3 &vIn, Vector3 &vOut)
     {
+        //    M(Cell/Row)
+        // |M00 M01 M02 M03|
+        // |M10 M11 M12 M13|
+        // |               |
+        // |               |
+
         vOut.x = e[m00] * vIn.x + e[m01] * vIn.y + e[m02] * vIn.z + e[m03]; // x
         vOut.y = e[m10] * vIn.x + e[m11] * vIn.y + e[m12] * vIn.z + e[m13]; // y
         vOut.z = 0.0;

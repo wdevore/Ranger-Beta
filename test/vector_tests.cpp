@@ -4,11 +4,7 @@
 #include <vector2d.hpp>
 #include <constants.hpp>
 
-bool epsilonCheck(double expected, double actual)
-{
-    double dif = fabs(expected - actual);
-    return dif > Core::EPSILON;
-}
+bool epsilonCheck(double expected, double actual);
 
 void create_zero_vector()
 {

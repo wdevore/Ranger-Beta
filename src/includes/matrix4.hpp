@@ -18,6 +18,7 @@
 namespace Core
 {
     class Vector3; // Forward decleration to avoid cyclic dependency.
+    class AffineTransform;
 
     class Matrix4
     {
@@ -94,6 +95,7 @@ namespace Core
         static Matrix4 createAsIdentity();
 
         void set(const Matrix4 &m);
+        void set(const AffineTransform &aft);
 
         void translate(const Vector3 &v);
         void translate(double x, double y, double z);
@@ -120,14 +122,15 @@ namespace Core
         {
             os << std::endl
                << std::fixed << std::setprecision(5);
-            os << "|" << m.e[m00] << ", " << m.e[m01] << ", " << m.e[m02] << ", " << m.e[m03] << "|\n";
-            os << "|" << m.e[m10] << ", " << m.e[m11] << ", " << m.e[m12] << ", " << m.e[m13] << "|\n";
-            os << "|" << m.e[m20] << ", " << m.e[m21] << ", " << m.e[m22] << ", " << m.e[m23] << "|\n";
-            os << "|" << m.e[m30] << ", " << m.e[m31] << ", " << m.e[m32] << ", " << m.e[m33] << "|\n";
+            os << "|" << std::setw(10) << m.e[m00] << "," << std::setw(10) << m.e[m01] << "," << std::setw(10) << m.e[m02] << "," << std::setw(10) << m.e[m03] << "|\n";
+            os << "|" << std::setw(10) << m.e[m10] << "," << std::setw(10) << m.e[m11] << "," << std::setw(10) << m.e[m12] << "," << std::setw(10) << m.e[m13] << "|\n";
+            os << "|" << std::setw(10) << m.e[m20] << "," << std::setw(10) << m.e[m21] << "," << std::setw(10) << m.e[m22] << "," << std::setw(10) << m.e[m23] << "|\n";
+            os << "|" << std::setw(10) << m.e[m30] << "," << std::setw(10) << m.e[m31] << "," << std::setw(10) << m.e[m32] << "," << std::setw(10) << m.e[m33] << "|\n";
             return os;
         }
     };
 
+    // I use a pointer for "a" because I will "this" which is a pointer.
     void multiply(const Matrix4 *a, const Matrix4 &b, Matrix4 &out);
 
     // Temporary matricies for multiplication

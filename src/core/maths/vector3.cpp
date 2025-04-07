@@ -94,12 +94,12 @@ namespace Core
         z += vector.z * scalar;
     }
 
-    double Vector3::getLength()
+    double Vector3::getLength() const
     {
         return sqrt(getLengthSqr());
     }
 
-    inline double Vector3::getLengthSqr()
+    inline double Vector3::getLengthSqr() const
     {
         return x * x + y * y;
     }
@@ -107,7 +107,7 @@ namespace Core
     /// @brief Epsilon equality
     /// @param vector
     /// @return bool
-    bool Vector3::equal(const Vector3 &other)
+    bool Vector3::equal(const Vector3 &other) const
     {
         return (fabs(x - other.x) <= Core::EPSILON) &&
                (fabs(y - other.y) <= Core::EPSILON) &&
@@ -117,12 +117,12 @@ namespace Core
     /// @brief the euclidean distance between the two specified vectors
     /// @param vector Vector3
     /// @return double
-    double Vector3::distance(const Vector3 &vector)
+    double Vector3::distance(const Vector3 &vector) const
     {
         return sqrt(distanceSquared(vector));
     }
 
-    inline double Vector3::distanceSquared(const Vector3 &vector)
+    inline double Vector3::distanceSquared(const Vector3 &vector) const
     {
         double a = vector.x - x;
         double b = vector.y - y;
@@ -172,7 +172,7 @@ namespace Core
             m.e[Matrix4::m23];
     }
 
-    Vector3 Vector3::clone(const Vector3 &vector)
+    Vector3 Vector3::clone(const Vector3 &vector) const
     {
         return Vector3{vector.x, vector.y, vector.z};
     }

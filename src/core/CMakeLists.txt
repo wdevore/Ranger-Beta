@@ -7,8 +7,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 add_subdirectory(maths)
 
 set(CORE_SOURCES
+    # Maths
     maths/vector2d.cpp
     maths/matrix4.cpp
+    maths/vector3.cpp
+    # Geometry
+    geometry/point.cpp
+    geometry/rectangle.cpp
 )
 
 # Add library as a ".a" file

@@ -3,6 +3,7 @@
 
 #include <vector2d.hpp>
 #include <constants.hpp>
+#include <matrix4.hpp>
 
 namespace Core
 {
@@ -29,12 +30,12 @@ namespace Core
         y = vector.y;
     }
 
-    double Vector2D::getLength()
+    double Vector2D::getLength() const
     {
         return sqrt(getLengthSqr());
     }
 
-    inline double Vector2D::getLengthSqr()
+    inline double Vector2D::getLengthSqr() const
     {
         return x * x + y * y;
     }
@@ -145,6 +146,12 @@ namespace Core
     double Vector2D::cross(const Vector2D &v1, const Vector2D &v2)
     {
         return v1.x * v2.y - v1.y * v2.x;
+    }
+
+    void Vector2D::mul(const Matrix4 &m)
+    {
+        x = x * m.e[Matrix4::m00] + y * m.e[Matrix4::m01] + m.e[Matrix4::m03];
+        y = x * m.e[Matrix4::m10] + y * m.e[Matrix4::m11] + m.e[Matrix4::m13];
     }
 
     void Vector2D::toIdentity()

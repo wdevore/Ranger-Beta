@@ -20,8 +20,10 @@ set(SOURCE_DIR ../src)
 
 add_executable(${PROJECT_NAME}
     unit_tests.cpp
+    helpers.cpp
     vector_tests.cpp
     matrix4_tests.cpp
+    rectangle_tests.cpp
 )
 
 # target_link_libraries(unit_tests PRIVATE Catch2::Catch2)
@@ -36,7 +38,19 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${SOURCE_DIR}/includes)
 
 # ----------------------- Test Suites ------------------------------------
 add_test(NAME vector_tests COMMAND ${PROJECT_NAME} "vector_suite")
+
 add_test(NAME matrix4_tests COMMAND ${PROJECT_NAME} "matrix_suite")
+# ----Below doesn't work! in VSCode IDE ----
+# This property controls the maximum size of the output captured by ctest
+# for a test. Setting it to -1 disables truncation, effectively achieving the
+# same as CTEST_FULL_OUTPUT=1 for that specific test.
+# set_tests_properties(matrix4_tests PROPERTIES
+#   OUTPUT_TRUNCATION_BUFFER_SIZE -1
+# )
+# However, adding
+# std::cout << "CTEST_FULL_OUTPUT" << std::endl;
+# As the first line in you test method does.
+add_test(NAME rectangle_tests COMMAND ${PROJECT_NAME} "rectangle_suite")
 
 # catch_discover_tests(unit_tests)
 

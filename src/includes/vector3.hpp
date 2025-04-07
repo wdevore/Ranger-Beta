@@ -40,16 +40,16 @@ namespace Core
         void uniformScale(double s);
         void nonUniformScale(double s);
         void mulScaleAdd(const Vector3 &vector, double scalar);
-        double getLength();
-        double getLengthSqr();
-        bool equal(const Vector3 &vector);
-        double distance(const Vector3 &vector);
-        double distanceSquared(const Vector3 &vector);
+        double getLength() const;
+        double getLengthSqr() const;
+        bool equal(const Vector3 &vector) const;
+        double distance(const Vector3 &vector) const;
+        double distanceSquared(const Vector3 &vector) const;
         double dot(const Vector3 &vector);
         void cross(const Vector3 &vector);
         void mul(const Matrix4 &m);
 
-        Vector3 clone(const Vector3 &vector);
+        Vector3 clone(const Vector3 &vector) const;
 
         // This is equivalent to toString()
         friend std::ostream &operator<<(std::ostream &os, const Vector3 &obj)

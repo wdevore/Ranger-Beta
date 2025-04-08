@@ -4,6 +4,7 @@
 void test_vector();
 void test_matrix4();
 void test_rectangle();
+void test_affinetransform();
 
 int main(int argc, char *argv[])
 {
@@ -26,6 +27,10 @@ int main(int argc, char *argv[])
     else if (selectedTestSuite == "rectangle_suite")
     {
         test_rectangle();
+    }
+    else if (selectedTestSuite == "affinetrx_suite")
+    {
+        test_affinetransform();
     }
     else
     {
@@ -86,6 +91,8 @@ void point_inside_rectangle();
 void point_inside_right_edge_rectangle();
 void rectangle_intersects_rectangle();
 void rectangle_not_intersects_rectangle();
+void rectangle_contains_rectangle();
+void rectangle_not_contains_rectangle();
 
 void test_rectangle()
 {
@@ -96,4 +103,17 @@ void test_rectangle()
     point_inside_right_edge_rectangle();
     rectangle_intersects_rectangle();
     rectangle_not_intersects_rectangle();
+    rectangle_contains_rectangle();
+    rectangle_not_contains_rectangle();
+}
+
+// ---------------- Affinetransform -------------------------
+void set_affinetransform();
+void maketranslate_affinetransform();
+
+void test_affinetransform()
+{
+    std::cout << "%%%%%%%%%% Affinetransform tests %%%%%%%%%%" << std::endl;
+    set_affinetransform();
+    maketranslate_affinetransform();
 }

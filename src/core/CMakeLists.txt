@@ -11,6 +11,7 @@ set(CORE_SOURCES
     maths/vector2d.cpp
     maths/matrix4.cpp
     maths/vector3.cpp
+    maths/affinetransform.cpp
     # Geometry
     geometry/point.cpp
     geometry/rectangle.cpp

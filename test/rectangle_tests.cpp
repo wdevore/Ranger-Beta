@@ -150,3 +150,55 @@ void rectangle_not_intersects_rectangle()
 
     std::cout << "======= End Test =========\n";
 }
+
+void rectangle_contains_rectangle()
+{
+    std::cout << "---- TESTING: rectangle_contains_rectangle ----" << std::endl;
+
+    Core::Rectangle rec{};
+    rec.set(100.0, 100.0);
+
+    std::cout << rec << std::endl;
+
+    Core::Rectangle rec2{};
+    rec2.set(25.0, 25.0, 50.0, 50.0);
+
+    std::cout << rec2 << std::endl;
+
+    // They rec should contain rec2
+    bool contains = rec.contains(rec2);
+
+    if (!contains)
+    {
+        std::cout << "'rec' should contain 'rec2' rectangle" << std::endl;
+        std::exit(1);
+    }
+
+    std::cout << "======= End Test =========\n";
+}
+
+void rectangle_not_contains_rectangle()
+{
+    std::cout << "---- TESTING: rectangle_not_contains_rectangle ----" << std::endl;
+
+    Core::Rectangle rec{};
+    rec.set(100.0, 100.0);
+
+    std::cout << rec << std::endl;
+
+    Core::Rectangle rec2{};
+    rec2.set(90.0, 90.0, 150.0, 150.0);
+
+    std::cout << rec2 << std::endl;
+
+    // They rec should NOT contain rec2
+    bool contains = rec.contains(rec2);
+
+    if (contains)
+    {
+        std::cout << "'rec' should not contain 'rec2' rectangle" << std::endl;
+        std::exit(1);
+    }
+
+    std::cout << "======= End Test =========\n";
+}

@@ -104,20 +104,7 @@ namespace Core
         /// | 0 0 1 0 |      | m2 m6 m10 m14 |
         /// | 0 0 0 1 |      | m3 m7 m11 m15 |
         ///```
-        friend std::ostream &toString4x4(std::ostream &os, const AffineTransform &aft)
-        {
-            using std::endl;
-            using std::setw;
-            using at = AffineTransform;
-
-            os << endl
-               << std::fixed << std::setprecision(5);
-            os << "|" << setw(10) << aft.getA() << "," << setw(10) << aft.getC() << "," << setw(10) << aft.m[at::m8] << setw(10) << aft.getTx() << "|\n";
-            os << "|" << setw(10) << aft.getB() << "," << setw(10) << aft.getD() << "," << setw(10) << aft.m[at::m9] << setw(10) << aft.getTy() << "|\n";
-            os << "|" << setw(10) << aft.m[at::m2] << "," << setw(10) << aft.m[at::m6] << "," << setw(10) << aft.m[at::m10] << setw(10) << aft.m[at::m14] << "|\n";
-            os << "|" << setw(10) << aft.m[at::m3] << "," << setw(10) << aft.m[at::m7] << "," << setw(10) << aft.m[at::m11] << setw(10) << aft.m[at::m15] << "|\n";
-            return os;
-        }
+        std::ostringstream toString4x4();
     };
 
 }

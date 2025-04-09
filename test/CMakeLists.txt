@@ -25,6 +25,7 @@ add_executable(${PROJECT_NAME}
     matrix4_tests.cpp
     rectangle_tests.cpp
     affinetransform_tests.cpp
+    node_tests.cpp
 )
 
 # target_link_libraries(unit_tests PRIVATE Catch2::Catch2)
@@ -54,6 +55,7 @@ add_test(NAME matrix4_tests COMMAND ${PROJECT_NAME} "matrix_suite")
 
 add_test(NAME rectangle_tests COMMAND ${PROJECT_NAME} "rectangle_suite")
 add_test(NAME affinetransform_tests COMMAND ${PROJECT_NAME} "affinetrx_suite")
+add_test(NAME node_tests COMMAND ${PROJECT_NAME} "node_suite")
 
 # catch_discover_tests(unit_tests)
 

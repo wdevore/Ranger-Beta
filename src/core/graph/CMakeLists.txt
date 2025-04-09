@@ -4,16 +4,16 @@ set(CMAKE_CXX_STANDARD           17)
 # I want c++17 to the require minimum
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
-set(MATHS_SOURCES
-    point.cpp
-    rectangle.cpp
+set(GRAPH_SOURCES
+    group.cpp
+    node.cpp
 )
 
 # Add library as a ".a" file
-add_library(GeometryLib OBJECT
-    ${MATHS_SOURCES}
+add_library(GraphLib OBJECT
+    ${GRAPH_SOURCES}
 )
 
-target_include_directories(GeometryLib
+target_include_directories(GraphLib
  PUBLIC ../../includes
 )

@@ -387,20 +387,21 @@ namespace Core
     /// | 0 0 1 0 |      | m2 m6 m10 m14 |
     /// | 0 0 0 1 |      | m3 m7 m11 m15 |
     ///```
-    std::ostringstream AffineTransform::toString4x4()
+    std::string AffineTransform::toString4x4()
     {
         using std::endl;
         using std::setw;
         using at = AffineTransform;
         std::ostringstream oss;
 
-        oss << std::endl;
-        oss << std::fixed << std::setprecision(5);
-        oss << "|" << setw(10) << getA() << "," << setw(10) << getC() << "," << setw(10) << m[at::m8] << setw(10) << getTx() << "|\n";
-        oss << "|" << setw(10) << getB() << "," << setw(10) << getD() << "," << setw(10) << m[at::m9] << setw(10) << getTy() << "|\n";
-        oss << "|" << setw(10) << m[at::m2] << "," << setw(10) << m[at::m6] << "," << setw(10) << m[at::m10] << setw(10) << m[at::m14] << "|\n";
-        oss << "|" << setw(10) << m[at::m3] << "," << setw(10) << m[at::m7] << "," << setw(10) << m[at::m11] << setw(10) << m[at::m15] << "|\n";
-        return oss;
+        oss << std::endl
+            << std::fixed << std::setprecision(5)
+            << "|" << setw(10) << getA() << "," << setw(10) << getC() << "," << setw(10) << m[at::m8] << setw(10) << getTx() << "|\n"
+            << "|" << setw(10) << getB() << "," << setw(10) << getD() << "," << setw(10) << m[at::m9] << setw(10) << getTy() << "|\n"
+            << "|" << setw(10) << m[at::m2] << "," << setw(10) << m[at::m6] << "," << setw(10) << m[at::m10] << setw(10) << m[at::m14] << "|\n"
+            << "|" << setw(10) << m[at::m3] << "," << setw(10) << m[at::m7] << "," << setw(10) << m[at::m11] << setw(10) << m[at::m15] << "|\n";
+
+        return oss.str();
     }
 
 }

@@ -5,6 +5,7 @@ void test_vector();
 void test_matrix4();
 void test_rectangle();
 void test_affinetransform();
+void test_node();
 
 int main(int argc, char *argv[])
 {
@@ -31,6 +32,10 @@ int main(int argc, char *argv[])
     else if (selectedTestSuite == "affinetrx_suite")
     {
         test_affinetransform();
+    }
+    else if (selectedTestSuite == "node_suite")
+    {
+        test_node();
     }
     else
     {
@@ -110,10 +115,27 @@ void test_rectangle()
 // ---------------- Affinetransform -------------------------
 void set_affinetransform();
 void maketranslate_affinetransform();
+void makeScale_affinetransform();
+void scale_affinetransform();
+void rotate_ccw_affinetransform();
 
 void test_affinetransform()
 {
     std::cout << "%%%%%%%%%% Affinetransform tests %%%%%%%%%%" << std::endl;
     set_affinetransform();
     maketranslate_affinetransform();
+    makeScale_affinetransform();
+    scale_affinetransform();
+    rotate_ccw_affinetransform();
+}
+
+// ---------------- Node -------------------------
+void create_node();
+void append_child_node();
+
+void test_node()
+{
+    std::cout << "%%%%%%%%%% Node tests %%%%%%%%%%" << std::endl;
+    create_node();
+    append_child_node();
 }

@@ -91,9 +91,9 @@ namespace Core
             using std::setw;
 
             os << endl
-               << std::fixed << std::setprecision(5);
-            os << "|" << setw(10) << aft.getA() << "," << setw(10) << aft.getC() << "," << setw(10) << aft.getTx() << "|\n";
-            os << "|" << setw(10) << aft.getB() << "," << setw(10) << aft.getD() << "," << setw(10) << aft.getTy() << "|\n";
+               << std::fixed << std::setprecision(5)
+               << "|" << setw(10) << aft.getA() << "," << setw(10) << aft.getC() << "," << setw(10) << aft.getTx() << "|\n"
+               << "|" << setw(10) << aft.getB() << "," << setw(10) << aft.getD() << "," << setw(10) << aft.getTy() << "|\n";
             return os;
         }
 
@@ -104,7 +104,7 @@ namespace Core
         /// | 0 0 1 0 |      | m2 m6 m10 m14 |
         /// | 0 0 0 1 |      | m3 m7 m11 m15 |
         ///```
-        std::ostringstream toString4x4();
+        std::string toString4x4();
     };
 
 }

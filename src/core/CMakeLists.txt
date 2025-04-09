@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD           17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 add_subdirectory(maths)
+add_subdirectory(geometry)
+add_subdirectory(graph)
 
 set(CORE_SOURCES
     # Maths
@@ -15,6 +17,9 @@ set(CORE_SOURCES
     # Geometry
     geometry/point.cpp
     geometry/rectangle.cpp
+    # Graph
+    graph/node.cpp
+    graph/group.cpp
 )
 
 # Add library as a ".a" file
@@ -29,4 +34,6 @@ add_library(CoreLib OBJECT
 # CoreLib is built from these libraries
 target_link_libraries(CoreLib
     PUBLIC MathsLib
+    PUBLIC GeometryLib
+    PUBLIC GraphLib
 )

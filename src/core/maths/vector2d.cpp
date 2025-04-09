@@ -7,10 +7,10 @@
 
 namespace Core
 {
-    Vector2D::~Vector2D()
-    {
-        std::cout << "Vector2D destructor called." << std::endl;
-    }
+    // Vector2D::~Vector2D()
+    // {
+    //     std::cout << "Vector2D destructor called." << std::endl;
+    // }
 
     void Vector2D::setByAngle(double radians)
     {

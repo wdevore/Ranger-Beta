@@ -15,7 +15,7 @@ namespace Core
 
         Vector2D(/* args */) = default;
         Vector2D(double x, double y) : x(x), y(y) {}
-        ~Vector2D();
+        ~Vector2D() = default;
 
         void setByAngle(double radians);
         void set(double x, double y);

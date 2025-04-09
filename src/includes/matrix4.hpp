@@ -121,11 +121,11 @@ namespace Core
         friend std::ostream &operator<<(std::ostream &os, const Matrix4 &m)
         {
             os << std::endl
-               << std::fixed << std::setprecision(5);
-            os << "|" << std::setw(10) << m.e[m00] << "," << std::setw(10) << m.e[m01] << "," << std::setw(10) << m.e[m02] << "," << std::setw(10) << m.e[m03] << "|\n";
-            os << "|" << std::setw(10) << m.e[m10] << "," << std::setw(10) << m.e[m11] << "," << std::setw(10) << m.e[m12] << "," << std::setw(10) << m.e[m13] << "|\n";
-            os << "|" << std::setw(10) << m.e[m20] << "," << std::setw(10) << m.e[m21] << "," << std::setw(10) << m.e[m22] << "," << std::setw(10) << m.e[m23] << "|\n";
-            os << "|" << std::setw(10) << m.e[m30] << "," << std::setw(10) << m.e[m31] << "," << std::setw(10) << m.e[m32] << "," << std::setw(10) << m.e[m33] << "|\n";
+               << std::fixed << std::setprecision(5)
+               << "|" << std::setw(10) << m.e[m00] << "," << std::setw(10) << m.e[m01] << "," << std::setw(10) << m.e[m02] << "," << std::setw(10) << m.e[m03] << "|\n"
+               << "|" << std::setw(10) << m.e[m10] << "," << std::setw(10) << m.e[m11] << "," << std::setw(10) << m.e[m12] << "," << std::setw(10) << m.e[m13] << "|\n"
+               << "|" << std::setw(10) << m.e[m20] << "," << std::setw(10) << m.e[m21] << "," << std::setw(10) << m.e[m22] << "," << std::setw(10) << m.e[m23] << "|\n"
+               << "|" << std::setw(10) << m.e[m30] << "," << std::setw(10) << m.e[m31] << "," << std::setw(10) << m.e[m32] << "," << std::setw(10) << m.e[m33] << "|\n";
             return os;
         }
     };

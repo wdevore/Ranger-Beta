@@ -20,6 +20,7 @@ set(CORE_SOURCES
     # Graph
     graph/node.cpp
     graph/group.cpp
+    graph/transform.cpp
 )
 
 # Add library as a ".a" file

@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(GRAPH_SOURCES
     group.cpp
     node.cpp
+    transform.cpp
 )
 
 # Add library as a ".a" file

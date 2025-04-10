@@ -5,9 +5,9 @@
 namespace Core
 {
 
-    nodeShPtr Group::getById(int id)
+    nodeShPtr Group::findNode(int id)
     {
-        for (const auto &ptr : children)
+        for (const auto &ptr : children_)
         {
             if (ptr->id == id)
                 return ptr;
@@ -16,9 +16,14 @@ namespace Core
         return nullptr;
     }
 
-    nodeShPtr Group::getByName(const std::string &name)
+    std::list<nodeShPtr> Group::getChildren()
     {
-        for (const auto &ptr : children)
+        return children_;
+    }
+
+    nodeShPtr Group::findNode(const std::string &name)
+    {
+        for (const auto &ptr : children_)
         {
             if (ptr->name == name)
                 return ptr;
@@ -28,11 +33,28 @@ namespace Core
 
     void Group::append(nodeShPtr node)
     {
-        children.push_back(node);
+        children_.push_back(node);
     }
 
     void Group::prepend(nodeShPtr node)
     {
-        children.push_front(node);
+        children_.push_front(node);
+    }
+
+    nodeShPtr Group::removeBack()
+    {
+        nodeShPtr n = children_.back();
+        children_.pop_back();
+        return n;
+    }
+
+    bool Group::isEmpty()
+    {
+        return children_.empty();
+    }
+
+    bool Group::isNotEmpty()
+    {
+        return !children_.empty();
     }
 } // namespace Core

@@ -132,10 +132,12 @@ void test_affinetransform()
 // ---------------- Node -------------------------
 void create_node();
 void append_child_node();
+void find_node();
 
 void test_node()
 {
     std::cout << "%%%%%%%%%% Node tests %%%%%%%%%%" << std::endl;
     create_node();
     append_child_node();
+    find_node();
 }

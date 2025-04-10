@@ -4,19 +4,15 @@
 
 namespace Core
 {
-    void Node::initialize()
-    {
-        std::cout << "Node initialize" << std::endl;
-    }
 
-    Group &Node::getChildren()
+    Group &Node::getGroup()
     {
         return group_;
     }
 
     int Node::getChildCount()
     {
-        return group_.children.size();
+        return group_.children_.size();
     }
 
     void Node::appendChild(nodeShPtr child)
@@ -27,6 +23,16 @@ namespace Core
     void Node::prependChild(nodeShPtr child)
     {
         group_.prepend(child);
+    }
+
+    nodeShPtr Node::findNode(int id)
+    {
+        return group_.findNode(id);
+    }
+
+    nodeShPtr Node::findNode(const std::string &name)
+    {
+        return group_.findNode(name);
     }
 
 } // namespace Core

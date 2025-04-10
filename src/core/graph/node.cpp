@@ -15,6 +15,11 @@ namespace Core
         return group_.children_.size();
     }
 
+    std::list<nodeShPtr> Node::getChildren()
+    {
+        return group_.getChildren();
+    }
+
     void Node::appendChild(nodeShPtr child)
     {
         group_.append(child);

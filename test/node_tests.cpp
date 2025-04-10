@@ -38,7 +38,7 @@ void append_child_node()
     Core::nodeShPtr splash = std::make_shared<Core::Node>("Splash");
     boot->appendChild(splash);
 
-    Core::printTree(boot->getGroup().getChildren(), boot);
+    Core::printTree(boot->getChildren(), boot);
 
     if (splash.get()->name != "Splash")
     {

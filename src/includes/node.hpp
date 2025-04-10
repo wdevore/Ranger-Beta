@@ -45,6 +45,7 @@ namespace Core
 
         Group &getGroup();
         int getChildCount();
+        std::list<nodeShPtr> getChildren();
 
         // Add to back
         void appendChild(nodeShPtr child);

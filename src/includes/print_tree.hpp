@@ -20,9 +20,7 @@ namespace Core
             return;
 
         for (int i = 0; i < level; i++)
-        {
             std::cout << treeIndent;
-        }
 
         std::cout << node->name << std::endl;
     }
@@ -38,9 +36,7 @@ namespace Core
             _printBranch(level, child);
 
             if (!subChildren.empty())
-            {
                 _printSubTree(nodes, subChildren, level);
-            }
         }
     }
 
@@ -60,9 +56,7 @@ namespace Core
 
         std::cout << "------------- Stack -------------------\n";
         for (auto &&node : nodes)
-        {
             std::cout << *node << std::endl;
-        }
 
         std::cout << "============ Print Done ========" << std::endl;
     }

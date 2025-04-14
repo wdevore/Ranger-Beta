@@ -26,6 +26,8 @@ add_executable(${PROJECT_NAME}
     rectangle_tests.cpp
     affinetransform_tests.cpp
     node_tests.cpp
+    spaces_tests.cpp
+    transform_stack_tests.cpp
 )
 
 # target_link_libraries(unit_tests PRIVATE Catch2::Catch2)
@@ -56,6 +58,10 @@ add_test(NAME matrix4_tests COMMAND ${PROJECT_NAME} "matrix_suite")
 add_test(NAME rectangle_tests COMMAND ${PROJECT_NAME} "rectangle_suite")
 add_test(NAME affinetransform_tests COMMAND ${PROJECT_NAME} "affinetrx_suite")
 add_test(NAME node_tests COMMAND ${PROJECT_NAME} "node_suite")
+add_test(NAME spaces_tests COMMAND ${PROJECT_NAME} "spaces_suite")
+add_test(NAME transform_stack_tests COMMAND ${PROJECT_NAME} "stack_suite")
+# Engine test will test World(s)
+# add_test(NAME engine_tests COMMAND ${PROJECT_NAME} "engine_suite")
 
 # catch_discover_tests(unit_tests)
 

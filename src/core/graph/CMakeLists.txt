@@ -8,6 +8,8 @@ set(GRAPH_SOURCES
     group.cpp
     node.cpp
     transform.cpp
+    transform_stack.cpp
+    node_manager.cpp
 )
 
 # Add library as a ".a" file

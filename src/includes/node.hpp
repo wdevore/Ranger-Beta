@@ -2,13 +2,30 @@
 
 #include <iostream>
 #include <string>
+#include <memory>
 
 #include <group.hpp>
 #include <transform.hpp>
+#include <affinetransform.hpp>
+#include <transform_stack.hpp>
 
 namespace Core
 {
+    enum class NodeSignal
+    {
+        /// A Node wants to leave stage
+        requestNodeLeaveStage,
+
+        /// A Node is given permission to leave
+        leaveStageGranted,
+
+        /// Notify a Node that it has moved to the Top
+        nodeMovedToStage
+    };
+
     static int NodeID{0};
+
+    using affineShPtr = std::shared_ptr<AffineTransform>;
 
     using nodeShPtr = std::shared_ptr<Node>;
     using nodeWkPtr = std::weak_ptr<Node>;
@@ -53,6 +70,19 @@ namespace Core
         void prependChild(nodeShPtr child);
         nodeShPtr findNode(int id);
         nodeShPtr findNode(const std::string &name);
+
+        affineShPtr calcTransform();
+        void update(double dt);
+        static void visit(nodeShPtr node, TransformStack &transformStack, double interpolation, double width, double height);
+
+        /// @brief
+        /// render() provides a default render--which is to draw nothing.
+        ///
+        /// You must **override** this in your custom [Node] if your [Node]
+        /// needs to perform custom rendering.
+        void render(const Matrix4 &model, double width, double height) {}
+
+        virtual void receiveSignal(NodeSignal signal) = 0;
 
         // This is equivalent to toString()
         friend std::ostream &operator<<(std::ostream &os, const Node &obj)

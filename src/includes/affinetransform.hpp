@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <memory>
 
 #include <vector2d.hpp>
 
@@ -9,12 +10,20 @@ namespace Core
 {
     class Matrix4;
 
+    class AffineTransform; // Forward decl just for 'using' statement.
+    using affineShPtr = std::shared_ptr<AffineTransform>;
+
     class AffineTransform
     {
     private:
         /* data */
     public:
         AffineTransform(/* args */) = default;
+        AffineTransform(bool setToIdentity)
+        {
+            if (setToIdentity)
+                toIdentity();
+        }
         ~AffineTransform() = default;
 
         static const int ma = 0; // a
@@ -57,6 +66,7 @@ namespace Core
 
         void set(double a, double b, double c, double d, double tx, double ty);
         void set(const AffineTransform &atf);
+        void set(const affineShPtr &atf);
         void set(const Matrix4 &m);
 
         void transform(Vector2D &point) const;

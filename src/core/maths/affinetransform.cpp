@@ -40,6 +40,16 @@ namespace Core
         m[mf] = atf.getTy();
     }
 
+    void AffineTransform::set(const affineShPtr &atf)
+    {
+        m[ma] = atf->getA();
+        m[mb] = atf->getB();
+        m[mc] = atf->getC();
+        m[md] = atf->getD();
+        m[me] = atf->getTx();
+        m[mf] = atf->getTy();
+    }
+
     void AffineTransform::set(const Matrix4 &m4)
     {
         m[0] = m4.e[0];

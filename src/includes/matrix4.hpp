@@ -26,6 +26,11 @@ namespace Core
         /* data */
     public:
         Matrix4(/* args */);
+        Matrix4(bool setToIdentity)
+        {
+            if (setToIdentity)
+                toIdentity();
+        }
         ~Matrix4() = default;
 
         // Array indices
@@ -130,7 +135,13 @@ namespace Core
         }
     };
 
-    // I use a pointer for "a" because I will "this" which is a pointer.
+    /// @brief
+    /// multiply multiplies a * b and places result into 'out', (i.e. out = a * b)
+    ///
+    /// I use a pointer for "a" because I will use "this" which is a pointer.
+    /// @param a input
+    /// @param b input
+    /// @param out output
     void multiply(const Matrix4 *a, const Matrix4 &b, Matrix4 &out);
 
     // Temporary matricies for multiplication

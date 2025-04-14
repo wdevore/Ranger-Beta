@@ -8,7 +8,6 @@
 
 namespace Core
 {
-    using nodeShPtr = std::shared_ptr<Node>;
     const std::string treeIndent = "   ";
 
     static void _printBranch(int level, const nodeShPtr &node)
@@ -22,7 +21,7 @@ namespace Core
         for (int i = 0; i < level; i++)
             std::cout << treeIndent;
 
-        std::cout << node->name << std::endl;
+        std::cout << *node << std::endl;
     }
 
     static void _printSubTree(
@@ -32,9 +31,9 @@ namespace Core
     {
         for (auto &&child : children)
         {
-            auto subChildren = child->getGroup().getChildren();
             _printBranch(level, child);
 
+            auto subChildren = child->getChildren();
             if (!subChildren.empty())
                 _printSubTree(nodes, subChildren, level);
         }
@@ -49,12 +48,13 @@ namespace Core
 
             if (node->getChildCount() > 0)
             {
-                auto subChildren = node->getGroup().getChildren();
-                _printSubTree(nodes, subChildren, 1);
+                auto subChildren = node->getChildren();
+                if (!subChildren.empty())
+                    _printSubTree(nodes, subChildren, 1);
             }
         }
 
-        std::cout << "------------- Stack -------------------\n";
+        std::cout << "------------- List -------------------\n";
         for (auto &&node : nodes)
             std::cout << *node << std::endl;
 

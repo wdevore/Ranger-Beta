@@ -6,6 +6,8 @@ void test_matrix4();
 void test_rectangle();
 void test_affinetransform();
 void test_node();
+void test_spaces();
+void test_transform_stack();
 
 int main(int argc, char *argv[])
 {
@@ -36,6 +38,14 @@ int main(int argc, char *argv[])
     else if (selectedTestSuite == "node_suite")
     {
         test_node();
+    }
+    else if (selectedTestSuite == "spaces_suite")
+    {
+        test_spaces();
+    }
+    else if (selectedTestSuite == "stack_suite")
+    {
+        test_transform_stack();
     }
     else
     {
@@ -140,4 +150,28 @@ void test_node()
     create_node();
     append_child_node();
     find_node();
+}
+
+// ---------------- Spaces -------------------------
+void map_device_to_view_spaces();
+
+void test_spaces()
+{
+    std::cout << "%%%%%%%%%% Spaces tests %%%%%%%%%%" << std::endl;
+    map_device_to_view_spaces();
+}
+
+// ---------------- Spaces -------------------------
+void create_transform_stack();
+void save_transform_stack();
+void apply_transform_stack();
+void restore_transform_stack();
+
+void test_transform_stack()
+{
+    std::cout << "%%%%%%%%%% Transform stack tests %%%%%%%%%%" << std::endl;
+    create_transform_stack();
+    save_transform_stack();
+    apply_transform_stack();
+    restore_transform_stack();
 }

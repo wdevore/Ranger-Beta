@@ -74,5 +74,57 @@ void create_node_manager()
 
     Core::NodeManager nm{};
 
-    std::cout << "======= End Test =========\n";
+    cout << "======= End Test =========\n";
+}
+
+void push_node_manager()
+{
+    using std::cout;
+    using std::endl;
+
+    cout << "---- TESTING: push_node_manager ----" << endl;
+
+    Core::NodeManager nm{};
+
+    Core::nodeShPtr boot = std::make_shared<Core::BootNode>("Boot");
+
+    nm.pushFront(boot);
+
+    cout << "Nodes size: " << nm.nodes.size() << endl;
+
+    if (nm.nodes.size() != 1)
+    {
+        cout << "Expected Node size of 1" << endl;
+        std::exit(1);
+    }
+
+    cout << "======= End Test =========" << endl;
+}
+
+void remove_node_manager()
+{
+    using std::cout;
+    using std::endl;
+
+    cout << "---- TESTING: remove_node_manager ----" << endl;
+
+    Core::NodeManager nm{};
+
+    Core::nodeShPtr boot = std::make_shared<Core::BootNode>("Boot");
+
+    nm.pushFront(boot);
+
+    cout << "Nodes size: " << nm.nodes.size() << endl;
+
+    nm.removeNode("Boot");
+
+    cout << "Nodes size: " << nm.nodes.size() << endl;
+
+    if (nm.nodes.size() != 0)
+    {
+        cout << "Expected Node size of 0" << endl;
+        std::exit(1);
+    }
+
+    cout << "======= End Test =========" << endl;
 }

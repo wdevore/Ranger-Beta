@@ -183,9 +183,13 @@ void test_transform_stack()
 
 // ---------------- Node manager -------------------------
 void create_node_manager();
+void push_node_manager();
+void remove_node_manager();
 
 void test_node_manager()
 {
     std::cout << "%%%%%%%%%% Node Manager tests %%%%%%%%%%" << std::endl;
     create_node_manager();
+    push_node_manager();
+    remove_node_manager();
 }

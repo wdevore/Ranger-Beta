@@ -14,7 +14,7 @@ add_subdirectory(${SOURCE_DIR})
 
 # I use INTERFACE because this is only used by dependencies.
 target_include_directories(EngineLib
- INTERFACE includes
+    INTERFACE includes
 )
 
 # CoreLib is built from these libraries

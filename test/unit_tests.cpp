@@ -8,6 +8,7 @@ void test_affinetransform();
 void test_node();
 void test_spaces();
 void test_transform_stack();
+void test_node_manager();
 
 int main(int argc, char *argv[])
 {
@@ -46,6 +47,10 @@ int main(int argc, char *argv[])
     else if (selectedTestSuite == "stack_suite")
     {
         test_transform_stack();
+    }
+    else if (selectedTestSuite == "node_manager_suite")
+    {
+        test_node_manager();
     }
     else
     {
@@ -161,7 +166,7 @@ void test_spaces()
     map_device_to_view_spaces();
 }
 
-// ---------------- Spaces -------------------------
+// ---------------- Transform stack -------------------------
 void create_transform_stack();
 void save_transform_stack();
 void apply_transform_stack();
@@ -174,4 +179,13 @@ void test_transform_stack()
     save_transform_stack();
     apply_transform_stack();
     restore_transform_stack();
+}
+
+// ---------------- Node manager -------------------------
+void create_node_manager();
+
+void test_node_manager()
+{
+    std::cout << "%%%%%%%%%% Node Manager tests %%%%%%%%%%" << std::endl;
+    create_node_manager();
 }

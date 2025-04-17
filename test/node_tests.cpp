@@ -20,12 +20,13 @@ namespace Core
         BootNode(std::string name, nodeWkPtr parent = std::weak_ptr<Node>{})
             : Node(name, parent)
         {
-            std::cout << "BootNode Constructor: '" << name << "'" << id << std::endl;
+            std::cout << "BootNode Constructor: N '" << name << "'" << id << std::endl;
         };
         ~BootNode() = default;
 
         void receiveSignal(Core::NodeSignal signal) override
         {
+            std::cout << "BootNode Got signal: N '" << signal << "'" << id << std::endl;
         }
     };
 
@@ -37,12 +38,13 @@ namespace Core
         SplashNode(std::string name, nodeWkPtr parent = std::weak_ptr<Node>{})
             : Node(name, parent)
         {
-            std::cout << "SplashNode Constructor: '" << name << "'" << id << std::endl;
+            std::cout << "SplashNode Constructor: N '" << name << "'" << id << std::endl;
         };
         ~SplashNode() = default;
 
         void receiveSignal(Core::NodeSignal signal) override
         {
+            std::cout << "SplashNode Got signal: N '" << signal << "'" << id << std::endl;
         }
     };
 
@@ -54,12 +56,13 @@ namespace Core
         IntroNode(std::string name, nodeWkPtr parent = std::weak_ptr<Node>{})
             : Node(name, parent)
         {
-            std::cout << "IntroNode Constructor: '" << name << "'" << id << std::endl;
+            std::cout << "IntroNode Constructor: N '" << name << "'" << id << std::endl;
         };
         ~IntroNode() = default;
 
         void receiveSignal(Core::NodeSignal signal) override
         {
+            std::cout << "IntroNode Got signal: N '" << signal << "'" << id << std::endl;
         }
     };
 

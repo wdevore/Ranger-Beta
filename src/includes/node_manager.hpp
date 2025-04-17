@@ -47,8 +47,10 @@ namespace Core
         void update(double msPerUpdate);
         void visit(double interpolation, double width, double height);
 
+        void push(nodeShPtr node);
         void pushBack(nodeShPtr node);
         void pushFront(nodeShPtr node);
+        void pop();
         void removeNode(const std::string &name);
 
         bool isNodeOnStage(nodeShPtr node);

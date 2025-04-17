@@ -22,6 +22,8 @@ namespace Core
                                    bool excludeRotation,
                                    bool excludeScale,
                                    AffineTransform &aft);
+
+        AffineTransform &calcTransform(bool dirty);
     };
 
 } // namespace Core

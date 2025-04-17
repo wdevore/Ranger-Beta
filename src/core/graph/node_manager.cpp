@@ -1,4 +1,6 @@
 // #include <algorithm> // for std::find_if
+#include <iostream>
+
 #include <node_manager.hpp>
 #include <matrix4.hpp>
 
@@ -23,7 +25,7 @@ namespace Core
         // We can't pop a node while in the "for" above, so we capture for popping.
         if (popTheTop)
         {
-            nodes.pop_front();
+            pop();
             popTheTop = false; // Make sure we don't pop again.
         }
 
@@ -34,13 +36,20 @@ namespace Core
     void NodeManager::visit(double interpolation, double width, double height)
     {
         if (underlay != nullptr)
-            Node::visit(underlay, transformStack, interpolation, width, height);
+        {
+            std::cout << "NM: Visitng underlay" << std::endl;
+            underlay->visit(transformStack, interpolation, width, height);
+        }
 
         // Visit node on Stage
-        Node::visit(nodes.front(), transformStack, interpolation, width, height);
+        std::cout << "NM: Visitng top : " << *nodes.front() << std::endl;
+        nodes.front()->visit(transformStack, interpolation, width, height);
 
         if (overlay != nullptr)
-            Node::visit(overlay, transformStack, interpolation, width, height);
+        {
+            std::cout << "NM: Visitng overlay" << std::endl;
+            overlay->visit(transformStack, interpolation, width, height);
+        }
     }
 
     void NodeManager::pushBack(nodeShPtr node)
@@ -48,9 +57,24 @@ namespace Core
         nodes.push_back(node);
     }
 
+    /// @brief This exactly like calling pushFront. This is the typical
+    /// call rather than explicitly calling pushBack or pushFront.
+    /// This also means you need to make sure you push Nodes in reverse
+    /// order, for example, you would push a Splash node first then a Boot node.
+    /// @param node
+    void NodeManager::push(nodeShPtr node)
+    {
+        pushFront(node);
+    }
+
     void NodeManager::pushFront(nodeShPtr node)
     {
         nodes.push_front(node);
+    }
+
+    void NodeManager::pop()
+    {
+        nodes.pop_front();
     }
 
     void NodeManager::removeNode(const std::string &name)
@@ -72,6 +96,8 @@ namespace Core
 
     ErrorConditions NodeManager::sendSignal(nodeShPtr node, NodeSignal signal)
     {
+        std::cout << "Node Manager::sendSignal: " << signal << std::endl;
+
         switch (signal)
         {
         case NodeSignal::requestNodeLeaveStage:
@@ -89,6 +115,7 @@ namespace Core
                     // Send signal to the next Node to activate, which is top+1
                     auto it = nodes.cbegin();
                     nodeShPtr next = *(++it);
+                    std::cout << "Node Manager::sendSignal: sending sig to Next : " << *next << std::endl;
                     next->receiveSignal(NodeSignal::nodeMovedToStage);
                 }
             }
@@ -102,6 +129,8 @@ namespace Core
             return ErrorConditions::UnknownSignal;
             break;
         }
+
+        std::cout << "Node Manager::sendSignal: done : " << *node << std::endl;
 
         return ErrorConditions::None;
     }

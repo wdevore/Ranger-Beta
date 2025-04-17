@@ -185,6 +185,11 @@ void test_transform_stack()
 void create_node_manager();
 void push_node_manager();
 void remove_node_manager();
+void signal_leave_stage_node_manager();
+void signal_to_stage_node_manager();
+void visit_node_manager();
+void visit_pop_node_manager();
+void children_node_manager();
 
 void test_node_manager()
 {
@@ -192,4 +197,9 @@ void test_node_manager()
     create_node_manager();
     push_node_manager();
     remove_node_manager();
+    signal_leave_stage_node_manager();
+    signal_to_stage_node_manager();
+    visit_node_manager();
+    visit_pop_node_manager();
+    children_node_manager();
 }

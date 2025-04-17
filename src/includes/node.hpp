@@ -23,6 +23,8 @@ namespace Core
         nodeMovedToStage
     };
 
+    std::ostream &operator<<(std::ostream &os, NodeSignal s);
+
     static int NodeID{0};
 
     using affineShPtr = std::shared_ptr<AffineTransform>;
@@ -71,16 +73,18 @@ namespace Core
         nodeShPtr findNode(int id);
         nodeShPtr findNode(const std::string &name);
 
-        affineShPtr calcTransform();
         void update(double dt);
-        static void visit(nodeShPtr node, TransformStack &transformStack, double interpolation, double width, double height);
+        void visit(TransformStack &transformStack, double interpolation, double width, double height);
 
         /// @brief
         /// render() provides a default render--which is to draw nothing.
         ///
         /// You must **override** this in your custom [Node] if your [Node]
         /// needs to perform custom rendering.
-        void render(const Matrix4 &model, double width, double height) {}
+        void render(const Matrix4 &model, double width, double height)
+        {
+            std::cout << "Node::render" << std::endl;
+        }
 
         virtual void receiveSignal(NodeSignal signal) = 0;
 

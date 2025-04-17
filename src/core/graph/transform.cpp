@@ -28,4 +28,27 @@ namespace Core
         }
     }
 
+    AffineTransform &Transform::calcTransform(bool dirty)
+    {
+        if (dirty)
+        {
+            aft.makeTranslate(position.x, position.y);
+
+            if (rotation != 0.0)
+            {
+                aft.rotate(rotation);
+            }
+
+            if (scale.x != 1.0 || scale.y != 1.0)
+            {
+                aft.scale(scale.x, scale.y);
+            }
+
+            // Invert...
+            aft.invert(inverse);
+        }
+
+        return aft;
+    }
+
 } // namespace Core

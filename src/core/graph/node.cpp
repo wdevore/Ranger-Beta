@@ -40,11 +40,6 @@ namespace Core
         return group_.findNode(name);
     }
 
-    affineShPtr Node::calcTransform()
-    {
-        return affineShPtr();
-    }
-
     void Node::update(double dt)
     {
         // Recure into the children
@@ -54,26 +49,28 @@ namespace Core
         }
     }
 
-    void Node::visit(nodeShPtr node, TransformStack &transformStack,
+    void Node::visit(TransformStack &transformStack,
                      double interpolation, double width, double height)
     {
         // Checking visibility here would cause any children that are visible
         // to not be rendered.
         // TODO Add parent and children flags for individual control.
-        if (!node->visible)
+        if (!visible)
             return;
 
+        std::cout << "Node::visit save T stack" << std::endl;
         transformStack.save();
 
         // TODO Because position and angles are dependent on lerping we perform
         // interpolation first.
         // node.interpolate(interpolation);
 
-        auto aft = node->calcTransform();
+        auto aft = transform_.calcTransform(dirty);
+        std::cout << aft << std::endl;
 
-        transformStack.applyTransform(*aft);
+        transformStack.applyTransform(aft);
 
-        node->render(transformStack.current, width, height);
+        render(transformStack.current, width, height);
 
         // Some of the children may still be visible.
         // TODO add extra flag to choose if parent only or all children are visible
@@ -81,7 +78,7 @@ namespace Core
         // Note: if you want the parent AND children to be invisible then you
         // need to bubble visibility to parent and children.
 
-        for (auto &&nod : node->getChildren())
+        for (auto &&nod : getChildren())
         {
             // if (node is Filter)
             // {
@@ -90,11 +87,33 @@ namespace Core
             // else
             // {
             // Recurse down the tree.
-            visit(nod, transformStack, interpolation, width, height);
+            std::cout << "Node::visit recurse into: " << *nod << std::endl;
+            nod->visit(transformStack, interpolation, width, height);
             // }
         }
 
+        std::cout << "Node::visit restore T stack : " << *this << std::endl;
         transformStack.restore();
+    }
+
+    std::ostream &operator<<(std::ostream &os, NodeSignal s)
+    {
+        switch (s)
+        {
+        case NodeSignal::requestNodeLeaveStage:
+            os << "requestNodeLeaveStage";
+            break;
+        case NodeSignal::leaveStageGranted:
+            os << "leaveStageGranted";
+            break;
+        case NodeSignal::nodeMovedToStage:
+            os << "nodeMovedToStage";
+            break;
+        default:
+            os << "Unknown NodeSignal";
+            break;
+        }
+        return os;
     }
 
 } // namespace Core

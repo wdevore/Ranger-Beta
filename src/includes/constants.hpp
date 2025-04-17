@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <iostream>
 
 namespace Core
 {
@@ -17,4 +18,6 @@ namespace Core
         /// @brief Attempt to remove Node from stage that wasn't at the top
         AttemptingToRemoveNonTopNode
     };
+
+    std::ostream &operator<<(std::ostream &os, ErrorConditions s);
 }

@@ -31,8 +31,7 @@ namespace Core
         // The map tracks if nodes are present in the nodeStack
         // std::map<std::string, nodeShPtr> nodeMap{};
 
-        // The stack is used for Nodes that push other nodes onto the stack.
-        // The Top is always render, so once a Node is pushed it is rendered.
+        // The Top is always rendered, so once a Node is pushed it is rendered.
         std::list<nodeShPtr> nodes{};
         bool popTheTop{false};
 

@@ -4,20 +4,15 @@ set(CMAKE_CXX_STANDARD           17)
 # I want c++17 to the require minimum
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
-set(GRAPH_SOURCES
-    group.cpp
-    node.cpp
-    transform.cpp
-    transform_stack.cpp
-    node_manager.cpp
-    constants.cpp
+set(EXTRAS_SOURCES
+    vector_font.cpp
 )
 
 # Add library as a ".a" file
-add_library(GraphLib OBJECT
-    ${GRAPH_SOURCES}
+add_library(ExtrasLib OBJECT
+    ${EXTRAS_SOURCES}
 )
 
-target_include_directories(GraphLib
+target_include_directories(ExtrasLib
  PUBLIC ../../includes
 )

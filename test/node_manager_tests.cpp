@@ -75,6 +75,27 @@ namespace TestNodes
         }
     };
 
+    class TriNode : public Core::Node
+    {
+    private:
+        /* data */
+    public:
+        bool gotSignal{false};
+
+        TriNode(std::string name, nodeWkPtr parent = std::weak_ptr<Node>{})
+            : Node(name, parent)
+        {
+            std::cout << "TriNode Constructor: NM  '" << name << "' id:" << id << std::endl;
+        };
+        ~TriNode() = default;
+
+        void receiveSignal(Core::NodeSignal signal) override
+        {
+            gotSignal = true;
+            std::cout << "TriNode Got signal: NM '" << signal << "' id:" << id << std::endl;
+        }
+    };
+
 } // namespace Core
 
 void create_node_manager()
@@ -169,7 +190,13 @@ void signal_leave_stage_node_manager()
 
     cout << "Nodes size: " << nm.nodes.size() << endl;
 
-    nm.sendSignal(boot, Core::NodeSignal::requestNodeLeaveStage);
+    Core::ErrorConditions response = nm.sendSignal(boot, Core::NodeSignal::requestNodeLeaveStage);
+
+    if (response != Core::ErrorConditions::None)
+    {
+        cout << "Expected no errors, Got: " << response << endl;
+        std::exit(1);
+    }
 
     if (!boot->gotSignal)
     {
@@ -199,7 +226,13 @@ void signal_to_stage_node_manager()
 
     cout << "Nodes size: " << nm.nodes.size() << endl;
 
-    nm.sendSignal(boot, Core::NodeSignal::requestNodeLeaveStage);
+    Core::ErrorConditions response = nm.sendSignal(boot, Core::NodeSignal::requestNodeLeaveStage);
+
+    if (response != Core::ErrorConditions::None)
+    {
+        cout << "Expected no errors, Got: " << response << endl;
+        std::exit(1);
+    }
 
     if (!boot->gotSignal)
     {
@@ -239,7 +272,7 @@ void visit_pop_node_manager()
     using std::cout;
     using std::endl;
 
-    cout << "---- TESTING: visit_node_manager ----" << endl;
+    cout << "---- TESTING: visit_pop_node_manager ----" << endl;
 
     Core::NodeManager nm{};
 
@@ -267,21 +300,25 @@ void children_node_manager()
     using std::cout;
     using std::endl;
 
-    cout << "---- TESTING: visit_node_manager ----" << endl;
+    cout << "---- TESTING: children_node_manager ----" << endl;
 
     Core::NodeManager nm{};
 
     auto boot = std::make_shared<TestNodes::BootNode>("Boot");
     auto splash = std::make_shared<TestNodes::SplashNode>("Splash");
+
     auto intro = std::make_shared<TestNodes::IntroNode>("Intro");
     splash->appendChild(intro);
+
+    auto triNode = std::make_shared<TestNodes::IntroNode>("Tri", intro);
+    intro->appendChild(triNode);
 
     // These types of Nodes are considered Scenes meaning they are
     // not meant to be children (as in) calling boot->appendChild()
     nm.push(splash);
     nm.push(boot); // The last Node pushed is the one on Stage.
 
-    cout << "Nodes size: " << nm.nodes.size() << endl;
+    cout << "Scene Nodes: " << nm.nodes.size() << endl;
 
     nm.visit(0.0, 100.0, 100.0);
 

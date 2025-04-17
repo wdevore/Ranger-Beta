@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 add_subdirectory(maths)
 add_subdirectory(geometry)
 add_subdirectory(graph)
+add_subdirectory(extras)
 
 # This kind of a hack. I don't list any actual sources, but
 # simply create a blank variable. I should use INTERFACEs but
@@ -42,4 +43,5 @@ target_link_libraries(CoreLib
     PUBLIC MathsLib
     PUBLIC GeometryLib
     PUBLIC GraphLib
+    PUBLIC ExtrasLib
 )

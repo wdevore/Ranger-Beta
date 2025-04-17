@@ -9,6 +9,7 @@ void test_node();
 void test_spaces();
 void test_transform_stack();
 void test_node_manager();
+void test_vector_font();
 
 int main(int argc, char *argv[])
 {
@@ -51,6 +52,10 @@ int main(int argc, char *argv[])
     else if (selectedTestSuite == "node_manager_suite")
     {
         test_node_manager();
+    }
+    else if (selectedTestSuite == "vector_font_suite")
+    {
+        test_vector_font();
     }
     else
     {
@@ -202,4 +207,13 @@ void test_node_manager()
     visit_node_manager();
     visit_pop_node_manager();
     children_node_manager();
+}
+
+// ---------------- Vector font -------------------------
+void create_vector_font();
+
+void test_vector_font()
+{
+    std::cout << "%%%%%%%%%% Vector font tests %%%%%%%%%%" << std::endl;
+    create_vector_font();
 }

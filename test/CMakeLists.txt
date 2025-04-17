@@ -29,6 +29,7 @@ add_executable(${PROJECT_NAME}
     spaces_tests.cpp
     transform_stack_tests.cpp
     node_manager_tests.cpp
+    vector_font_tests.cpp
 )
 
 # target_link_libraries(unit_tests PRIVATE Catch2::Catch2)
@@ -62,6 +63,7 @@ add_test(NAME node_tests COMMAND ${PROJECT_NAME} "node_suite")
 add_test(NAME spaces_tests COMMAND ${PROJECT_NAME} "spaces_suite")
 add_test(NAME transform_stack_tests COMMAND ${PROJECT_NAME} "stack_suite")
 add_test(NAME node_manager_tests COMMAND ${PROJECT_NAME} "node_manager_suite")
+add_test(NAME vector_font_tests COMMAND ${PROJECT_NAME} "vector_font_suite")
 # Engine test will test World(s)
 # add_test(NAME engine_tests COMMAND ${PROJECT_NAME} "engine_suite")
 

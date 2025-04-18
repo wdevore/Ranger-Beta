@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 set(EXTRAS_SOURCES
     vector_font.cpp
+    char_vectors.cpp
+    delay.cpp
 )
 
 # Add library as a ".a" file

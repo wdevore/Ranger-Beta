@@ -8,6 +8,7 @@ namespace Game
     {
     private:
         /* data */
+
     public:
         GameApp(unsigned int width, unsigned int height) : App(width, height) {};
         ~GameApp();

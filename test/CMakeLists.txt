@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD           17)
 # I want c++17 to the require minimum
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
+message(STATUS "Current CMakeLists.txt directory: ${CMAKE_CURRENT_LIST_DIR}")
+
 # include(FetchContent)
 
 # FetchContent_Declare(
@@ -40,10 +42,14 @@ add_executable(${PROJECT_NAME}
 include(CTest)
 # include(Catch)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${SOURCE_DIR}/includes)
+# enable_testing()
+
+target_include_directories(${PROJECT_NAME} 
+    PRIVATE ${SOURCE_DIR}/includes
+)
 
 # ----------------------- Test Suites ------------------------------------
-add_test(NAME vector_tests COMMAND ${PROJECT_NAME} "vector_suite")
+add_test(NAME "${CMAKE_CURRENT_LIST_DIR}/vector_tests" COMMAND ${PROJECT_NAME} "vector_suite")
 
 add_test(NAME matrix4_tests COMMAND ${PROJECT_NAME} "matrix_suite")
 # ----Below doesn't work! in VSCode IDE ----
@@ -69,7 +75,7 @@ add_test(NAME vector_font_tests COMMAND ${PROJECT_NAME} "vector_font_suite")
 
 # catch_discover_tests(unit_tests)
 
-# EngineLib is built from these libraries
-target_link_libraries(${PROJECT_NAME}
-    PUBLIC CoreLib
+# Test are built from this library
+target_link_libraries(${PROJECT_NAME} PUBLIC
+    CoreLib
 )

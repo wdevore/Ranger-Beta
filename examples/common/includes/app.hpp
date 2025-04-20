@@ -23,6 +23,8 @@ namespace Game
     private:
         /* data */
         GLFWwindow *window_;
+
+    protected:
         Color4 bgClearColor{0.2f, 0.3f, 0.3f, 1.0f};
 
         unsigned int VBO, VAO;
@@ -55,6 +57,7 @@ namespace Game
         int run();
 
         virtual int construct() = 0;
+        virtual void render() = 0;
     };
 
 } // namespace Game

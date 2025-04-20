@@ -14,6 +14,7 @@ namespace Game
         ~GameApp();
 
         int construct() override;
-    };
+        void render() override;
+        };
 
 } // namespace Game

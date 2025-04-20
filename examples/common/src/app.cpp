@@ -144,16 +144,7 @@ namespace Game
             // Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
             glfwPollEvents();
 
-            // Render
-            // Clear the colorbuffer
-            glClearColor(bgClearColor.r, bgClearColor.g, bgClearColor.b, bgClearColor.a);
-            glClear(GL_COLOR_BUFFER_BIT);
-
-            // draw our first triangle
-            glUseProgram(shaderProgram);
-            glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-            glDrawArrays(GL_TRIANGLES, 0, 3);
-            // glBindVertexArray(0); // no need to unbind it every time
+            render();
 
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
             // -------------------------------------------------------------------------------

@@ -6,18 +6,10 @@
 
 #include <string>
 
+#include <color4.hpp>
+
 namespace Game
 {
-    struct Color4
-    {
-        float r{};
-        float g{};
-        float b{};
-        float a{};
-
-        Color4(float r, float g, float b, float a) : r(r), g(g), b(b), a(a) {}
-    };
-
     class App
     {
     private:
@@ -47,6 +39,7 @@ namespace Game
         unsigned int width{};
         unsigned int height{};
 
+        App() = default;
         App(unsigned int width, unsigned int height) : width(width), height(height) {};
         ~App();
 
@@ -54,9 +47,21 @@ namespace Game
         bool createWindow(const std::string &title);
         int configure();
 
+        /// @brief Start game loop
+        /// @return
         int run();
 
+        /// @brief Called after App has initialized
+        /// @return
+        virtual int setup() = 0;
+        /// @brief Called when it is time to contruct your game nodes
+        /// @return
         virtual int construct() = 0;
+        /// @brief Called every time an update is required
+        /// @param dt
+        /// @return
+        virtual int update(double dt) = 0;
+        /// @brief Called every frame to draw your game
         virtual void render() = 0;
     };
 

@@ -47,6 +47,7 @@ namespace Core
 
         nodeWkPtr parent;
 
+        Node() = default;
         // This explicitly constructs a default-initialized std::weak_ptr,
         // which will be empty (i.e., not associated with any managed object,
         // similar to a null raw pointer). This is done because you can't

@@ -17,7 +17,10 @@ namespace Game
     int App::initialize()
     {
         int initialized = glfwInit();
-
+        if (initialized)
+        {
+            initialized = setup();
+        }
         return initialized;
     }
 
@@ -143,6 +146,9 @@ namespace Game
         {
             // Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
             glfwPollEvents();
+
+            // TODO add logic to determine when to call update.
+            update(0.0);
 
             render();
 

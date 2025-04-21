@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 set(COMMON_SOURCES
     src/app.cpp
+    src/color4.cpp
 )
 
 # Add library as a ".a" file

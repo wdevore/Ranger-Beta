@@ -11,12 +11,13 @@ namespace Core
         double duration_{}; // in milliseconds
 
     public:
+        Delay() = default;
         Delay(double duration) : duration_(duration) {};
         ~Delay() = default;
 
         void reset();
         /// @brief Return 'true' if delay expired.
-        /// @param dt 
+        /// @param dt
         /// @return bool
         bool expired(double dt);
     };

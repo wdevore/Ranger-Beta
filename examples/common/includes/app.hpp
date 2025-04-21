@@ -13,27 +13,11 @@ namespace Game
     class App
     {
     private:
+    protected:
         /* data */
         GLFWwindow *window_;
 
-    protected:
         Color4 bgClearColor{0.2f, 0.3f, 0.3f, 1.0f};
-
-        unsigned int VBO, VAO;
-        unsigned int shaderProgram;
-
-        const char *vertexShaderSource = "#version 330 core\n"
-                                         "layout (location = 0) in vec3 aPos;\n"
-                                         "void main()\n"
-                                         "{\n"
-                                         "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-                                         "}\0";
-        const char *fragmentShaderSource = "#version 330 core\n"
-                                           "out vec4 FragColor;\n"
-                                           "void main()\n"
-                                           "{\n"
-                                           "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-                                           "}\n\0";
 
     public:
         unsigned int width{};
@@ -51,6 +35,18 @@ namespace Game
         /// @return
         int run();
 
+        /// @brief Allows app to check if the app has been setup properly.
+        /// @return
+        virtual int verifyConfigured() = 0;
+
+        /// @brief Called by configure so that derived classes can configure
+        /// shaders and stuff.
+        /// @return
+        virtual int compile() = 0;
+        /// @brief Called when the game loop exit and it is time to cleanup
+        /// OpenGL.
+        /// @return
+        virtual int deconstruct() = 0;
         /// @brief Called after App has initialized
         /// @return
         virtual int setup() = 0;

@@ -38,7 +38,12 @@ int main(int, char **)
 
     app.construct();
 
-    int runState = app.run();
+    int runStatus = app.run();
+
+    if (runStatus < 0)
+    {
+        std::cout << "App failed to launch" << std::endl;
+    }
 
     std::cout << "Done. Goodbye!" << std::endl;
 }

@@ -16,7 +16,7 @@ namespace Core
     /// The NodeManager controls Node traversal.
     ///
     /// Holds and manages the Nodes that represent the visual aspect of the Scene.
-    class NodeManager
+    class NodeManager final
     {
     private:
         /* data */

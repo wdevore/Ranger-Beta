@@ -34,6 +34,8 @@ add_executable(${PROJECT_NAME}
     vector_font_tests.cpp
 )
 
+add_subdirectory(../src Testing)
+
 # target_link_libraries(unit_tests PRIVATE Catch2::Catch2)
 
 # list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
@@ -42,7 +44,7 @@ add_executable(${PROJECT_NAME}
 include(CTest)
 # include(Catch)
 
-# enable_testing()
+enable_testing()
 
 target_include_directories(${PROJECT_NAME} 
     PRIVATE ${SOURCE_DIR}/includes

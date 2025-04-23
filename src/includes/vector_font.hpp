@@ -7,7 +7,7 @@
 
 namespace Core
 {
-    class VectorFont
+    class VectorFont final
     {
     private:
         /* data */

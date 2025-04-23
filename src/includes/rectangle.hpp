@@ -20,7 +20,7 @@ namespace Core
     ///                     <     maxX, maxY
     ///```
     ///
-    class Rectangle
+    class Rectangle final
     {
     private:
         /* data */

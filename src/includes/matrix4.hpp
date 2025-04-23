@@ -20,7 +20,7 @@ namespace Core
     class Vector3; // Forward decleration to avoid cyclic dependency.
     class AffineTransform;
 
-    class Matrix4
+    class Matrix4 final
     {
     private:
         /* data */

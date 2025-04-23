@@ -3,7 +3,7 @@
 
 namespace Core
 {
-    class Transform
+    class Transform final
     {
     private:
         /* data */

@@ -8,7 +8,7 @@ namespace Core
     class Node;
     using nodeShPtr = std::shared_ptr<Node>;
 
-    class Group
+    class Group final
     {
     private:
         /* data */

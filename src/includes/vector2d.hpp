@@ -6,7 +6,7 @@ namespace Core
 {
     class Matrix4;
 
-    class Vector2D
+    class Vector2D final
     {
     private:
     public:

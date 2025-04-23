@@ -39,9 +39,10 @@ FetchContent_MakeAvailable(glfw)
 set(GLAD_SOURCES ../dependencies/glad/src)
 set(GLAD_INCLUDES ../dependencies/glad/include)
 
-message("STATUS glad includes: " ${GLAD_INCLUDES})
+message(STATUS "glad includes: " ${GLAD_INCLUDES})
 
 set(COMMON_DIR ../common)
+# set(SOURCE_DIR ../common)
 
 add_executable(${PROJECT_NAME}
     main.cpp
@@ -59,7 +60,7 @@ add_executable(${PROJECT_NAME}
 # we want to link against "CoreLib" which when built is in
 # build/bin/core/libCoreLib.a
 # "../../src" indicates the source dependencies if the library changes and
-# "bin" is the root directory.
+# "bin" is the root dPirectory.
 # Also:
 # [source_dir]: This is the path to the subdirectory containing the CMakeLists.txt
 # file you want CMake to process. This path is typically relative to the
@@ -71,13 +72,15 @@ add_executable(${PROJECT_NAME}
 # top-level binary directory for more complex build layouts. 
 add_subdirectory(../../src bin)
 
-add_subdirectory(../common combin)
+add_subdirectory(${COMMON_DIR} combin)
 
-message("STATUS glfw dir: " ${glfw_SOURCE_DIR})
+message(STATUS "glfw dir: " ${glfw_SOURCE_DIR})
+# message(STATUS "SOURCE_DIR: " ${SOURCE_DIR})
+message(STATUS "COMMON_DIR: " ${COMMON_DIR})
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC includes
-    PUBLIC ${SOURCE_DIR}/includes
+    # PUBLIC ${SOURCE_DIR}/includes
     PUBLIC ${COMMON_DIR}/includes
     PUBLIC ${GLAD_INCLUDES}
     PUBLIC ${glfw_SOURCE_DIR}/deps

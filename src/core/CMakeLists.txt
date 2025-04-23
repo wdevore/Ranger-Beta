@@ -8,6 +8,7 @@ add_subdirectory(maths)
 add_subdirectory(geometry)
 add_subdirectory(graph)
 add_subdirectory(extras)
+add_subdirectory(rendering)
 
 # This kind of a hack. I don't list any actual sources, but
 # simply create a blank variable. I should use INTERFACEs but
@@ -44,4 +45,5 @@ target_link_libraries(CoreLib
     PUBLIC GeometryLib
     PUBLIC GraphLib
     PUBLIC ExtrasLib
+    PUBLIC RenderLib
 )

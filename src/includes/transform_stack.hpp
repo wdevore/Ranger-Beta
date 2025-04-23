@@ -10,7 +10,7 @@ namespace Core
 {
     using matrixShPtr = std::shared_ptr<Matrix4>;
 
-    class TransformStack
+    class TransformStack final
     {
     private:
         /* data */

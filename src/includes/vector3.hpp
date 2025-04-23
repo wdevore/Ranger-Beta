@@ -6,7 +6,7 @@ namespace Core
 {
     class Matrix4; // Forward decleration to avoid cyclic dependency.
 
-    class Vector3
+    class Vector3 final
     {
     private:
         /* data */

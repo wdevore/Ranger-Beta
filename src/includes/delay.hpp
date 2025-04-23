@@ -3,7 +3,7 @@
 namespace Core
 {
     /// @brief A delay in milliseconds.
-    class Delay
+    class Delay final
     {
     private:
         /* data */

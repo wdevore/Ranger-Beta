@@ -23,7 +23,9 @@ namespace Core
 
     void Vbo::bind(Mesh *mesh)
     {
+        // Make this Vbo active
         glBindBuffer(GL_ARRAY_BUFFER, vboId_);
+        // copy our vertices array in a buffer for OpenGL to use
         glBufferData(GL_ARRAY_BUFFER, mesh->vertices.size() * sizeof(GLfloat), &mesh->vertices[0], GL_STATIC_DRAW);
     }
 

@@ -3,6 +3,22 @@
 #include <vao.hpp>
 #include <mesh.hpp>
 
+// A vertex array object (also known as VAO) can be bound just like a vertex
+// buffer object and any subsequent vertex attribute calls from that point on
+// will be stored inside the VAO. This has the advantage that when configuring
+// vertex attribute pointers you only have to make those calls once and whenever
+// we want to draw the object, we can just bind the corresponding VAO.
+// This makes switching between different vertex data and attribute
+// configurations as easy as binding a different VAO. All the state we just
+// set is stored inside the VAO.
+
+// A vertex array object stores the following:
+//
+// - Calls to glEnableVertexAttribArray or glDisableVertexAttribArray.
+// - Vertex attribute configurations via glVertexAttribPointer.
+// - Vertex buffer objects associated with vertex attributes by calls to
+//   glVertexAttribPointer.
+
 namespace Core
 {
     Vao::~Vao()
@@ -26,8 +42,13 @@ namespace Core
         // and attribute pointer(s).
         glBindVertexArray(vaoId_);
 
+        // Any subsequent vertex attribute calls from this point on
+        // will be stored inside the VAO.
+        // From this point on we should bind/configure the corresponding VBO(s)
+        // and attribute pointer(s) and then unbind the VAO for later use.
         mesh->bind();
 
+        // then set our vertex attributes pointers
         glVertexAttribPointer(0, XYZ_Component_count, GL_FLOAT, GL_FALSE, XYZ_Component_count * sizeof(GLfloat), (GLvoid *)0);
 
         glEnableVertexAttribArray(0);

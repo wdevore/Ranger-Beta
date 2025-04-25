@@ -9,6 +9,9 @@
 #include <vbo.hpp>
 #include <ebo.hpp>
 
+// A Mesh is given to a Vao during binding. The Vao will then call this
+// Mesh's bind method to further bind the Vbo and Ebo during the Vao's
+// binding step. The Vao is container like concept around Vbo and Ebo's.
 namespace Core
 {
     class Mesh

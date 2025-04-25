@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD           17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 add_subdirectory(gl_objects)
+add_subdirectory(shaders)
 
 # This kind of a hack. I don't list any actual sources, but
 # simply create a blank variable. I should use INTERFACEs but
@@ -21,4 +22,5 @@ add_library(RenderLib STATIC
 # RenderLib is built from these libraries
 target_link_libraries(RenderLib
     PUBLIC GLObjectsLib
+    PUBLIC ShadersLib
 )

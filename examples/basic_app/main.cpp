@@ -11,7 +11,7 @@ const GLuint WIDTH = 800, HEIGHT = 600;
 
 int main(int, char **)
 {
-    std::cout << "Hello, App!" << std::endl;
+    std::cout << "Game launching" << std::endl;
 
     Game::GameApp app{WIDTH, HEIGHT};
 
@@ -29,6 +29,7 @@ int main(int, char **)
         return -1;
     }
 
+    // Main configuration.
     int configured = app.configure();
     if (configured < 0)
     {

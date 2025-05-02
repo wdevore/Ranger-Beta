@@ -23,9 +23,14 @@ namespace Core
         Vao(/* args */) = default;
         ~Vao();
 
+        void construct();
         void bind(Mesh *mesh);
-        // void use();
-        // void unUse();
+        void use();
+        void unUse();
+        void release();
+
+        //! Use this more often than the draw methods.
+        // void render(const VectorShapeSPtr& shape);
 
         //! Use this more often than the draw methods.
         // void render(const VectorShapeSPtr& shape);

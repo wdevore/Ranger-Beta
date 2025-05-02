@@ -10,10 +10,6 @@ namespace Game
     void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode);
     void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
-    App::~App()
-    {
-    }
-
     int App::initialize()
     {
         int initialized = glfwInit();
@@ -67,6 +63,8 @@ namespace Game
             return -1;
         }
 
+        int buildStatus = build();
+
         // Define the viewport dimensions
         // glViewport(0, 0, width, height);
 
@@ -77,9 +75,9 @@ namespace Game
     {
         int configured = verifyConfigured();
         if (configured < 0)
-        {
             return -1;
-        }
+
+        std::cout << "Entering game loop" << std::endl;
 
         // Game loop
         while (!glfwWindowShouldClose(window_))

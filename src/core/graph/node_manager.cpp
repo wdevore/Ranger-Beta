@@ -42,7 +42,7 @@ namespace Core
         }
 
         // Visit node on Stage
-        std::cout << "NM: Visitng top : " << *nodes.front() << std::endl;
+        // std::cout << "NM: Visitng top : " << *nodes.front() << std::endl;
         nodes.front()->visit(transformStack, interpolation, width, height);
 
         if (overlay != nullptr)
@@ -96,7 +96,7 @@ namespace Core
 
     ErrorConditions NodeManager::sendSignal(nodeShPtr node, NodeSignal signal)
     {
-        std::cout << "Node Manager::sendSignal: " << signal << std::endl;
+        // std::cout << "Node Manager::sendSignal: " << signal << std::endl;
 
         switch (signal)
         {
@@ -130,7 +130,7 @@ namespace Core
             break;
         }
 
-        std::cout << "Node Manager::sendSignal: done : " << *node << std::endl;
+        // std::cout << "Node Manager::sendSignal: done : " << *node << std::endl;
 
         return ErrorConditions::None;
     }

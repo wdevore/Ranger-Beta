@@ -5,6 +5,10 @@
 
 namespace Core
 {
+    void Vbo::construct()
+    {
+    }
+
     Vbo::~Vbo()
     {
         if (genBound_)

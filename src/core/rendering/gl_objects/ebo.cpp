@@ -5,11 +5,16 @@
 
 namespace Core
 {
+
     Ebo::~Ebo()
     {
         if (genBound_)
             glDeleteBuffers(1, &eboId_);
         std::cout << "~Ebo" << std::endl;
+    }
+
+    void Ebo::construct()
+    {
     }
 
     void Ebo::gen()

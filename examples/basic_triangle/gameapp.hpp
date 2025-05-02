@@ -27,11 +27,12 @@ namespace Game
     public:
         GameApp() = default;
         GameApp(unsigned int width, unsigned int height) : App(width, height) {};
-        ~GameApp();
+        ~GameApp() = default;
 
         int verifyConfigured() override;
 
         int compile() override;
+
         int deconstruct() override;
 
         int setup() override;

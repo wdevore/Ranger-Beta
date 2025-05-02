@@ -2,6 +2,11 @@
 
 namespace Core
 {
+    void Mesh::construct()
+    {
+        vbo.construct();
+        ebo.construct();
+    }
 
     void Mesh::gen()
     {

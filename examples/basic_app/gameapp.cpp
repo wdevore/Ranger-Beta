@@ -21,6 +21,7 @@ namespace Game
         return 0;
     }
 
+    // Called by App::configure
     int GameApp::compile()
     {
         std::cout << "Compiling shaders" << std::endl;
@@ -75,6 +76,14 @@ namespace Game
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
 
+        return 1; // success
+    }
+
+    // Called by App::configure
+    int GameApp::build()
+    {
+        std::cout << "Building Atlas" << std::endl;
+
         // set up vertex data (and buffer(s)) and configure vertex attributes
         // ------------------------------------------------------------------
         float vertices[] = {
@@ -100,8 +109,6 @@ namespace Game
         // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
         // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
         glBindVertexArray(0);
-
-        return 1; // success
     }
 
     int GameApp::deconstruct()
@@ -138,7 +145,7 @@ namespace Game
 
     void GameApp::render()
     {
-        std::cout << "rendering" << std::endl;
+        // std::cout << "rendering" << std::endl;
 
         // Render
         nodeMan.visit(0.0, width, height);

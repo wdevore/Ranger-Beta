@@ -21,6 +21,7 @@ namespace Core
         Ebo(/* args */) = default;
         ~Ebo();
 
+        void construct();
         void bind(Mesh *mesh);
         void gen();
         // void use();

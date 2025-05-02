@@ -5,10 +5,6 @@
 namespace Game
 {
 
-    GameApp::~GameApp()
-    {
-    }
-
     int GameApp::verifyConfigured()
     {
         return 0;
@@ -122,6 +118,7 @@ namespace Game
         return 1;
     }
 
+    /// @brief Called by App class
     void GameApp::render()
     {
         // Render

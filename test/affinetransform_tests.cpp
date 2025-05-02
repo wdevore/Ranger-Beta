@@ -16,9 +16,9 @@ void set_affinetransform()
     Core::AffineTransform aft{};
     aft.set(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
 
-    std::cout << aft << std::endl;
+    // std::cout << aft << std::endl;
 
-    std::cout << aft.toString4x4() << std::endl;
+    // std::cout << aft.toString4x4() << std::endl;
     // Core::Vector2D p{25.0, 25.0};
 
     // bool contained = rec.pointContained(p);

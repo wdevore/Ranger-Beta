@@ -58,7 +58,7 @@ namespace Core
         if (!visible)
             return;
 
-        std::cout << "Node::visit save T stack" << std::endl;
+        // std::cout << "Node::visit save T stack" << std::endl;
         transformStack.save();
 
         // TODO Because position and angles are dependent on lerping we perform
@@ -66,7 +66,7 @@ namespace Core
         // node.interpolate(interpolation);
 
         auto aft = transform_.calcTransform(dirty);
-        std::cout << aft << std::endl;
+        // std::cout << aft << std::endl;
 
         transformStack.applyTransform(aft);
 
@@ -92,7 +92,7 @@ namespace Core
             // }
         }
 
-        std::cout << "Node::visit restore T stack : " << *this << std::endl;
+        // std::cout << "Node::visit restore T stack : " << *this << std::endl;
         transformStack.restore();
     }
 

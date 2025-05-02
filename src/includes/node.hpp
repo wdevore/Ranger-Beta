@@ -84,7 +84,7 @@ namespace Core
         /// needs to perform custom rendering.
         void render(const Matrix4 &model, double width, double height)
         {
-            std::cout << "Node::render" << std::endl;
+            // std::cout << "Node::render" << std::endl;
         }
 
         virtual void receiveSignal(NodeSignal signal) = 0;

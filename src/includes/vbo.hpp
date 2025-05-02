@@ -21,6 +21,7 @@ namespace Core
         Vbo(/* args */) = default;
         ~Vbo();
 
+        void construct();
         void bind(Mesh *mesh);
         void gen();
         // void use();

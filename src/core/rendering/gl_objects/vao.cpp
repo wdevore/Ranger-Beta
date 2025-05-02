@@ -21,6 +21,10 @@
 
 namespace Core
 {
+    void Vao::construct()
+    {
+    }
+
     Vao::~Vao()
     {
         if (genBound_)
@@ -60,6 +64,23 @@ namespace Core
         // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs),
         // remember: do NOT unbind the EBO, keep it bound to this VAO
         glBindVertexArray(0);
+    }
+
+    void Vao::use()
+    {
+        glBindVertexArray(vaoId_);
+    }
+
+    void Vao::unUse()
+    {
+        // See opengl wiki as to why "glBindVertexArray(0)" isn't really necessary here:
+        // https://www.opengl.org/wiki/Vertex_Specification#Vertex_Buffer_Object
+        // Note the line "Changing the GL_ARRAY_BUFFER binding changes nothing about vertex attribute 0..."
+        glBindVertexArray(0);
+    }
+
+    void Vao::release()
+    {
     }
 
 } // namespace Core

@@ -21,12 +21,13 @@ namespace Core
     public:
         Vbo vbo{};
         Ebo ebo{};
-        std::vector<GLfloat> vertices;
-        std::vector<GLuint> indices;
+        std::vector<GLfloat> vertices{};
+        std::vector<GLuint> indices{};
 
         Mesh(/* args */) = default;
         ~Mesh() = default;
 
+        void construct();
         void gen();
         void bind();
     };

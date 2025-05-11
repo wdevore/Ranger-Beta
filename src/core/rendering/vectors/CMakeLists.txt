@@ -15,6 +15,7 @@ set(VECTOR_SOURCES
     dynamic_mono_atlas.cpp
     static_mono_atlas.cpp
     shape_generator.cpp
+    base_atlas.cpp
 )
 
 # Add library as a ".a" file

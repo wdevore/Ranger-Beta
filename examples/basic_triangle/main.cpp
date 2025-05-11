@@ -5,7 +5,7 @@
 #include <GLFW/glfw3.h>
 
 // Window dimensions of GL canvas, not the OS window.
-const GLuint WIDTH = 800, HEIGHT = 600;
+const GLuint DEVICE_WIDTH = 800, DEVICE_HEIGHT = 600;
 
 #include <gameapp.hpp>
 
@@ -13,7 +13,7 @@ int main(int, char **)
 {
     std::cout << "Hello, triangle!" << std::endl;
 
-    Game::GameApp app{WIDTH, HEIGHT};
+    Game::GameApp app{DEVICE_WIDTH, DEVICE_HEIGHT};
 
     int initialized = app.initialize();
     if (initialized == GLFW_FALSE)

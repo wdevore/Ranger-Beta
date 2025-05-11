@@ -281,7 +281,9 @@ namespace Core
         vOut.z = 0.0f;
     }
 
-    void Matrix4::setToOrtho(double left, double right, double bottom, double top, double near, double far)
+    void Matrix4::setToOrtho(double left, double right,
+                             double bottom, double top,
+                             double near, double far)
     {
         double xorth = 2.0 / (right - left);
         double yorth = 2.0 / (top - bottom);

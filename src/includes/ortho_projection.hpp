@@ -8,18 +8,18 @@ namespace Core
     {
     private:
         /* data */
-        double near{};
-        double far{};
+        float near{};
+        float far{};
 
-        double left{};
-        double right{};
-        double bottom{};
-        double top{};
+        float left{};
+        float right{};
+        float bottom{};
+        float top{};
 
-        double width{};
-        double height{};
+        float width{};
+        float height{};
 
-        double ratioCorrection{};
+        float ratioCorrection{1.0};
 
         // Projection matrix (orthographic)
         Matrix4 matrix{true};
@@ -30,11 +30,11 @@ namespace Core
 
         const Matrix4 &getMatrix() const { return matrix; };
 
-        void setProjection(double left, double right,
-                           double bottom, double top,
-                           double near, double far);
+        void setProjection(float bottom, float left,
+                           float top, float right,
+                           float near, float far);
 
-        void setCenteredProjection(double near, double far);
+        void setCenteredProjection(float width, float height, float near, float far);
     };
 
 } // namespace Core

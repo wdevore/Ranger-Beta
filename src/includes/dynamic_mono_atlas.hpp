@@ -8,23 +8,14 @@
 #include "shape.hpp"
 #include "basic_shader.hpp"
 #include "constants.hpp"
-#include "ortho_projection.hpp"
-#include "matrix4.hpp"
+#include "base_atlas.hpp"
 
 namespace Core
 {
 
-    class DynamicMonoAtlas final
+    class DynamicMonoAtlas final : public BaseAtlas
     {
     private:
-        const GLuint UnBindID{0};
-        const GLsizei Uniform4vColorCompCount{1};
-        const GLintptr GLSubDataOffset{0};
-        /// @brief Format is: xyzxyzxyz...
-        const int VertexStride{3}; // xyz
-        const GLsizei GLUniformMatrixCount{1};
-        const GLboolean GLUniformMatrixTransposed{false};
-
         /* data */
         ErrorConditions configure();
         ErrorConditions shake();
@@ -49,9 +40,6 @@ namespace Core
         GLuint modelLoc{};
         GLuint colorLoc{};
 
-        OrthoProjection projection{};
-        Matrix4 viewspace{true};
-
     public:
         std::list<shapeShPtr> shapes{};
         int nextID{};
@@ -65,10 +53,6 @@ namespace Core
         GLuint eboID{};
 
         BasicShader shader{"mono_vertex.glsl", "mono_fragment.glsl"};
-
-        std::string lastError{};
-
-        bool dirty{true};
 
         DynamicMonoAtlas(/* args */) = default;
         ~DynamicMonoAtlas() = default;

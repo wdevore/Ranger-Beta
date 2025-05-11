@@ -145,7 +145,7 @@ namespace Core
         Matrix4 pm = projection.getMatrix();
         glUniformMatrix4fv(projLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, pm.data());
 
-        glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, viewspace.data());
+        glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, camera.viewspace.data());
 
         return ErrorConditions::None;
     }

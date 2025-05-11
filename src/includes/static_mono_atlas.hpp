@@ -8,23 +8,14 @@
 #include "shape.hpp"
 #include "basic_shader.hpp"
 #include "constants.hpp"
-#include "ortho_projection.hpp"
-#include "matrix4.hpp"
+#include "base_atlas.hpp"
 
 namespace Core
 {
 
-    class StaticMonoAtlas final
+    class StaticMonoAtlas final : public BaseAtlas
     {
     private:
-        const GLuint UnBindID{0};
-        const GLsizei Uniform4vColorCompCount{1};
-        const GLintptr GLSubDataOffset{0};
-        /// @brief Format is: xyzxyzxyz...
-        const int VertexStride{3}; // xyz
-        const GLsizei GLUniformMatrixCount{1};
-        const GLboolean GLUniformMatrixTransposed{false};
-
         /* data */
         ErrorConditions configure();
         ErrorConditions shake();
@@ -48,9 +39,6 @@ namespace Core
 
         GLint modelLoc{};
         GLint colorLoc{};
-
-        OrthoProjection projection{};
-        Matrix4 viewspace{true};
 
     public:
         std::list<shapeShPtr> shapes{};

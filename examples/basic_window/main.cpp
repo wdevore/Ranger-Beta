@@ -8,7 +8,7 @@
 #include <vector2d.hpp>
 
 // Window dimensions of GL canvas, not the OS window.
-const GLuint WIDTH = 800, HEIGHT = 600;
+const GLuint DEVICE_WIDTH = 800, DEVICE_HEIGHT = 600;
 
 // Function prototypes
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode);
@@ -25,7 +25,7 @@ int main(int, char **)
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     // Create a GLFWwindow object that we can use for GLFW's functions
-    GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(DEVICE_WIDTH, DEVICE_HEIGHT, "LearnOpenGL", NULL, NULL);
     glfwMakeContextCurrent(window);
     if (window == NULL)
     {
@@ -50,7 +50,7 @@ int main(int, char **)
     std::cout << "Loaded OpenGL " << GLAD_VERSION_MAJOR(version) << "." << GLAD_VERSION_MINOR(version) << std::endl;
 
     // Define the viewport dimensions
-    glViewport(0, 0, WIDTH, HEIGHT);
+    glViewport(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT);
 
     // Game loop
     while (!glfwWindowShouldClose(window))

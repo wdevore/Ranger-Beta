@@ -71,6 +71,14 @@ namespace Game
             return -1;
         }
 
+        // Successfully loaded OpenGL
+        std::cout << "App::configure Loaded OpenGL "
+                  << GLAD_VERSION_MAJOR(version) << "." << GLAD_VERSION_MINOR(version) << std::endl
+                  << "--------------------------"
+                  << " GL calls can now be made "
+                  << "--------------------------"
+                  << std::endl;
+
         // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
         // ---- Anything GL wise can be called after this point. -----
         // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
@@ -81,17 +89,6 @@ namespace Game
             glfwTerminate();
             return -1;
         }
-
-        // Successfully loaded OpenGL
-        std::cout << "Loaded OpenGL " << GLAD_VERSION_MAJOR(version) << "." << GLAD_VERSION_MINOR(version) << std::endl;
-
-        // int compileStatus = compile();
-        // if (compileStatus < 0)
-        // {
-        //     return -1;
-        // }
-
-        // int buildStatus = build();
 
         return 0;
     }
@@ -117,7 +114,7 @@ namespace Game
 
             // TODO add logic to determine when to call update.
             // std::cout << "dt: " << dt << std::endl;
-            update(dt);
+            update(dt * Core::TO_MILLISECONDS);
 
             render();
             frameCounter++;

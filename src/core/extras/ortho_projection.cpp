@@ -2,7 +2,9 @@
 
 namespace Core
 {
-    void OrthoProjection::setProjection(double left, double right, double bottom, double top, double near, double far)
+    void OrthoProjection::setProjection(float bottom, float left,
+                                        float top, float right,
+                                        float near, float far)
     {
         this->near = near;
         this->far = far;
@@ -19,7 +21,7 @@ namespace Core
     /// @brief Centers the projection and adjusts for aspect ratio.
     /// @param
     /// @param
-    void OrthoProjection::setCenteredProjection(double near, double far)
+    void OrthoProjection::setCenteredProjection(float width, float height, float near, float far)
     {
         // Adjust for aspect ratio
         left = -width / 2.0 / ratioCorrection;

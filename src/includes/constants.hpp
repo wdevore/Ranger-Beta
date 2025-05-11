@@ -9,6 +9,8 @@ namespace Core
     static const double DEGREES_TO_RADIANS = M_PI / 180.0;
     static const double RADIANS_TO_DEGREES = 180.0 / M_PI;
 
+    static const double TO_MILLISECONDS = 1000.0;
+
     static const std::string rootPath{"/home/iposthuman/Development/cpp/Ranger-Beta"};
     static const std::string examplePath{"/examples/basic_app"};
     static const std::string shadersPath{"/examples/common/assets/shaders/"};

@@ -6,6 +6,7 @@
 
 namespace Core
 {
+
     ErrorConditions StaticMonoAtlas::configure()
     {
         // Load shader pograms
@@ -114,6 +115,8 @@ namespace Core
 
     ErrorConditions StaticMonoAtlas::configureUniforms()
     {
+        std::cout << "StaticMonoAtlas::configureUniforms" << std::endl;
+
         shader.use();
 
         GLuint program = shader.program();
@@ -122,6 +125,7 @@ namespace Core
         if (modelLoc < 0)
         {
             lastError = "Couldn't find 'model' uniform variable";
+            std::cout << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
 
@@ -129,6 +133,7 @@ namespace Core
         if (colorLoc < 0)
         {
             lastError = "Couldn't find 'fragColor' uniform variable";
+            std::cout << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
 
@@ -137,6 +142,7 @@ namespace Core
         if (projLoc < 0)
         {
             lastError = "Couldn't find 'projection' uniform variable";
+            std::cout << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
 
@@ -144,16 +150,18 @@ namespace Core
         if (viewLoc < 0)
         {
             lastError = "Couldn't find 'view' uniform variable";
+            std::cout << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
 
+        int err = 0;
         Matrix4 pm = projection.getMatrix();
         glUniformMatrix4fv(projLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, pm.data());
-        int err = checkGLError("StaticMonoAtlas::configureUniforms:glUniformMatrix4fv(1)");
+        err = checkGLError("StaticMonoAtlas::configureUniforms:glUniformMatrix4fv(1)");
         if (err < 0)
             return ErrorConditions::GLFunctionError;
 
-        glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, viewspace.data());
+        glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, camera.viewspace.data());
         err = checkGLError("StaticMonoAtlas::configureUniforms:glUniformMatrix4fv(2)");
         if (err < 0)
             return ErrorConditions::GLFunctionError;
@@ -262,7 +270,7 @@ namespace Core
         if (shape != nullptr)
         {
             // model.data() ==> (const GLfloat *)&model.e[0]
-            // glUniformMatrix4fv(modelLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, model.data());
+            glUniformMatrix4fv(modelLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, model.data());
             glDrawElements(shape->primitiveMode, shape->indicesCount, GL_UNSIGNED_INT, shape->dataIndicesOffset());
         }
     }

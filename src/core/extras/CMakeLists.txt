@@ -10,6 +10,7 @@ set(EXTRAS_SOURCES
     delay.cpp
     ortho_projection.cpp
     viewport.cpp
+    camera.cpp
 )
 
 # Add library as a ".a" file

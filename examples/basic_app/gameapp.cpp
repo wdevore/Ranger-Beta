@@ -58,11 +58,6 @@ namespace Game
 
         // Load any assets, for example vector font.
 
-        // Build vector objects
-        // vecObj.construct();
-
-        // Initialize any Node objects
-
         nodeMan.initialize();
 
         return 1;
@@ -72,17 +67,19 @@ namespace Game
     {
         std::cout << "GameApp::construct game" << std::endl;
 
-        // Create a single scene Node to hold a square.
+        // Create a single scene (aka Node) to hold a square.
         basicScene = std::make_shared<BasicScene>("BasicScene");
         nodeMan.push(basicScene);
 
+        atlas.initialize(width, height);
+
         // TODO Hack for now. Add a shape at this point.
         Core::ShapeGenerator generator{};
-        generator.generateUnitRectangle(Core::ShapeControls::Centered, Core::ShapeControls::Outline);
+        generator.generateUnitRectangle(Core::ShapeControls::Centered, Core::ShapeControls::Filled);
         Core::Shape &shape = generator.shape;
         atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
-        generator.generateUnitTriangle(Core::ShapeControls::Centered, Core::ShapeControls::Outline);
+        generator.generateUnitTriangle(Core::ShapeControls::Centered, Core::ShapeControls::Filled);
         shape = generator.shape;
         atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
@@ -96,25 +93,24 @@ namespace Game
 
     void GameApp::render()
     {
-        // std::cout << "rendering" << std::endl;
+        // Clear the colorbuffer
+        glClearColor(bgClearColor.r, bgClearColor.g, bgClearColor.b, bgClearColor.a);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // 1) Check projection and model
 
         // Render
         // nodeMan.visit(0.0, width, height);
 
-        // Clear the colorbuffer
-        glClearColor(bgClearColor.r, bgClearColor.g, bgClearColor.b, bgClearColor.a);
-        glClear(GL_COLOR_BUFFER_BIT);
-        // 1) Check projection and model
-
         Core::Matrix4 model{true};
+        model.setScale(100.0, 100.0, 1.0);
+        // model.translate(0.0, 0.0, 1.0);
+        atlas.setColor({1.0, 0.5, 0.0, 0.0});
         atlas.render(0, model);
+
+        // model.toIdentity();
+        atlas.setColor({0.5, 1.0, 0.5, 0.0});
         atlas.render(1, model);
-
-        // draw our first triangle
-        // glUseProgram(shaderProgram);
-        // glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-
-        // glDrawArrays(GL_TRIANGLES, 0, 3);  <---
 
         // glBindVertexArray(0); // no need to unbind it every time
     }

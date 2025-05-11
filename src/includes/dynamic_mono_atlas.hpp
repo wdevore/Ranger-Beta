@@ -38,8 +38,11 @@ namespace Core
         void eboBind(int bufferSize, const std::vector<GLuint> &indices);
 
         // ------- Uniforms ---------------
-        const std::string uniModel{"model"}; // \x00
+        // Fragment vars
         const std::string uniColor{"fragColor"};
+
+        // Vertex vars
+        const std::string uniModel{"model"}; // \x00
         const std::string uniProjection{"projection"};
         const std::string uniView{"view"};
 
@@ -61,7 +64,7 @@ namespace Core
         GLuint vboID{};
         GLuint eboID{};
 
-        BasicShader shader{"basic.vs", "basic.frag"};
+        BasicShader shader{"mono_vertex.glsl", "mono_fragment.glsl"};
 
         std::string lastError{};
 

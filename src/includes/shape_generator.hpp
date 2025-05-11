@@ -19,6 +19,7 @@ namespace Core
         ~ShapeGenerator() = default;
 
         void generateUnitRectangle(ShapeControls alignment, ShapeControls fillType);
+        void generateUnitTriangle(ShapeControls alignment, ShapeControls fillType);
     };
 
 } // namespace Core

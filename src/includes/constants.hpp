@@ -41,6 +41,8 @@ namespace Core
     enum class ShapeControls
     {
         Centered,
+        BottomXAxis,
+        TopXAxis,
         Filled,
         Outline,
     };

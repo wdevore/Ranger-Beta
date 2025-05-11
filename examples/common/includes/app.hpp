@@ -1,4 +1,5 @@
 #pragma once
+#include <chrono>
 
 #include <glad/gl.h>
 // We don't need to include opengl <gl.h> because glfw does it already.
@@ -18,6 +19,16 @@ namespace Game
         GLFWwindow *window_;
 
         Color4 bgClearColor{0.2f, 0.3f, 0.3f, 1.0f};
+
+        // ------------ Timing ------------------
+        using Clock = std::chrono::high_resolution_clock;
+        using TimePoint = Clock::time_point;
+        using Duration = std::chrono::duration<double>; // Delta time in seconds
+
+        TimePoint previousFrameTime;
+        TimePoint lastFPSTime;
+        int frameCounter{};
+        double currentFPS{};
 
     public:
         unsigned int width{};

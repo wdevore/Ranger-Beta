@@ -22,6 +22,11 @@ namespace Game
         {
             initialized = setup();
         }
+
+        previousFrameTime = Clock::now();
+        frameCounter = 0;
+        currentFPS = 0.0;
+
         return initialized;
     }
 
@@ -102,17 +107,43 @@ namespace Game
         // Game loop
         while (!glfwWindowShouldClose(window_))
         {
-            // Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
+            const TimePoint currentFrameTime = Clock::now();
+            const Duration deltaTime = currentFrameTime - previousFrameTime;
+            const double dt = deltaTime.count(); // Get delta time in seconds
+
+            // Check if any events have been activated (key pressed, mouse moved
+            // etc.) and call corresponding response functions
             glfwPollEvents();
 
             // TODO add logic to determine when to call update.
-            update(0.0);
+            // std::cout << "dt: " << dt << std::endl;
+            update(dt);
 
             render();
+            frameCounter++;
+
+            const TimePoint currentTime = Clock::now();
+            const Duration timeSinceLastFPSUpdate = currentTime - lastFPSTime;
+
+            // Update FPS roughly every second
+            if (timeSinceLastFPSUpdate.count() >= 1.0)
+            {
+                currentFPS = static_cast<double>(frameCounter) / timeSinceLastFPSUpdate.count();
+                frameCounter = 0;
+                lastFPSTime = currentTime;
+
+                // Now 'currentFPS' holds the frames per second
+                // std::cout << "currentFPS: " << currentFPS << std::endl;
+            }
 
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
             // -------------------------------------------------------------------------------
             glfwSwapBuffers(window_);
+
+            previousFrameTime = currentFrameTime;
+
+            // Optional: Limit frame rate (if needed)
+            // std::this_thread::sleep_for(targetFrameDuration - deltaTime);
         }
 
         // optional: de-allocate all resources once they've outlived their purpose:

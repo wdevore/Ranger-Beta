@@ -1,6 +1,18 @@
+#include <cmath>
+
 #include <glad/gl.h>
 
 #include "shape_generator.hpp"
+
+// ---------- OpenGL unit space -------------------------------
+//
+//  top-left         (0,1) +Y
+//                     |
+//                     |
+// -X (-1,0) --------(0,0)-------- (1,0) +X
+//                     |
+//                     |
+//                   (0,-1) -Y      bottom-right
 
 namespace Core
 {
@@ -10,13 +22,6 @@ namespace Core
         shape.name = "UnitRectangle";
         shape.id = nextId++;
 
-        //  top-left         (0,1) +Y
-        //                     |
-        //                     |
-        // -X (-1,0) --------(0,0)-------- (1,0) +X
-        //                     |
-        //                     |
-        //                   (0,-1) -Y      bottom-right
         if (alignment == ShapeControls::Centered)
         {
             shape.vertices = {
@@ -54,6 +59,59 @@ namespace Core
             // CCW
             shape.indices = {
                 0, 3, 2, 1, // Outside edges
+            };
+            shape.primitiveMode = GL_LINE_LOOP;
+        }
+    }
+
+    void ShapeGenerator::generateUnitTriangle(ShapeControls alignment, ShapeControls fillType)
+    {
+        shape.clear();
+        shape.name = "UnitTriangle";
+        shape.id = nextId++;
+
+        if (alignment == ShapeControls::Centered)
+        {
+            shape.vertices = {
+                -0.5, -0.5, 0.0,      // lower-left
+                0.5, -0.5, 0.0,       // lower-right
+                0.0, M_PI / 6.3, 0.0, // top-center
+            };
+        }
+        else if (alignment == ShapeControls::TopXAxis)
+        {
+            // The top-left vertex is at 0,0 --> TopXAxis
+            shape.vertices = {
+                -0.5, -1.0, 0.0, // lower-left
+                0.5, -1.0, 0.0,  // lower-right
+                0.0, 0.0, 0.0,   // top-center as zero
+            };
+        }
+        else
+        {
+            shape.vertices = {
+                -0.5, 0.0, 0.0, // lower-left as zero
+                0.5, 0.0, 0.0,  // lower-right as zero
+                0.0, 1.0, 0.0,  // top-center as 1
+            };
+        }
+
+        // These indices can be used with the same vertices. You don't need
+        // separate vertex arrays.
+        if (fillType == ShapeControls::Filled)
+        {
+            // CCW
+            // Technically we could use a quad here.
+            shape.indices = {
+                0, 1, 2, // Single triangle
+            };
+            shape.primitiveMode = GL_TRIANGLES;
+        }
+        else
+        {
+            // CCW
+            shape.indices = {
+                0, 1, 2, // Outside edges
             };
             shape.primitiveMode = GL_LINE_LOOP;
         }

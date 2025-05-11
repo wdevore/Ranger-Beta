@@ -78,10 +78,12 @@ namespace Game
 
         // TODO Hack for now. Add a shape at this point.
         Core::ShapeGenerator generator{};
-        generator.generateUnitRectangle(Core::ShapeControls::Centered, Core::ShapeControls::Filled);
-
+        generator.generateUnitRectangle(Core::ShapeControls::Centered, Core::ShapeControls::Outline);
         Core::Shape &shape = generator.shape;
+        atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
+        generator.generateUnitTriangle(Core::ShapeControls::Centered, Core::ShapeControls::Outline);
+        shape = generator.shape;
         atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
         atlas.burn();
@@ -103,10 +105,10 @@ namespace Game
         glClearColor(bgClearColor.r, bgClearColor.g, bgClearColor.b, bgClearColor.a);
         glClear(GL_COLOR_BUFFER_BIT);
         // 1) Check projection and model
-        // 2) Switch back to simpler shaders
 
         Core::Matrix4 model{true};
         atlas.render(0, model);
+        atlas.render(1, model);
 
         // draw our first triangle
         // glUseProgram(shaderProgram);

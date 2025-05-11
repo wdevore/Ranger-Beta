@@ -9,10 +9,11 @@ namespace Core
     private:
         /* data */
     public:
-        BasicShader(const std::string &vertexPath, const std::string &fragmentPath) : Shader(vertexPath, fragmentPath) {};
+        BasicShader();
+        explicit BasicShader(const std::string &vertexPath, const std::string &fragmentPath) : Shader(vertexPath, fragmentPath) {};
         ~BasicShader() = default;
 
-        void build();
+        ErrorConditions build();
     };
 
 } // namespace Core

@@ -4,10 +4,11 @@
 #include <unordered_map>
 
 #include "vector_shape.hpp"
-#include "vector_object.hpp"
 
 namespace Core
 {
+    class VectorObject;
+
     class Atlas
     {
     private:
@@ -20,7 +21,7 @@ namespace Core
         Atlas(/* args */) = default;
         ~Atlas() = default;
 
-        virtual void construct(VectorObject &vo) = 0;
+        virtual void construct(VectorObject *vo) = 0;
         void addShape(const VectorShapeSPtr &shape);
     };
 

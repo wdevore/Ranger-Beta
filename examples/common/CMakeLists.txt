@@ -14,8 +14,10 @@ add_library(CommonLib OBJECT
     ${COMMON_SOURCES}
 )
 
+# The relative paths are based on the location of the CMakeList file.
 target_include_directories(CommonLib
     PUBLIC includes
+    PUBLIC ../../src/includes
     PUBLIC ${GLAD_INCLUDES}
     PUBLIC ${glfw_SOURCE_DIR}/deps
     PUBLIC ${glfw_SOURCE_DIR}/include

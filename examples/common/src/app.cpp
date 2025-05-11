@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "app.hpp"
+#include <constants.hpp>
 
 namespace Game
 {
@@ -10,8 +11,12 @@ namespace Game
     void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode);
     void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
+    /// @brief This is the first method called by main.cpp
+    /// @return
     int App::initialize()
     {
+        std::cout << "App::initialize" << std::endl;
+
         int initialized = glfwInit();
         if (initialized)
         {
@@ -23,10 +28,10 @@ namespace Game
     bool App::createWindow(const std::string &title)
     {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-        glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
         // Create a GLFWwindow object that we can use for GLFW's functions
         window_ = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
@@ -38,11 +43,18 @@ namespace Game
         glfwMakeContextCurrent(window_);
         glfwSetFramebufferSizeCallback(window_, framebuffer_size_callback);
 
+        // Set initial viewport size
+        int width_, height_;
+        glfwGetFramebufferSize(window_, &width_, &height_);
+        std::cout << "App::createWindow Window size: " << width_ << "x" << height_ << std::endl;
+
         return true;
     }
 
     int App::configure()
     {
+        std::cout << "App::configure" << std::endl;
+
         // Set the required callback functions
         glfwSetKeyCallback(window_, key_callback);
 
@@ -54,19 +66,27 @@ namespace Game
             return -1;
         }
 
-        // Successfully loaded OpenGL
-        std::cout << "Loaded OpenGL " << GLAD_VERSION_MAJOR(version) << "." << GLAD_VERSION_MINOR(version) << std::endl;
-
-        int compileStatus = compile();
-        if (compileStatus < 0)
+        // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+        // ---- Anything GL wise can be called after this point. -----
+        // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+        glViewport(0, 0, width, height);
+        int err = Core::checkGLError("App::createWindow:glViewport");
+        if (err < 0)
         {
+            glfwTerminate();
             return -1;
         }
 
-        int buildStatus = build();
+        // Successfully loaded OpenGL
+        std::cout << "Loaded OpenGL " << GLAD_VERSION_MAJOR(version) << "." << GLAD_VERSION_MINOR(version) << std::endl;
 
-        // Define the viewport dimensions
-        // glViewport(0, 0, width, height);
+        // int compileStatus = compile();
+        // if (compileStatus < 0)
+        // {
+        //     return -1;
+        // }
+
+        // int buildStatus = build();
 
         return 0;
     }
@@ -77,7 +97,7 @@ namespace Game
         if (configured < 0)
             return -1;
 
-        std::cout << "Entering game loop" << std::endl;
+        std::cout << "App::run Entering game loop" << std::endl;
 
         // Game loop
         while (!glfwWindowShouldClose(window_))
@@ -116,6 +136,8 @@ namespace Game
     // ---------------------------------------------------------------------------------------------
     void framebuffer_size_callback(GLFWwindow *window, int width, int height)
     {
+        std::cout << "GL View dimensions: " << width << "x" << height << std::endl;
+
         // make sure the viewport matches the new window dimensions; note that width and
         // height will be significantly larger than specified on retina displays.
         glViewport(0, 0, width, height);

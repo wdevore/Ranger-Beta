@@ -1,9 +1,11 @@
 #pragma once
 
-#include <vector_atlas.hpp>
+#include "vector_atlas.hpp"
 
 namespace Core
 {
+    class VectorObject;
+
     class VectorUniformAtlas final : public VectorAtlas
     {
     private:
@@ -12,10 +14,9 @@ namespace Core
         VectorUniformAtlas(/* args */) = default;
         ~VectorUniformAtlas() = default;
 
-        void add(float x, float y);
-        void add(float x, float y, float z);
+        void build(VectorObject *vo) override;
 
-        void add(float x, float y, float z, int i);
+        void buildSquare_(VectorObject *vo);
     };
 
 } // namespace Core

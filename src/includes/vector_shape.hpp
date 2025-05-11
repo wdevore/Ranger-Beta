@@ -22,9 +22,12 @@ namespace Core
         std::string name{};
         GLuint primitiveType{};
 
+        /// @brief BBox upper-left
         Vector3 minPoint{};
+        /// @brief BBox lower-right
         Vector3 maxPoint{};
 
+        /// @brief How many vertices
         int vertexCount;
 
         Mesh mesh{};

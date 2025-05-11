@@ -1,7 +1,8 @@
 #pragma once
 
 #include "vao.hpp"
-#include "vector_uniform_atlas.hpp"
+
+#include <vector_uniform_atlas.hpp>
 
 namespace Core
 {
@@ -12,6 +13,7 @@ namespace Core
 
     public:
         Vao vao{};
+
         VectorUniformAtlas atlas{};
 
         VectorObject(/* args */) = default;
@@ -26,6 +28,8 @@ namespace Core
         void release();
 
         void bind();
+
+        int begin();
     };
 
 } // namespace Core

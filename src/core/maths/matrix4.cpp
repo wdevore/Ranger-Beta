@@ -74,22 +74,22 @@ namespace Core
 
     inline void Matrix4::translate(double x, double y, double z)
     {
-        tM0_.e[m00] = 1.0;
-        tM0_.e[m01] = 0.0;
-        tM0_.e[m02] = 0.0;
+        tM0_.e[m00] = 1.0f;
+        tM0_.e[m01] = 0.0f;
+        tM0_.e[m02] = 0.0f;
         tM0_.e[m03] = x;
-        tM0_.e[m10] = 0.0;
-        tM0_.e[m11] = 1.0;
-        tM0_.e[m12] = 0.0;
+        tM0_.e[m10] = 0.0f;
+        tM0_.e[m11] = 1.0f;
+        tM0_.e[m12] = 0.0f;
         tM0_.e[m13] = y;
-        tM0_.e[m20] = 0.0;
-        tM0_.e[m21] = 0.0;
-        tM0_.e[m22] = 1.0;
+        tM0_.e[m20] = 0.0f;
+        tM0_.e[m21] = 0.0f;
+        tM0_.e[m22] = 1.0f;
         tM0_.e[m23] = z;
-        tM0_.e[m30] = 0.0;
-        tM0_.e[m31] = 0.0;
-        tM0_.e[m32] = 0.0;
-        tM0_.e[m33] = 1.0;
+        tM0_.e[m30] = 0.0f;
+        tM0_.e[m31] = 0.0f;
+        tM0_.e[m32] = 0.0f;
+        tM0_.e[m33] = 1.0f;
 
         multiply(this, tM0_, mulM_);
         set(mulM_);
@@ -162,20 +162,20 @@ namespace Core
 
         tM0_.e[m00] = c;
         tM0_.e[m01] = -s;
-        tM0_.e[m02] = 0.0;
-        tM0_.e[m03] = 0.0;
+        tM0_.e[m02] = 0.0f;
+        tM0_.e[m03] = 0.0f;
         tM0_.e[m10] = s;
         tM0_.e[m11] = c;
-        tM0_.e[m12] = 0.0;
-        tM0_.e[m13] = 0.0;
-        tM0_.e[m20] = 0.0;
-        tM0_.e[m21] = 0.0;
-        tM0_.e[m22] = 1.0;
-        tM0_.e[m23] = 0.0;
-        tM0_.e[m30] = 0.0;
-        tM0_.e[m31] = 0.0;
-        tM0_.e[m32] = 0.0;
-        tM0_.e[m33] = 1.0;
+        tM0_.e[m12] = 0.0f;
+        tM0_.e[m13] = 0.0f;
+        tM0_.e[m20] = 0.0f;
+        tM0_.e[m21] = 0.0f;
+        tM0_.e[m22] = 1.0f;
+        tM0_.e[m23] = 0.0f;
+        tM0_.e[m30] = 0.0f;
+        tM0_.e[m31] = 0.0f;
+        tM0_.e[m32] = 0.0f;
+        tM0_.e[m33] = 1.0f;
 
         multiply(this, tM0_, mulM_);
         set(mulM_);
@@ -201,7 +201,7 @@ namespace Core
 
         e[m00] = sx;
         e[m11] = sy;
-        e[m22] = 1.0;
+        e[m22] = 1.0f;
     }
 
     /// @brief Overwrites the diagonal scale components.
@@ -224,21 +224,21 @@ namespace Core
     void Matrix4::scaleBy(double sx, double sy, double sz)
     {
         tM0_.e[m00] = sx;
-        tM0_.e[m01] = 0;
-        tM0_.e[m02] = 0;
-        tM0_.e[m03] = 0;
-        tM0_.e[m10] = 0;
+        tM0_.e[m01] = 0.0f;
+        tM0_.e[m02] = 0.0f;
+        tM0_.e[m03] = 0.0f;
+        tM0_.e[m10] = 0.0f;
         tM0_.e[m11] = sy;
-        tM0_.e[m12] = 0;
-        tM0_.e[m13] = 0;
-        tM0_.e[m20] = 0;
-        tM0_.e[m21] = 0;
+        tM0_.e[m12] = 0.0f;
+        tM0_.e[m13] = 0.0f;
+        tM0_.e[m20] = 0.0f;
+        tM0_.e[m21] = 0.0f;
         tM0_.e[m22] = sz;
-        tM0_.e[m23] = 0;
-        tM0_.e[m30] = 0;
-        tM0_.e[m31] = 0;
-        tM0_.e[m32] = 0;
-        tM0_.e[m33] = 1;
+        tM0_.e[m23] = 0.0f;
+        tM0_.e[m30] = 0.0f;
+        tM0_.e[m31] = 0.0f;
+        tM0_.e[m32] = 0.0f;
+        tM0_.e[m33] = 1.0f;
 
         multiply(this, tM0_, mulM_);
         set(mulM_);
@@ -278,7 +278,35 @@ namespace Core
 
         vOut.x = e[m00] * vIn.x + e[m01] * vIn.y + e[m02] * vIn.z + e[m03]; // x
         vOut.y = e[m10] * vIn.x + e[m11] * vIn.y + e[m12] * vIn.z + e[m13]; // y
-        vOut.z = 0.0;
+        vOut.z = 0.0f;
+    }
+
+    void Matrix4::setToOrtho(double left, double right, double bottom, double top, double near, double far)
+    {
+        double xorth = 2.0 / (right - left);
+        double yorth = 2.0 / (top - bottom);
+        double zorth = 2.0 / (near - far);
+
+        double tx = (right + left) / (left - right);
+        double ty = (top + bottom) / (bottom - top);
+        double tz = (far + near) / (far - near);
+
+        e[m00] = xorth;
+        e[m10] = 0.0f;
+        e[m20] = 0.0f;
+        e[m30] = 0.0f;
+        e[m01] = 0.0f;
+        e[m11] = yorth;
+        e[m21] = 0.0f;
+        e[m31] = 0.0f;
+        e[m02] = 0.0f;
+        e[m12] = 0.0f;
+        e[m22] = zorth;
+        e[m32] = 0.0f;
+        e[m03] = tx;
+        e[m13] = ty;
+        e[m23] = tz;
+        e[m33] = 1.0f;
     }
 
     /// @brief multiply multiplies a * b and places result into 'out', (i.e. out = a * b)
@@ -355,24 +383,24 @@ namespace Core
 
     void Matrix4::toIdentity()
     {
-        e[m00] = 1.0;
-        e[m01] = 0.0;
-        e[m02] = 0.0;
-        e[m03] = 0.0;
+        e[m00] = 1.0f;
+        e[m01] = 0.0f;
+        e[m02] = 0.0f;
+        e[m03] = 0.0f;
 
-        e[m10] = 0.0;
-        e[m11] = 1.0;
-        e[m12] = 0.0;
-        e[m13] = 0.0;
+        e[m10] = 0.0f;
+        e[m11] = 1.0f;
+        e[m12] = 0.0f;
+        e[m13] = 0.0f;
 
-        e[m20] = 0.0;
-        e[m21] = 0.0;
-        e[m22] = 1.0;
-        e[m23] = 0.0;
+        e[m20] = 0.0f;
+        e[m21] = 0.0f;
+        e[m22] = 1.0f;
+        e[m23] = 0.0f;
 
-        e[m30] = 0.0;
-        e[m31] = 0.0;
-        e[m32] = 0.0;
-        e[m33] = 1.0;
+        e[m30] = 0.0f;
+        e[m31] = 0.0f;
+        e[m32] = 0.0f;
+        e[m33] = 1.0f;
     }
 }

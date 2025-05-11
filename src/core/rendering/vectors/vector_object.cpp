@@ -4,6 +4,9 @@ namespace Core
 {
     void VectorObject::construct()
     {
+        atlas.construct(this);
+        vao.construct();
+        vao.bind(&atlas.mesh);
     }
 
     void VectorObject::use()
@@ -23,7 +26,12 @@ namespace Core
 
     void VectorObject::bind()
     {
-        vao.bind(&atlas.mesh);
+        // vao.bind(&atlas.mesh);
+    }
+
+    int VectorObject::begin()
+    {
+        return atlas.begin();
     }
 
 } // namespace Core

@@ -13,6 +13,7 @@ add_subdirectory(rendering)
 # This kind of a hack. I don't list any actual sources, but
 # simply create a blank variable. I should use INTERFACEs but
 # I can't get it to work.
+# Update, I decided to move constants here
 set(CORE_SOURCES
     # Maths
     # maths/vector2d.cpp
@@ -28,6 +29,7 @@ set(CORE_SOURCES
     # graph/transform.cpp
     # graph/transform_stack.cpp
     # graph/node_manager.cpp
+    constants.cpp
 )
 
 # Add library as a ".a" file

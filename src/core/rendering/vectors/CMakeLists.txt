@@ -5,11 +5,16 @@ set(CMAKE_CXX_STANDARD           17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 set(VECTOR_SOURCES
-    atlas.cpp
-    uniform_atlas.cpp
+    # atlas.cpp
+    # uniform_atlas.cpp
     vector_object.cpp
     vector_atlas.cpp
+    vector_shape.cpp
     vector_uniform_atlas.cpp
+    shape.cpp
+    dynamic_mono_atlas.cpp
+    static_mono_atlas.cpp
+    shape_generator.cpp
 )
 
 # Add library as a ".a" file

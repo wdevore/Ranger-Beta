@@ -23,6 +23,11 @@ namespace Core
 {
     void Vao::construct()
     {
+        if (!genBound_)
+        {
+            glGenVertexArrays(1, &vaoId_);
+            genBound_ = true;
+        }
     }
 
     Vao::~Vao()
@@ -34,11 +39,7 @@ namespace Core
 
     void Vao::bind(Mesh *mesh)
     {
-        if (!genBound_)
-        {
-            glGenVertexArrays(1, &vaoId_);
-            genBound_ = true;
-        }
+        // construct() must be called prior.
 
         mesh->gen();
 

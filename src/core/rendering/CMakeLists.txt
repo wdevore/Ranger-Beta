@@ -25,4 +25,6 @@ target_link_libraries(RenderLib
     PUBLIC GLObjectsLib
     PUBLIC ShadersLib
     PUBLIC VectorsLib
+    # We need to include CoreLib because of deps on constants.cpp
+    PUBLIC CoreLib
 )

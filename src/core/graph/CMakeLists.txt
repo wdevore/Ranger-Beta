@@ -10,7 +10,6 @@ set(GRAPH_SOURCES
     transform.cpp
     transform_stack.cpp
     node_manager.cpp
-    constants.cpp
 )
 
 # Add library as a ".a" file

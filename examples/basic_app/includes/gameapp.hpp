@@ -2,7 +2,10 @@
 
 #include <app.hpp>
 #include <node_manager.hpp>
-#include <basic_scene_node.hpp>
+#include <static_mono_atlas.hpp>
+#include "basic_scene_node.hpp"
+// #include "vector_object.hpp"
+// #include "basic_shader.hpp"
 
 namespace Game
 {
@@ -14,21 +17,26 @@ namespace Game
 
         std::shared_ptr<BasicScene> basicScene;
 
-        unsigned int VBO, VAO;
-        unsigned int shaderProgram;
+        // Core::BasicShader shader{};
+        // Core::VectorObject vecObj{};
 
-        const char *vertexShaderSource = "#version 330 core\n"
-                                         "layout (location = 0) in vec3 aPos;\n"
-                                         "void main()\n"
-                                         "{\n"
-                                         "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-                                         "}\0";
-        const char *fragmentShaderSource = "#version 330 core\n"
-                                           "out vec4 FragColor;\n"
-                                           "void main()\n"
-                                           "{\n"
-                                           "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-                                           "}\n\0";
+        // unsigned int VBO, VAO;
+        // unsigned int shaderProgram;
+
+        // const char *vertexShaderSource = "#version 330 core\n"
+        //                                  "layout (location = 0) in vec3 aPos;\n"
+        //                                  "void main()\n"
+        //                                  "{\n"
+        //                                  "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+        //                                  "}\0";
+        // const char *fragmentShaderSource = "#version 330 core\n"
+        //                                    "out vec4 FragColor;\n"
+        //                                    "void main()\n"
+        //                                    "{\n"
+        //                                    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+        //                                    "}\n\0";
+
+        Core::StaticMonoAtlas atlas{};
 
     public:
         GameApp() = default;

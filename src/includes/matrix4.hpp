@@ -94,13 +94,15 @@ namespace Core
         // M33 WW: Typically the value one. On Vector3 multiplication this value is ignored.
         static const int m33 = 15;
 
-        double e[16] = {};
+        float e[16] = {};
 
         // Factory
         static Matrix4 createAsIdentity();
 
         void set(const Matrix4 &m);
         void set(const AffineTransform &aft);
+
+        const float *data() const { return (const float *)&e[0]; }
 
         void translate(const Vector3 &v);
         void translate(double x, double y, double z);
@@ -119,6 +121,10 @@ namespace Core
 
         void transformVertices(const std::vector<double> &inV, std::vector<double> &out);
         void transformVector(const Vector3 &vector, Vector3 &out);
+
+        void setToOrtho(double left, double right,
+                        double bottom, double top,
+                        double near, double far);
 
         void toIdentity();
 

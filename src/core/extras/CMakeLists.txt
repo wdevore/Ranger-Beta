@@ -8,6 +8,8 @@ set(EXTRAS_SOURCES
     vector_font.cpp
     char_vectors.cpp
     delay.cpp
+    ortho_projection.cpp
+    viewport.cpp
 )
 
 # Add library as a ".a" file
@@ -16,5 +18,8 @@ add_library(ExtrasLib OBJECT
 )
 
 target_include_directories(ExtrasLib
- PUBLIC ../../includes
+    PUBLIC ../../includes
+    PUBLIC ${GLAD_INCLUDES}
+    PUBLIC ${glfw_SOURCE_DIR}/deps
+    PUBLIC ${glfw_SOURCE_DIR}/include
 )

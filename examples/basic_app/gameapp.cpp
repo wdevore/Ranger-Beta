@@ -104,11 +104,14 @@ namespace Game
 
         Core::Matrix4 model{true};
         model.setScale(100.0, 100.0, 1.0);
-        // model.translate(0.0, 0.0, 1.0);
         atlas.setColor({1.0, 0.5, 0.0, 0.0});
         atlas.render(0, model);
 
-        // model.toIdentity();
+        model.toIdentity();
+        // Order matters
+        model.translate(50.0, 50.0, 0.0);
+        model.scaleBy(100.0, 100.0, 1.0);
+        model.rotate(45.0 * Core::DEGREES_TO_RADIANS);
         atlas.setColor({0.5, 1.0, 0.5, 0.0});
         atlas.render(1, model);
 

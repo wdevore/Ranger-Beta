@@ -112,7 +112,8 @@ namespace Game
             // etc.) and call corresponding response functions
             glfwPollEvents();
 
-            // TODO add logic to determine when to call update.
+            // TODO add logic to determine when to call update. See
+            // Gemini response.
             // std::cout << "dt: " << dt << std::endl;
             update(dt * Core::TO_MILLISECONDS);
 

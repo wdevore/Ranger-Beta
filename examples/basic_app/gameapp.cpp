@@ -26,24 +26,6 @@ namespace Game
         return 0;
     }
 
-    // Called by App::configure
-    int GameApp::compile()
-    {
-        std::cout << "GameApp::compile shaders" << std::endl;
-
-        // shader.build();
-
-        return 1; // success
-    }
-
-    // Called by App::configure
-    int GameApp::build()
-    {
-        std::cout << "GameApp::build Atlas" << std::endl;
-
-        return 1; // Success
-    }
-
     int GameApp::deconstruct()
     {
         std::cout << "GameApp::deconstruct" << std::endl;

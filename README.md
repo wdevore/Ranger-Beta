@@ -8,8 +8,8 @@ This project was started in April 2025 and is a mixture of:
 - [SimpleOpenGL-Go](https://github.com/wdevore/SimpleOpenGL-Go) was done in 2020
 
 # Tasks ✔
-* Complete shapes <-- **WORKING**
-* Integrate Node system
+* Complete shapes ✔
+* Integrate Node system <-- **WORKING**
   * Zoom Node
   * Dragging
   * Space mapping

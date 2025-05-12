@@ -54,18 +54,9 @@ namespace Game
         // Virtuals
         // ----------------------------------------------------------
 
-        /// @brief Builds the Atlas
-        /// @return
-        virtual int build() = 0;
-
         /// @brief Allows app to check if the app has been setup properly.
         /// @return
         virtual int verifyConfigured() = 0;
-
-        /// @brief Called by configure so that derived classes can configure
-        /// shaders and stuff.
-        /// @return
-        virtual int compile() = 0;
 
         /// @brief Called when the game loop exit and it is time to cleanup
         /// OpenGL.

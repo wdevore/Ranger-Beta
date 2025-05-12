@@ -26,8 +26,6 @@ namespace Game
 
         int verifyConfigured() override;
 
-        int compile() override;
-        int build() override;
         int deconstruct() override;
 
         int setup() override;

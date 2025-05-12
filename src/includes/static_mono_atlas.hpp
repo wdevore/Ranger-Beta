@@ -42,6 +42,8 @@ namespace Core
 
     public:
         std::list<shapeShPtr> shapes{};
+        // TODO std::unordered_map<std::string, VectorShapeSPtr> shapes{};
+
         int nextID{};
 
         // For the Shaking process

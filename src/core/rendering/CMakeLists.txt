@@ -4,7 +4,6 @@ set(CMAKE_CXX_STANDARD           17)
 # I want c++17 to the require minimum
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
-add_subdirectory(gl_objects)
 add_subdirectory(shaders)
 add_subdirectory(vectors)
 
@@ -22,7 +21,6 @@ add_library(RenderLib STATIC
 
 # RenderLib is built from these libraries
 target_link_libraries(RenderLib
-    PUBLIC GLObjectsLib
     PUBLIC ShadersLib
     PUBLIC VectorsLib
     # We need to include CoreLib because of deps on constants.cpp

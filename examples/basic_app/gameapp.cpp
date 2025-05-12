@@ -75,11 +75,38 @@ namespace Game
 
         // TODO Hack for now. Add a shape at this point.
         Core::ShapeGenerator generator{};
+        // 0
         generator.generateUnitRectangle(Core::ShapeControls::Centered, Core::ShapeControls::Filled);
         Core::Shape &shape = generator.shape;
         atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
+        // 1
         generator.generateUnitTriangle(Core::ShapeControls::Centered, Core::ShapeControls::Filled);
+        shape = generator.shape;
+        atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
+
+        // 2
+        generator.generateHLine();
+        shape = generator.shape;
+        atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
+
+        // 3
+        generator.generateVLine();
+        shape = generator.shape;
+        atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
+
+        // 4
+        generator.generateUnitPlus();
+        shape = generator.shape;
+        atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
+
+        // 5
+        generator.generateUnitCircle(12, Core::ShapeControls::Filled);
+        shape = generator.shape;
+        atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
+
+        // 6
+        generator.generateArc(0.0, 45.0 * Core::DEGREES_TO_RADIANS, 6, Core::ShapeControls::Filled);
         shape = generator.shape;
         atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
@@ -105,7 +132,7 @@ namespace Game
         Core::Matrix4 model{true};
         model.setScale(100.0, 100.0, 1.0);
         atlas.setColor({1.0, 0.5, 0.0, 0.0});
-        atlas.render(0, model);
+        atlas.render(0, model); // rectangle
 
         model.toIdentity();
         // Order matters
@@ -113,7 +140,37 @@ namespace Game
         model.scaleBy(100.0, 100.0, 1.0);
         model.rotate(45.0 * Core::DEGREES_TO_RADIANS);
         atlas.setColor({0.5, 1.0, 0.5, 0.0});
-        atlas.render(1, model);
+        atlas.render(1, model); // triangle
+
+        model.toIdentity();
+        model.translate(-200.0, 0.0, 0.0);
+        model.scaleBy(100.0, 100.0, 1.0);
+        atlas.setColor({1.0, 0.5, 0.5, 0.0});
+        atlas.render(2, model); // hline
+
+        model.toIdentity();
+        model.translate(-200.0, 0.0, 0.0);
+        model.scaleBy(100.0, 100.0, 1.0);
+        atlas.setColor({1.0, 0.0, 0.5, 0.0});
+        atlas.render(3, model); // vline
+
+        model.toIdentity();
+        model.translate(100.0, 200.0, 0.0);
+        model.scaleBy(100.0, 100.0, 1.0);
+        atlas.setColor({1.0, 1.0, 0.0, 0.0});
+        atlas.render(4, model); // hplus
+
+        model.toIdentity();
+        model.translate(200.0, 0.0, 0.0);
+        model.scaleBy(100.0, 100.0, 1.0);
+        atlas.setColor({0.5, 0.5, 1.0, 0.0});
+        atlas.render(5, model); // circle
+
+        model.toIdentity();
+        model.translate(-100.0, 100.0, 0.0);
+        model.scaleBy(100.0, 100.0, 1.0);
+        atlas.setColor({0.5, 0.5, 1.0, 0.0});
+        atlas.render(6, model); // arc
 
         // glBindVertexArray(0); // no need to unbind it every time
     }

@@ -40,13 +40,10 @@ namespace Core
         return group_.findNode(name);
     }
 
+    /// @brief Inherited Nodes should override AND subcribe as a timing target.
+    /// @param dt
     void Node::update(double dt)
     {
-        // Recure into the children
-        for (auto &&child : group_.children_)
-        {
-            child->update(dt);
-        }
     }
 
     void Node::visit(TransformStack &transformStack,
@@ -70,7 +67,7 @@ namespace Core
 
         transformStack.applyTransform(aft);
 
-        render(transformStack.current, width, height);
+        render(transformStack.current);
 
         // Some of the children may still be visible.
         // TODO add extra flag to choose if parent only or all children are visible

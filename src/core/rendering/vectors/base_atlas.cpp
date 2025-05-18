@@ -1,15 +1,18 @@
 #include <base_atlas.hpp>
+#include <environment.hpp>
 
 namespace Core
 {
-    void BaseAtlas::initialize(int width, int height)
+    void BaseAtlas::initialize(environmentShPtr environment)
     {
-        std::cout << "StaticMonoAtlas::initialize : " << width << "x" << height << std::endl;
+        this->environment = environment;
+
+        std::cout << "StaticMonoAtlas::initialize : " << environment->deviceWidth << "x" << environment->deviceHeight << std::endl;
 
         const float near{-1.0};
         const float far{1.0};
-        const float w = static_cast<float>(width);
-        const float h = static_cast<float>(height);
+        const float w = static_cast<float>(environment->deviceWidth);
+        const float h = static_cast<float>(environment->deviceHeight);
 
         // Origin at bottom-left
         // projection.setProjection(0.0, 0.0,
@@ -19,8 +22,7 @@ namespace Core
         // Origin at screen center
         projection.setCenteredProjection(w, h, near, far);
 
-        std::cout << "StaticMonoAtlas::initialize Projection matrix set" << std::endl;
-
+        // std::cout << "StaticMonoAtlas::initialize Projection matrix set" << std::endl;
         // |   0.00250,   0.00000,   0.00000,  -0.00000|
         // |   0.00000,   0.00333,   0.00000,  -0.00000|
         // |   0.00000,   0.00000,  -1.00000,   0.00000|

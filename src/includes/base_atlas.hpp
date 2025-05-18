@@ -1,13 +1,17 @@
 #pragma once
 
+#include <memory>
+
 #include <glad/gl.h>
 
 #include "ortho_projection.hpp"
-// #include "matrix4.hpp"
 #include "camera.hpp"
 
 namespace Core
 {
+    class Environment;
+    using environmentShPtr = std::shared_ptr<Environment>;
+
     class BaseAtlas
     {
     private:
@@ -26,7 +30,8 @@ namespace Core
         OrthoProjection projection{};
         /// @brief This is the camera
         Camera camera{};
-        // Matrix4 viewspace{true};
+
+        environmentShPtr environment;
 
         std::string lastError{};
 
@@ -36,7 +41,7 @@ namespace Core
         BaseAtlas(/* args */) = default;
         ~BaseAtlas() = default;
 
-        void initialize(int width, int height);
+        virtual void initialize(environmentShPtr environment);
     };
 
 } // namespace Core

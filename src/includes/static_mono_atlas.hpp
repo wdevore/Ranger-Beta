@@ -12,7 +12,6 @@
 
 namespace Core
 {
-
     class StaticMonoAtlas final : public BaseAtlas
     {
     private:
@@ -60,8 +59,11 @@ namespace Core
 
         bool dirty{true};
 
-        StaticMonoAtlas(/* args */) = default;
+        StaticMonoAtlas(/* args */) { std::cout << "StaticMonoAtlas ctor" << std::endl; };
+
         ~StaticMonoAtlas() = default;
+
+        void initialize(environmentShPtr environment) override;
 
         /// @brief Main method to call to load and compile.
         /// @return
@@ -85,4 +87,5 @@ namespace Core
         void render(int id, const Matrix4 &model);
     };
 
+    using staticAtlasShPtr = std::shared_ptr<StaticMonoAtlas>;
 } // namespace Core

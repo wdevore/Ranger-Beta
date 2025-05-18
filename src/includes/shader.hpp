@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <sstream> // For std::ostringstream
+#include <memory>
 
 #include <glad/gl.h>
 // We don't need to include opengl <gl.h> because glfw does it already.
@@ -11,6 +12,9 @@
 
 namespace Core
 {
+    class Environment;
+    using environmentShPtr = std::shared_ptr<Environment>;
+
     class Shader
     {
     private:
@@ -28,26 +32,16 @@ namespace Core
         std::string vertexPath_;
         std::string fragmentPath_;
 
+        environmentShPtr environment;
+
         ErrorConditions build();
 
     public:
         Shader() = default;
-        explicit Shader(const std::string &vertexPath, const std::string &fragmentPath) : vertexPath_(vertexPath), fragmentPath_(fragmentPath)
-        {
-            std::ostringstream oss;
-            oss << rootPath << shadersPath << vertexPath_;
-            std::cout << "Shader::Shader vp: " << oss.str() << std::endl;
-
-            vertexPath_ = oss.str();
-
-            oss.str("");
-            oss.clear();
-
-            oss << rootPath << shadersPath << fragmentPath_;
-            std::cout << "Shader::Shader fp: " << oss.str() << std::endl;
-            fragmentPath_ = oss.str();
-        };
+        explicit Shader(const std::string &vertexPath, const std::string &fragmentPath) : vertexPath_(vertexPath), fragmentPath_(fragmentPath) {};
         ~Shader() = default;
+
+        void initialize(environmentShPtr environment);
 
         // Set by inherited class.
         GLuint program() const { return program_; };

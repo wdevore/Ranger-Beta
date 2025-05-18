@@ -15,21 +15,8 @@ add_subdirectory(rendering)
 # I can't get it to work.
 # Update, I decided to move constants here
 set(CORE_SOURCES
-    # Maths
-    # maths/vector2d.cpp
-    # maths/matrix4.cpp
-    # maths/vector3.cpp
-    # maths/affinetransform.cpp
-    # Geometry
-    # geometry/point.cpp
-    # geometry/rectangle.cpp
-    # Graph
-    # graph/node.cpp
-    # graph/group.cpp
-    # graph/transform.cpp
-    # graph/transform_stack.cpp
-    # graph/node_manager.cpp
     constants.cpp
+    environment.cpp
 )
 
 # Add library as a ".a" file

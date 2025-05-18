@@ -5,9 +5,30 @@
 // #include <unistd.h> // For readlink (POSIX)
 
 #include <shader.hpp>
+#include <environment.hpp>
 
 namespace Core
 {
+    void Shader::initialize(environmentShPtr environment)
+    {
+        this->environment = environment;
+
+        // TODO Set paths
+        std::ostringstream oss;
+
+        oss << environment->rootPath << environment->shadersPath << vertexPath_;
+        std::cout << "Shader::Shader vp: " << oss.str() << std::endl;
+
+        vertexPath_ = oss.str();
+
+        oss.str("");
+        oss.clear();
+
+        oss << environment->rootPath << environment->shadersPath << fragmentPath_;
+        std::cout << "Shader::Shader fp: " << oss.str() << std::endl;
+        fragmentPath_ = oss.str();
+    }
+
     ErrorConditions Shader::read()
     {
         std::cout << "Shader::read reading shaders" << std::endl;

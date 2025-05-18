@@ -4,10 +4,10 @@
 #include <string>
 #include <memory>
 
-#include <group.hpp>
-#include <transform.hpp>
-#include <affinetransform.hpp>
-#include <transform_stack.hpp>
+#include "group.hpp"
+#include "transform.hpp"
+#include "affinetransform.hpp"
+#include "transform_stack.hpp"
 
 namespace Core
 {
@@ -32,11 +32,19 @@ namespace Core
     using nodeShPtr = std::shared_ptr<Node>;
     using nodeWkPtr = std::weak_ptr<Node>;
 
+    class Environment;
+    using environmentShPtr = std::shared_ptr<Environment>;
+
+    class NodeManager;
+
     class Node
     {
     private:
         Group group_;
         Transform transform_;
+
+    protected:
+        Core::environmentShPtr env;
 
     public:
         int id{0};
@@ -74,15 +82,17 @@ namespace Core
         nodeShPtr findNode(int id);
         nodeShPtr findNode(const std::string &name);
 
-        void update(double dt);
+        virtual int build(NodeManager &nodeMan) = 0;
+
+        virtual void update(double dt);
         void visit(TransformStack &transformStack, double interpolation, double width, double height);
 
         /// @brief
         /// render() provides a default render--which is to draw nothing.
         ///
-        /// You must **override** this in your custom [Node] if your [Node]
+        /// You should **override** this in your custom [Node] if your [Node]
         /// needs to perform custom rendering.
-        void render(const Matrix4 &model, double width, double height)
+        virtual void render(const Matrix4 &model)
         {
             // std::cout << "Node::render" << std::endl;
         }

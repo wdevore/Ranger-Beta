@@ -6,20 +6,20 @@
 namespace Core
 {
     // "../common/assets/shaders/basic_mvp.vs", "../common/assets/shaders/basic.frag"
-    BasicShader::BasicShader()
-    {
-        std::cout << "BasicShader::BasicShader()" << std::endl;
+    // BasicShader::BasicShader()
+    // {
+    // std::cout << "BasicShader::BasicShader()" << std::endl;
 
-        std::ostringstream oss;
-        oss << rootPath << shadersPath << "basic.vs";
-        vertexPath_ = oss.str();
+    // std::ostringstream oss;
+    // oss << rootPath << shadersPath << "basic.vs";
+    // vertexPath_ = oss.str();
 
-        oss.str("");
-        oss.clear();
+    // oss.str("");
+    // oss.clear();
 
-        oss << rootPath << shadersPath << "basic.frag";
-        fragmentPath_ = oss.str();
-    }
+    // oss << rootPath << shadersPath << "basic.frag";
+    // fragmentPath_ = oss.str();
+    // }
 
     ErrorConditions BasicShader::build()
     {

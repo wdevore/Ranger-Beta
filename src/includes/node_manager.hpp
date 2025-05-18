@@ -39,11 +39,16 @@ namespace Core
         nodeShPtr underlay = nullptr;
         nodeShPtr overlay = nullptr;
 
+        // Nodes that want an update call must register themselves as a target.
+        std::list<nodeShPtr> timingTargets{};
+
         NodeManager(/* args */) = default;
         ~NodeManager() = default;
 
         void initialize();
-        void update(double msPerUpdate);
+        /// @brief
+        /// @param dt is in milliseconds
+        void update(double dt);
         void visit(double interpolation, double width, double height);
 
         void push(nodeShPtr node);
@@ -53,6 +58,9 @@ namespace Core
         void removeNode(const std::string &name);
 
         bool isNodeOnStage(nodeShPtr node);
+
+        void registerTarget(nodeShPtr node);
+        void unRegisterTarget(nodeShPtr node);
 
         ErrorConditions sendSignal(nodeShPtr node, NodeSignal signal);
     };

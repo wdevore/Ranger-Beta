@@ -7,9 +7,15 @@
 namespace Core
 {
 
+    void StaticMonoAtlas::initialize(environmentShPtr environment)
+    {
+        BaseAtlas::initialize(environment);
+    }
+
     ErrorConditions StaticMonoAtlas::configure()
     {
         // Load shader pograms
+        shader.initialize(environment);
         ErrorConditions buildStatus = shader.build();
         if (buildStatus != ErrorConditions::None)
             return buildStatus;

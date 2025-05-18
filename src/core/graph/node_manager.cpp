@@ -11,28 +11,39 @@ namespace Core
         transformStack.initialize(Matrix4{true});
     }
 
-    void NodeManager::update(double msPerUpdate)
+    void NodeManager::update(double dt)
     {
-        if (underlay != nullptr)
-            underlay->update(msPerUpdate);
-
-        // Iterate the node stack
-        for (auto &&node : nodes)
+        for (auto &&target : timingTargets)
         {
-            node->update(msPerUpdate);
+            target->update(dt);
         }
 
-        // We can't pop a node while in the "for" above, so we capture for popping.
+        // if (underlay != nullptr)
+        //     underlay->update(msPerUpdate);
+
+        // // Iterate the node stack
+        // for (auto &&node : nodes)
+        // {
+        //     node->update(msPerUpdate);
+        // }
+
         if (popTheTop)
         {
+            // First unregister the Top Node if it is registered as a timing target.
+            nodeShPtr front = nodes.front();
+            std::cout << "Unregistering potential timing target: " << front << std::endl;
+
+            unRegisterTarget(front);
+
             pop();
             popTheTop = false; // Make sure we don't pop again.
         }
 
-        if (overlay != nullptr)
-            overlay->update(msPerUpdate);
+        // if (overlay != nullptr)
+        //     overlay->update(msPerUpdate);
     }
 
+    // Visit performs the render pass
     void NodeManager::visit(double interpolation, double width, double height)
     {
         if (underlay != nullptr)
@@ -92,6 +103,17 @@ namespace Core
     bool NodeManager::isNodeOnStage(nodeShPtr node)
     {
         return node->id == nodes.front()->id;
+    }
+
+    void NodeManager::registerTarget(nodeShPtr node)
+    {
+        timingTargets.push_back(node);
+    }
+
+    void NodeManager::unRegisterTarget(nodeShPtr node)
+    {
+        timingTargets.remove_if([node](nodeShPtr n)
+                                { return n->name == node->name; });
     }
 
     ErrorConditions NodeManager::sendSignal(nodeShPtr node, NodeSignal signal)

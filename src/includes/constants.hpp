@@ -11,10 +11,6 @@ namespace Core
 
     static const double TO_MILLISECONDS = 1000.0;
 
-    static const std::string rootPath{"/home/iposthuman/Development/cpp/Ranger-Beta"};
-    static const std::string examplePath{"/examples/basic_app"};
-    static const std::string shadersPath{"/examples/common/assets/shaders/"};
-
     enum class ErrorConditions
     {
         /// @brief No Error occurred.

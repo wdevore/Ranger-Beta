@@ -87,6 +87,11 @@ namespace Core
         virtual void update(double dt);
         void visit(TransformStack &transformStack, double interpolation, double width, double height);
 
+        void setPosition(float x, float y);
+        void setRotation(float radians);
+        void setScale(float scale);
+        void setScale(float scaleX, float scaleY);
+
         /// @brief
         /// render() provides a default render--which is to draw nothing.
         ///

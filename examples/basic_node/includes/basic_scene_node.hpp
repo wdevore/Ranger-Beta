@@ -2,10 +2,11 @@
 
 #include <memory>
 
-#include "node.hpp"
-#include "environment.hpp"
-#include "matrix4.hpp"
-#include "node_manager.hpp"
+#include <node.hpp>
+#include <environment.hpp>
+#include <matrix4.hpp>
+#include <node_manager.hpp>
+#include <color4.hpp>
 
 namespace Game
 {
@@ -15,8 +16,7 @@ namespace Game
     {
     private:
         /* data */
-        int rectangleAtlasId_{};
-        Core::Matrix4 model{};
+        Color4 bgClearColor{0.2f, 0.2f, 0.2f, 1.0f};
 
     public:
         BasicScene() = default;
@@ -30,6 +30,7 @@ namespace Game
 
         int build(Core::NodeManager &nodeMan) override;
 
+        // void update(double dt) override;
         void render(const Core::Matrix4 &model) override;
 
         void receiveSignal(Core::NodeSignal signal) override;

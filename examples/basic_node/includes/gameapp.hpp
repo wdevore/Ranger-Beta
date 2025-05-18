@@ -3,7 +3,7 @@
 #include <app.hpp>
 #include <node_manager.hpp>
 #include "basic_scene_node.hpp"
-#include "environment.hpp"
+#include <game_environment.hpp>
 
 namespace Game
 {
@@ -15,7 +15,7 @@ namespace Game
 
         std::shared_ptr<BasicScene> basicScene;
 
-        Core::environmentShPtr environment = std::make_shared<Core::Environment>();
+        gameEnvironmentShPtr environment = std::make_shared<GameEnvironment>();
 
     public:
         GameApp() = default;

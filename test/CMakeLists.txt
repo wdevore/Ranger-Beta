@@ -3,7 +3,7 @@ project(unit_tests VERSION 0.1.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD           17)
 # I want c++17 to the require minimum
-set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 message(STATUS "Current CMakeLists.txt directory: ${CMAKE_CURRENT_LIST_DIR}")
 

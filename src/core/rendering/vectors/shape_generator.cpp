@@ -16,10 +16,18 @@
 
 namespace Core
 {
+    const std::string GeneratedShapeNames::UnitRectangle = "UnitRectangle";
+    const std::string GeneratedShapeNames::UnitTriangle = "UnitTriangle";
+    const std::string GeneratedShapeNames::UnitHLine = "UnitHLine";
+    const std::string GeneratedShapeNames::UnitVLine = "UnitVLine";
+    const std::string GeneratedShapeNames::UnitPlus = "UnitPlus";
+    const std::string GeneratedShapeNames::UnitCircle = "UnitCircle";
+    const std::string GeneratedShapeNames::UnitArc = "UnitArc";
+
     void ShapeGenerator::generateUnitRectangle(ShapeControls alignment, ShapeControls fillType)
     {
         shape.clear();
-        shape.name = "UnitRectangle";
+        shape.name = GeneratedShapeNames::UnitRectangle;
         shape.id = nextId++;
 
         if (alignment == ShapeControls::Centered)
@@ -67,7 +75,7 @@ namespace Core
     void ShapeGenerator::generateUnitTriangle(ShapeControls alignment, ShapeControls fillType)
     {
         shape.clear();
-        shape.name = "UnitTriangle";
+        shape.name = GeneratedShapeNames::UnitTriangle;
         shape.id = nextId++;
 
         if (alignment == ShapeControls::Centered)
@@ -120,7 +128,7 @@ namespace Core
     void ShapeGenerator::generateHLine()
     {
         shape.clear();
-        shape.name = "UnitHLine";
+        shape.name = GeneratedShapeNames::UnitHLine;
         shape.id = nextId++;
 
         shape.vertices = {
@@ -138,7 +146,7 @@ namespace Core
     void ShapeGenerator::generateVLine()
     {
         shape.clear();
-        shape.name = "UnitVLine";
+        shape.name = GeneratedShapeNames::UnitVLine;
         shape.id = nextId++;
 
         shape.vertices = {
@@ -156,7 +164,7 @@ namespace Core
     void ShapeGenerator::generateUnitPlus()
     {
         shape.clear();
-        shape.name = "UnitPlus";
+        shape.name = GeneratedShapeNames::UnitPlus;
         shape.id = nextId++;
 
         shape.vertices = {
@@ -179,7 +187,7 @@ namespace Core
         const float step{static_cast<float>(M_PI / static_cast<double>(segmentCount))};
 
         shape.clear();
-        shape.name = "UnitCircle";
+        shape.name = GeneratedShapeNames::UnitCircle;
         shape.id = nextId++;
 
         int index{0};
@@ -219,7 +227,7 @@ namespace Core
         const float step{static_cast<float>((endAngle - startAngle) / static_cast<double>(segmentCount))};
 
         shape.clear();
-        shape.name = "UnitArc";
+        shape.name = GeneratedShapeNames::UnitArc;
         shape.id = nextId++;
 
         int index{0};

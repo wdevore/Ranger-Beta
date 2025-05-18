@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.31.0)
 
 set(CMAKE_CXX_STANDARD           17)
 # I want c++17 to the require minimum
-set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(MATHS_SOURCES
     vector2d.cpp

@@ -3,7 +3,7 @@ project(basic_node VERSION 0.1.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD           17)
 # I want c++17 to the require minimum
-set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 message(STATUS "Current CMakeLists.txt directory: ${CMAKE_CURRENT_LIST_DIR}")
 
@@ -42,12 +42,13 @@ set(GLAD_INCLUDES ../dependencies/glad/include)
 message(STATUS "glad includes: " ${GLAD_INCLUDES})
 
 set(COMMON_DIR ../common)
-# set(SOURCE_DIR ../common)
 
 add_executable(${PROJECT_NAME}
     main.cpp
     gameapp.cpp
+    game_environment.cpp
     nodes/basic_scene_node.cpp
+    nodes/square_node.cpp
     ${GLAD_SOURCES}/glad.c
 )
 

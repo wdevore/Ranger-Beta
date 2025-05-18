@@ -84,13 +84,43 @@ namespace Core
             // else
             // {
             // Recurse down the tree.
-            std::cout << "Node::visit recurse into: " << *nod << std::endl;
+            // std::cout << "Node::visit recurse into: " << *nod << std::endl;
             nod->visit(transformStack, interpolation, width, height);
             // }
         }
 
         // std::cout << "Node::visit restore T stack : " << *this << std::endl;
         transformStack.restore();
+    }
+
+    void Node::setPosition(float x, float y)
+    {
+        // TODO add ripple call
+        transform_.position.x = x;
+        transform_.position.y = y;
+        dirty = true;
+    }
+
+    void Node::setRotation(float radians)
+    {
+        // TODO add ripple call
+        transform_.rotation = radians;
+        dirty = true;
+    }
+
+    void Node::setScale(float scale)
+    {
+        // TODO add ripple call
+        transform_.scale.x = scale;
+        transform_.scale.y = scale;
+        dirty = true;
+    }
+
+    void Node::setScale(float scaleX, float scaleY)
+    {
+        transform_.scale.x = scaleX;
+        transform_.scale.y = scaleY;
+        dirty = true;
     }
 
     std::ostream &operator<<(std::ostream &os, NodeSignal s)

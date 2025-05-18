@@ -15,16 +15,17 @@ namespace Core
         int deviceWidth{};
         int deviceHeight{};
 
-        const std::string rootPath{"/home/iposthuman/Development/cpp/Ranger-Beta"};
-        const std::string examplePath{"/examples/basic_app"};
-        const std::string shadersPath{"/examples/common/assets/shaders/"};
+        std::string rootPath{};
+        std::string examplePath{};
+        std::string shadersPath{};
 
         StaticMonoAtlas atlas{};
 
         Environment(/* args */) { std::cout << "Environment ctor" << std::endl; };
         ~Environment() = default;
 
-        void initialize();
+        void initialize(int deviceWidth, int deviceHeight);
+        void postInitialize();
     };
 
     using environmentShPtr = std::shared_ptr<Environment>;

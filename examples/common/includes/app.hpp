@@ -18,8 +18,6 @@ namespace Game
         /* data */
         GLFWwindow *window_;
 
-        Color4 bgClearColor{0.2f, 0.3f, 0.3f, 1.0f};
-
         // ------------ Timing ------------------
         using Clock = std::chrono::high_resolution_clock;
         using TimePoint = Clock::time_point;

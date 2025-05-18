@@ -45,9 +45,7 @@ namespace Game
         std::cout << "GameApp::construct game" << std::endl;
 
         auto env = environment;
-        env->deviceWidth = width;
-        env->deviceHeight = height;
-        env->initialize();
+        env->initialize(width, height);
 
         // Create a single scene (aka Node) to hold a square.
         // The Scene will have a background square for color.
@@ -56,8 +54,7 @@ namespace Game
 
         nodeMan.push(basicScene);
 
-        env->atlas.burn();
-        env->atlas.use();
+        env->postInitialize();
 
         env->atlas.setColor({1.0, 0.5, 0.0, 0.0});
 
@@ -66,10 +63,6 @@ namespace Game
 
     void GameApp::render()
     {
-        // Clear the colorbuffer
-        glClearColor(bgClearColor.r, bgClearColor.g, bgClearColor.b, bgClearColor.a);
-        glClear(GL_COLOR_BUFFER_BIT);
-
         // Render
         nodeMan.visit(0.0, width, height);
 

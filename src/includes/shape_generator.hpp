@@ -1,10 +1,22 @@
 #pragma once
+#include <string>
 
 #include "shape.hpp"
 #include "constants.hpp"
 
 namespace Core
 {
+
+    struct GeneratedShapeNames
+    {
+        static const std::string UnitRectangle;
+        static const std::string UnitTriangle;
+        static const std::string UnitHLine;
+        static const std::string UnitVLine;
+        static const std::string UnitPlus;
+        static const std::string UnitCircle;
+        static const std::string UnitArc;
+    };
 
     class ShapeGenerator
     {

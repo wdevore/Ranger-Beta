@@ -9,6 +9,7 @@ set(MATHS_SOURCES
     vector3.cpp
     matrix4.cpp
     affinetransform.cpp
+    zoom_transform.cpp
 )
 
 # Add library as a ".a" file

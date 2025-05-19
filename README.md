@@ -3,13 +3,14 @@ A c++17 continuation of Ranger-Alpha and FlutterRanger
 
 This project was started in April 2025 and is a mixture of:
 
-- [Ranger-Go-IDE](https://github.com/wdevore/Ranger-Go-IGE) was done is 2020
 - [Ranger-Alpha](https://github.com/wdevore/Ranger-Alpha) was done in March 2016
+- [Ranger-Go-IDE](https://github.com/wdevore/Ranger-Go-IGE) was done is 2020
 - [SimpleOpenGL-Go](https://github.com/wdevore/SimpleOpenGL-Go) was done in 2020
 
 # Tasks ✔
 * Complete shapes ✔
-* Integrate Node system <-- **WORKING**
+* Event system <-- **WORKING**
+* Integrate Node system -- 1st draft complete.
   * Zoom Node
   * Dragging
   * Space mapping

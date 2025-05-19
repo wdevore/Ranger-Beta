@@ -11,6 +11,7 @@ set(EXTRAS_SOURCES
     ortho_projection.cpp
     viewport.cpp
     camera.cpp
+    zoom_node.cpp
 )
 
 # Add library as a ".a" file

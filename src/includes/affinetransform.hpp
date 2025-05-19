@@ -45,43 +45,44 @@ namespace Core
         static const int m15 = 15; // 1
 
         // [a, b, 0, 0, c, d, 0, 0, 0, 0, 1, 0, 0, e, f, 0, 1]
-        double m[16] = {};
+        float m[16] = {};
 
         // These getters are marked as 'const' to indicate they
         // will not mutate this class. This allows them to be used as getter
         // input to another method.
-        double getA() const;
-        double getB() const;
-        double getC() const;
-        double getD() const;
-        double getTx() const;
-        double getTy() const;
+        float getA() const;
+        float getB() const;
+        float getC() const;
+        float getD() const;
+        float getTx() const;
+        float getTy() const;
 
-        void setA(double v);
-        void setB(double v);
-        void setC(double v);
-        void setD(double v);
-        void setTx(double v);
-        void setTy(double v);
+        void setA(float v);
+        void setB(float v);
+        void setC(float v);
+        void setD(float v);
+        void setTx(float v);
+        void setTy(float v);
 
-        void set(double a, double b, double c, double d, double tx, double ty);
+        void set(float a, float b, float c, float d, float tx, float ty);
         void set(const AffineTransform &atf);
         void set(const affineShPtr &atf);
         void set(const Matrix4 &m);
 
         void transform(Vector2D &point) const;
         void transform(const Vector2D &point, Vector2D &out) const;
-        void transform(double x, double y, Vector2D &out) const;
+        void transform(float x, float y, Vector2D &out) const;
 
-        void makeTranslate(double x, double y);
+        void translate(float x, float y);
+        void makeTranslate(float x, float y);
         void makeTranslate(const Vector2D &point);
 
-        void scale(double sx, double sy);
-        void makeScale(double sx, double sy);
-        double getPsuedoScale() const;
+        void scale(float sx, float sy);
+        void makeScale(float sx, float sy);
+        float getPsuedoScale() const;
 
-        void rotate(double radianAngle);
-        void makeRotate(double radianAngle);
+        void rotate(float radianAngle);
+        void makeRotate(float radianAngle);
 
         static void multiplyPre(const AffineTransform &m, AffineTransform &n);
         static void multiplyPost(const AffineTransform &m, AffineTransform &n);

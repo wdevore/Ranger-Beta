@@ -6,21 +6,21 @@
 namespace Core
 {
 
-    double AffineTransform::getA() const { return m[ma]; }
-    double AffineTransform::getB() const { return m[mb]; }
-    double AffineTransform::getC() const { return m[mc]; }
-    double AffineTransform::getD() const { return m[md]; }
-    double AffineTransform::getTx() const { return m[me]; }
-    double AffineTransform::getTy() const { return m[mf]; }
+    float AffineTransform::getA() const { return m[ma]; }
+    float AffineTransform::getB() const { return m[mb]; }
+    float AffineTransform::getC() const { return m[mc]; }
+    float AffineTransform::getD() const { return m[md]; }
+    float AffineTransform::getTx() const { return m[me]; }
+    float AffineTransform::getTy() const { return m[mf]; }
 
-    void AffineTransform::setA(double v) { m[ma] = v; }
-    void AffineTransform::setB(double v) { m[mb] = v; }
-    void AffineTransform::setC(double v) { m[mc] = v; }
-    void AffineTransform::setD(double v) { m[md] = v; }
-    void AffineTransform::setTx(double v) { m[me] = v; }
-    void AffineTransform::setTy(double v) { m[mf] = v; }
+    void AffineTransform::setA(float v) { m[ma] = v; }
+    void AffineTransform::setB(float v) { m[mb] = v; }
+    void AffineTransform::setC(float v) { m[mc] = v; }
+    void AffineTransform::setD(float v) { m[md] = v; }
+    void AffineTransform::setTx(float v) { m[me] = v; }
+    void AffineTransform::setTy(float v) { m[mf] = v; }
 
-    void AffineTransform::set(double a, double b, double c, double d, double tx, double ty)
+    void AffineTransform::set(float a, float b, float c, float d, float tx, float ty)
     {
         m[ma] = a;
         m[mb] = b;
@@ -91,13 +91,19 @@ namespace Core
     /// @param x
     /// @param y
     /// @param out
-    void AffineTransform::transform(double x, double y, Vector2D &out) const
+    void AffineTransform::transform(float x, float y, Vector2D &out) const
     {
         out.x = (m[ma] * x) + (m[mc] * y) + m[me];
         out.y = (m[mb] * x) + (m[md] * y) + m[mf];
     }
 
-    void AffineTransform::makeTranslate(double x, double y)
+    void AffineTransform::translate(float x, float y)
+    {
+        m[me] += (m[ma] * x) + (m[mc] * y);
+        m[mf] += (m[mb] * x) + (m[md] * y);
+    }
+
+    void AffineTransform::makeTranslate(float x, float y)
     {
         m[ma] = 1.0;
         m[mb] = 0.0;
@@ -120,7 +126,7 @@ namespace Core
     /// @brief Scales 'this' transform
     /// @param sx
     /// @param sy
-    void AffineTransform::scale(double sx, double sy)
+    void AffineTransform::scale(float sx, float sy)
     {
         m[ma] *= sx;
         m[mb] *= sx;
@@ -128,7 +134,7 @@ namespace Core
         m[md] *= sy;
     }
 
-    void AffineTransform::makeScale(double sx, double sy)
+    void AffineTransform::makeScale(float sx, float sy)
     {
         m[ma] = sx;
         m[mb] = 0.0;
@@ -138,7 +144,7 @@ namespace Core
         m[mf] = 0.0;
     }
 
-    double AffineTransform::getPsuedoScale() const
+    float AffineTransform::getPsuedoScale() const
     {
         return m[ma];
     }
@@ -175,16 +181,16 @@ namespace Core
     ///
     ///     - +angle yeilds a CCW rotation.
     /// @param radianAngle
-    void AffineTransform::rotate(double radianAngle)
+    void AffineTransform::rotate(float radianAngle)
     {
-        double s = sin(radianAngle);
-        double cr = cos(radianAngle);
+        float s = sin(radianAngle);
+        float cr = cos(radianAngle);
 
         // Capture value BEFORE they are modified
-        double a = m[ma];
-        double b = m[mb];
-        double c = m[mc];
-        double d = m[md];
+        float a = m[ma];
+        float b = m[mb];
+        float c = m[mc];
+        float d = m[md];
 
         m[ma] = a * cr + c * s;
         m[mb] = b * cr + d * s;
@@ -192,10 +198,10 @@ namespace Core
         m[md] = d * cr - b * s;
     }
 
-    void AffineTransform::makeRotate(double radianAngle)
+    void AffineTransform::makeRotate(float radianAngle)
     {
-        double s = sin(radianAngle);
-        double c = cos(radianAngle);
+        float s = sin(radianAngle);
+        float c = cos(radianAngle);
         m[ma] = c;
         m[mb] = s;
         m[mc] = -s;
@@ -210,17 +216,17 @@ namespace Core
     void AffineTransform::multiplyPre(const AffineTransform &m, AffineTransform &n)
     {
         // Copy values BEFORE modifying them.
-        double na = n.getA();
-        double nb = n.getB();
-        double nc = n.getC();
-        double nd = n.getD();
+        float na = n.getA();
+        float nb = n.getB();
+        float nc = n.getC();
+        float nd = n.getD();
 
-        double ja = m.getA();
-        double jb = m.getB();
-        double jc = m.getC();
-        double jd = m.getD();
-        double mtx = m.getTx();
-        double mty = m.getTy();
+        float ja = m.getA();
+        float jb = m.getB();
+        float jc = m.getC();
+        float jd = m.getD();
+        float mtx = m.getTx();
+        float mty = m.getTy();
 
         // Now perform multiplication
         n.setA(na * ja + nb * jc);
@@ -237,17 +243,17 @@ namespace Core
     void AffineTransform::multiplyPost(const AffineTransform &m, AffineTransform &n)
     {
         // Copy values BEFORE modifying them.
-        double na = n.getA();
-        double nb = n.getB();
-        double nc = n.getC();
-        double nd = n.getD();
-        double ntx = n.getTx();
-        double nty = n.getTy();
+        float na = n.getA();
+        float nb = n.getB();
+        float nc = n.getC();
+        float nd = n.getD();
+        float ntx = n.getTx();
+        float nty = n.getTy();
 
-        double ja = m.getA();
-        double jb = m.getB();
-        double jc = m.getC();
-        double jd = m.getD();
+        float ja = m.getA();
+        float jb = m.getB();
+        float jc = m.getC();
+        float jd = m.getD();
 
         // Now perform multiplication
         n.setA(ja * na + jb * nc);
@@ -265,19 +271,19 @@ namespace Core
     void AffineTransform::multiplyPost(const AffineTransform &m, AffineTransform &n, AffineTransform &out)
     {
         // Copy values BEFORE modifying them.
-        double na = n.getA();
-        double nb = n.getB();
-        double nc = n.getC();
-        double nd = n.getD();
-        double ntx = n.getTx();
-        double nty = n.getTy();
+        float na = n.getA();
+        float nb = n.getB();
+        float nc = n.getC();
+        float nd = n.getD();
+        float ntx = n.getTx();
+        float nty = n.getTy();
 
-        double ja = m.getA();
-        double jb = m.getB();
-        double jc = m.getC();
-        double jd = m.getD();
-        double jtx = m.getTx();
-        double jty = m.getTy();
+        float ja = m.getA();
+        float jb = m.getB();
+        float jc = m.getC();
+        float jd = m.getD();
+        float jtx = m.getTx();
+        float jty = m.getTy();
 
         // Now perform multiplication
         out.setA(ja * na + jb * nc);
@@ -292,20 +298,20 @@ namespace Core
     void AffineTransform::invert()
     {
         // Copy values BEFORE modifying them.
-        double a = m[ma];
-        double b = m[mb];
-        double c = m[mc];
-        double d = m[md];
-        double tx = m[me];
-        double ty = m[mf];
+        float a = m[ma];
+        float b = m[mb];
+        float c = m[mc];
+        float d = m[md];
+        float tx = m[me];
+        float ty = m[mf];
 
-        double denom = a * d - b * c;
+        float denom = a * d - b * c;
         if (denom == 0)
         {
             std::cout << "Invert failed. Determinant denominator = 0" << std::endl;
             return;
         }
-        double determinant = 1.0 / denom;
+        float determinant = 1.0 / denom;
 
         m[ma] = determinant * d;
         m[mb] = -determinant * b;
@@ -318,20 +324,20 @@ namespace Core
     /// @brief This can silently fail if the determinant denominator = 0
     void AffineTransform::invert(AffineTransform &out) const
     {
-        double a = m[ma];
-        double b = m[mb];
-        double c = m[mc];
-        double d = m[md];
-        double tx = m[me];
-        double ty = m[mf];
+        float a = m[ma];
+        float b = m[mb];
+        float c = m[mc];
+        float d = m[md];
+        float tx = m[me];
+        float ty = m[mf];
 
-        double denom = a * d - b * c;
+        float denom = a * d - b * c;
         if (denom == 0)
         {
             std::cout << "Invert failed. Determinant denominator = 0" << std::endl;
             return;
         }
-        double determinant = 1.0 / denom;
+        float determinant = 1.0 / denom;
 
         out.setA(determinant * d);
         out.setB(-determinant * b);
@@ -355,7 +361,7 @@ namespace Core
     /// ```
     void AffineTransform::transpose()
     {
-        double c = getC();
+        float c = getC();
         setC(getB());
         setB(c);
     }

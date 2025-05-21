@@ -8,6 +8,7 @@
 #include "transform.hpp"
 #include "affinetransform.hpp"
 #include "transform_stack.hpp"
+#include "io_event.hpp"
 
 namespace Core
 {
@@ -85,6 +86,7 @@ namespace Core
         virtual int build(NodeManager &nodeMan) = 0;
 
         virtual void update(double dt);
+        virtual bool handleEvent(const IOEvent &event);
         void visit(TransformStack &transformStack, double interpolation, double width, double height);
 
         void setPosition(float x, float y);

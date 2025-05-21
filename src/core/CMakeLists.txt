@@ -17,6 +17,7 @@ add_subdirectory(rendering)
 set(CORE_SOURCES
     constants.cpp
     environment.cpp
+    io_event.cpp
 )
 
 # Add library as a ".a" file

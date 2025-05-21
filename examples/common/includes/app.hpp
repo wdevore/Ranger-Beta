@@ -1,19 +1,18 @@
 #pragma once
 #include <chrono>
+#include <string>
 
 #include <glad/gl.h>
 // We don't need to include opengl <gl.h> because glfw does it already.
 #include <GLFW/glfw3.h>
 
-#include <string>
-
 #include <color4.hpp>
+#include <io_event.hpp>
 
 namespace Game
 {
     class App
     {
-    private:
     protected:
         /* data */
         GLFWwindow *window_;
@@ -31,6 +30,7 @@ namespace Game
     public:
         unsigned int width{};
         unsigned int height{};
+        Core::IOEvent ioEvent{};
 
         App() = default;
         App(unsigned int width, unsigned int height) : width(width), height(height) {};
@@ -76,6 +76,11 @@ namespace Game
 
         /// @brief Called every frame to draw your game
         virtual void render() = 0;
+
+        // -----------------------------------------------------------
+        // Events
+        // -----------------------------------------------------------
+        virtual void processIOEvent() = 0;
     };
 
 } // namespace Game

@@ -7,6 +7,7 @@
 #include "transform_stack.hpp"
 #include "node.hpp"
 #include "constants.hpp"
+#include "io_event.hpp"
 
 namespace Core
 {
@@ -41,6 +42,7 @@ namespace Core
 
         // Nodes that want an update call must register themselves as a target.
         std::list<nodeShPtr> timingTargets{};
+        std::list<nodeShPtr> eventTargets{};
 
         NodeManager(/* args */) = default;
         ~NodeManager() = default;
@@ -61,6 +63,10 @@ namespace Core
 
         void registerTarget(nodeShPtr node);
         void unRegisterTarget(nodeShPtr node);
+
+        void processEvent(const IOEvent &event);
+        void registerForEvent(nodeShPtr node);
+        void unRegisterForEvent(nodeShPtr node);
 
         ErrorConditions sendSignal(nodeShPtr node, NodeSignal signal);
     };

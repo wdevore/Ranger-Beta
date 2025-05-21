@@ -52,6 +52,9 @@ namespace Game
             return false;
         }
         glfwMakeContextCurrent(window_);
+        // Store the 'this' pointer of the App instance in the window's user pointer
+        glfwSetWindowUserPointer(window_, this);
+
         glfwSetFramebufferSizeCallback(window_, framebuffer_size_callback);
 
         // Set initial viewport size
@@ -247,6 +250,12 @@ namespace Game
         std::cout << "Mouse wheel scrolled (x offset: " << xoffset << ", y offset: " << yoffset << ")" << std::endl;
         // Typically, yoffset represents vertical scrolling (positive for up, negative for down)
         // xoffset represents horizontal scrolling (if the mouse supports it)
+        Game::App *app = static_cast<Game::App *>(glfwGetWindowUserPointer(window));
+        if (app)
+        {
+            app->ioEvent.setMouseWheelEvent(xoffset, yoffset);
+            app->processIOEvent();
+        }
     }
 
     // Callback function for cursor entering or leaving the window
@@ -263,4 +272,5 @@ namespace Game
             // The mouse cursor is no longer inside the client area of the window
         }
     }
+
 } // namespace Game

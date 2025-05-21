@@ -17,6 +17,7 @@ namespace Game
         appendChild(squareNode);
 
         // nodeMan.registerTarget(shared_from_this());
+        nodeMan.registerForEvent(shared_from_this());
 
         return 1;
     }
@@ -32,4 +33,9 @@ namespace Game
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
+    bool BasicScene::handleEvent(const Core::IOEvent &event)
+    {
+        std::cout << "BasicScene::handleEvent " << event.x << "," << event.y << std::endl;
+        return true;
+    }
 } // namespace GameApp

@@ -30,6 +30,8 @@ namespace Game
         int construct() override;
         int update(double dt) override;
         void render() override;
+
+        void processIOEvent() override;
     };
 
 } // namespace Game

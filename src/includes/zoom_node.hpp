@@ -65,7 +65,7 @@ namespace Core
 
         AffineTransform &calcTransform();
 
-        bool handleEvent(/*event*/);
+        bool handleEvent(const IOEvent &event) override;
     };
 
 } // namespace Core

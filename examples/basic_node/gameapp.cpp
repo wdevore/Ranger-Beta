@@ -82,6 +82,11 @@ namespace Game
         return 1; // Successful update
     }
 
+    void GameApp::processIOEvent()
+    {
+        nodeMan.processEvent(ioEvent);
+    }
+
     int GameApp::deconstruct()
     {
         std::cout << "GameApp::deconstruct" << std::endl;

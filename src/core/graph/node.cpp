@@ -46,6 +46,13 @@ namespace Core
     {
     }
 
+    /// @brief process and IO event. Default is nothing
+    /// @param event
+    bool Node::handleEvent(const IOEvent &event)
+    {
+        return false;
+    }
+
     void Node::visit(TransformStack &transformStack,
                      double interpolation, double width, double height)
     {

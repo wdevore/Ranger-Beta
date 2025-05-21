@@ -116,6 +116,25 @@ namespace Core
                                 { return n->name == node->name; });
     }
 
+    void NodeManager::processEvent(const IOEvent &event)
+    {
+        for (auto &&target : eventTargets)
+        {
+            target->handleEvent(event);
+        }
+    }
+
+    void NodeManager::registerForEvent(nodeShPtr node)
+    {
+        eventTargets.push_back(node);
+    }
+
+    void NodeManager::unRegisterForEvent(nodeShPtr node)
+    {
+        eventTargets.remove_if([node](nodeShPtr n)
+                               { return n->name == node->name; });
+    }
+
     ErrorConditions NodeManager::sendSignal(nodeShPtr node, NodeSignal signal)
     {
         // std::cout << "Node Manager::sendSignal: " << signal << std::endl;

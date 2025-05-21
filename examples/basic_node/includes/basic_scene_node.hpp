@@ -7,6 +7,7 @@
 #include <matrix4.hpp>
 #include <node_manager.hpp>
 #include <color4.hpp>
+#include <io_event.hpp>
 
 namespace Game
 {
@@ -34,6 +35,8 @@ namespace Game
         void render(const Core::Matrix4 &model) override;
 
         void receiveSignal(Core::NodeSignal signal) override;
+
+        bool handleEvent(const Core::IOEvent &event) override;
     };
 
 } // namespace Game

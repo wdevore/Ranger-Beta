@@ -81,7 +81,7 @@ namespace Core
         return zoom.getTransform();
     }
 
-    bool ZoomNode::handleEvent(/* event */)
+    bool ZoomNode::handleEvent(const IOEvent &event)
     {
         // TODO add mouse and space mapping.
         return false;

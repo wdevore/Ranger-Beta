@@ -174,13 +174,6 @@ namespace Game
         return 0;
     }
 
-    // Is called whenever a key is pressed/released via GLFW
-    void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode)
-    {
-        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-            glfwSetWindowShouldClose(window, GL_TRUE);
-    }
-
     // glfw: whenever the window size changed (by OS or user resize) this callback function executes
     // ---------------------------------------------------------------------------------------------
     void framebuffer_size_callback(GLFWwindow *window, int width, int height)
@@ -192,62 +185,125 @@ namespace Game
         glViewport(0, 0, width, height);
     }
 
+    // --------------------------------------------------------------------
+    // IO Event callbacks
+    // --------------------------------------------------------------------
+    Core::IOEvent::Modifier App::modifierToEnum(int modifier)
+    {
+        Core::IOEvent::Modifier modi{Core::IOEvent::Modifier::Unknown};
+        if (modifier & GLFW_MOD_SHIFT)
+        {
+            modi = Core::IOEvent::Modifier::Shift;
+        }
+        if (modifier & GLFW_MOD_CONTROL)
+        {
+            modi = Core::IOEvent::Modifier::Control;
+        }
+        if (modifier & GLFW_MOD_ALT)
+        {
+            modi = Core::IOEvent::Modifier::Alt;
+        }
+        if (modifier & GLFW_MOD_SUPER)
+        {
+            modi = Core::IOEvent::Modifier::Super;
+        }
+
+        return modi;
+    }
+
+    Core::IOEvent::Action App::actionToEnum(int action)
+    {
+        Core::IOEvent::Action act{Core::IOEvent::Action::UnKnown};
+        if (action == GLFW_PRESS)
+        {
+            act = Core::IOEvent::Action::Press;
+        }
+        else if (action == GLFW_RELEASE)
+        {
+            act = Core::IOEvent::Action::Release;
+        }
+        else if (action == GLFW_REPEAT)
+        {
+            act = Core::IOEvent::Action::Repeat;
+        }
+
+        return act;
+    }
+
+    Core::IOEvent::Button App::buttonToEnum(int button)
+    {
+        Core::IOEvent::Button buto{Core::IOEvent::Button::Unknown};
+        if (button == GLFW_MOUSE_BUTTON_LEFT)
+        {
+            buto = Core::IOEvent::Button::Left;
+        }
+        else if (button == GLFW_MOUSE_BUTTON_RIGHT)
+        {
+            buto = Core::IOEvent::Button::Right;
+        }
+        else if (button == GLFW_MOUSE_BUTTON_MIDDLE)
+        {
+            buto = Core::IOEvent::Button::Middle;
+        };
+
+        return buto;
+    }
+
+    // Is called whenever a key is pressed/released via GLFW
+    void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode)
+    {
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        {
+            glfwSetWindowShouldClose(window, GL_TRUE);
+            return;
+        }
+
+        Game::App *app = static_cast<Game::App *>(glfwGetWindowUserPointer(window));
+        if (app)
+        {
+            if (action == GLFW_PRESS || action == GLFW_REPEAT)
+            {
+                app->environment->registerKeyPressed(key);
+            }
+            else if (action == GLFW_RELEASE)
+            {
+                app->environment->registerKeyReleased(key);
+            }
+
+            app->ioEvent.setKeyboardEvent(key, scancode, app->actionToEnum(action), app->modifierToEnum(mode));
+            app->processIOEvent();
+        }
+    }
+
     // Callback function for cursor position
     // Mouse coordinate system has the origin at the top-left.
     void cursor_position_callback(GLFWwindow *window, double xpos, double ypos)
     {
-        std::cout << "Mouse moved to (" << xpos << ", " << ypos << ")" << std::endl;
+        // std::cout << "Mouse moved to (" << xpos << ", " << ypos << ")" << std::endl;
         // You can store the mouse position in your application here
+        Game::App *app = static_cast<Game::App *>(glfwGetWindowUserPointer(window));
+        if (app)
+        {
+            app->ioEvent.setMouseMoveEvent(xpos, ypos);
+            app->processIOEvent();
+        }
     }
 
     // Callback function for mouse button events
     void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
     {
-        if (action == GLFW_PRESS)
+        Game::App *app = static_cast<Game::App *>(glfwGetWindowUserPointer(window));
+        if (app)
         {
-            if (button == GLFW_MOUSE_BUTTON_LEFT)
-            {
-                std::cout << "Left mouse button pressed" << std::endl;
-            }
-            else if (button == GLFW_MOUSE_BUTTON_RIGHT)
-            {
-                std::cout << "Right mouse button pressed" << std::endl;
-            }
-            else if (button == GLFW_MOUSE_BUTTON_MIDDLE)
-            {
-                std::cout << "Middle mouse button pressed" << std::endl;
-            }
-            else
-            {
-                std::cout << "Other mouse button pressed: " << button << std::endl;
-            }
+            app->ioEvent.setMouseButtonEvent(app->buttonToEnum(button), app->actionToEnum(action), app->modifierToEnum(mods));
+            app->processIOEvent();
         }
-        else if (action == GLFW_RELEASE)
-        {
-            if (button == GLFW_MOUSE_BUTTON_LEFT)
-            {
-                std::cout << "Left mouse button released" << std::endl;
-            }
-            else if (button == GLFW_MOUSE_BUTTON_RIGHT)
-            {
-                std::cout << "Right mouse button released" << std::endl;
-            }
-            else if (button == GLFW_MOUSE_BUTTON_MIDDLE)
-            {
-                std::cout << "Middle mouse button released" << std::endl;
-            }
-            else
-            {
-                std::cout << "Other mouse button released: " << button << std::endl;
-            }
-        }
-        // 'mods' indicates which modifier keys (Shift, Ctrl, Alt, Super) were held down
     }
 
     // Callback function for mouse wheel scrolling
     void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
     {
-        std::cout << "Mouse wheel scrolled (x offset: " << xoffset << ", y offset: " << yoffset << ")" << std::endl;
+        // std::cout << "Mouse wheel scrolled (x offset: " << xoffset << ", y offset: " << yoffset << ")" << std::endl;
         // Typically, yoffset represents vertical scrolling (positive for up, negative for down)
         // xoffset represents horizontal scrolling (if the mouse supports it)
         Game::App *app = static_cast<Game::App *>(glfwGetWindowUserPointer(window));
@@ -261,15 +317,11 @@ namespace Game
     // Callback function for cursor entering or leaving the window
     void cursor_enter_callback(GLFWwindow *window, int entered)
     {
-        if (entered)
+        Game::App *app = static_cast<Game::App *>(glfwGetWindowUserPointer(window));
+        if (app)
         {
-            std::cout << "Mouse cursor entered the window" << std::endl;
-            // The mouse cursor is now inside the client area of the window
-        }
-        else
-        {
-            std::cout << "Mouse cursor left the window" << std::endl;
-            // The mouse cursor is no longer inside the client area of the window
+            app->ioEvent.setMouseEnterExitEvent(static_cast<bool>(entered));
+            app->processIOEvent();
         }
     }
 

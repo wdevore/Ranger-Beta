@@ -90,7 +90,7 @@ namespace Game
     int GameApp::deconstruct()
     {
         std::cout << "GameApp::deconstruct" << std::endl;
-        environment->atlas.dispose();
+        environment->dispose();
 
         return 1; // success
     }

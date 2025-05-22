@@ -1,6 +1,7 @@
 #pragma once
 #include <chrono>
 #include <string>
+#include <memory>
 
 #include <glad/gl.h>
 // We don't need to include opengl <gl.h> because glfw does it already.
@@ -8,6 +9,7 @@
 
 #include <color4.hpp>
 #include <io_event.hpp>
+#include <game_environment.hpp>
 
 namespace Game
 {
@@ -31,6 +33,8 @@ namespace Game
         unsigned int width{};
         unsigned int height{};
         Core::IOEvent ioEvent{};
+
+        gameEnvironmentShPtr environment = std::make_shared<GameEnvironment>();
 
         App() = default;
         App(unsigned int width, unsigned int height) : width(width), height(height) {};
@@ -81,6 +85,9 @@ namespace Game
         // Events
         // -----------------------------------------------------------
         virtual void processIOEvent() = 0;
+        Core::IOEvent::Modifier modifierToEnum(int modifier);
+        Core::IOEvent::Action actionToEnum(int action);
+        Core::IOEvent::Button buttonToEnum(int button);
     };
 
 } // namespace Game

@@ -61,11 +61,13 @@ namespace Core
 
         bool isNodeOnStage(nodeShPtr node);
 
-        void registerTarget(nodeShPtr node);
-        void unRegisterTarget(nodeShPtr node);
+        /// @brief These methods will cause update() calls to occur.
+        /// @param node
+        void registerForTimingUpdates(nodeShPtr node);
+        void unRegisterForTimingUpdates(nodeShPtr node);
 
         void processEvent(const IOEvent &event);
-        void registerForEvent(nodeShPtr node);
+        void registerForEvents(nodeShPtr node);
         void unRegisterForEvent(nodeShPtr node);
 
         ErrorConditions sendSignal(nodeShPtr node, NodeSignal signal);

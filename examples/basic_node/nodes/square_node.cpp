@@ -25,7 +25,7 @@ namespace Game
 
         setPosition(100.0f, 100.0f);
 
-        nodeMan.registerTarget(shared_from_this());
+        nodeMan.registerForTimingUpdates(shared_from_this());
 
         return 1;
     }

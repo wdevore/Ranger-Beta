@@ -16,4 +16,11 @@ namespace Core
         atlas.use();
     }
 
+    void Environment::dispose()
+    {
+        atlas.unUse();
+        atlas.dispose();
+        pressedKeys.clear();
+    }
+
 } // namespace Core

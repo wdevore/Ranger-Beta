@@ -16,10 +16,27 @@ namespace Game
 
         appendChild(squareNode);
 
-        // nodeMan.registerTarget(shared_from_this());
-        nodeMan.registerForEvent(shared_from_this());
+        nodeMan.registerForEvents(shared_from_this());
+        nodeMan.registerForTimingUpdates(shared_from_this());
 
         return 1;
+    }
+
+    void BasicScene::update(double dt)
+    {
+        using ioKey = Core::IOEvent::Key;
+        if (env->isKeyPressed(ioKey::A) && env->isKeyPressed(ioKey::B))
+        {
+            std::cout << "AB" << std::endl;
+        }
+        else if (env->isKeyPressed(ioKey::A))
+        {
+            std::cout << "A" << std::endl;
+        }
+        else if (env->isKeyPressed(ioKey::B))
+        {
+            std::cout << "B" << std::endl;
+        }
     }
 
     void BasicScene::receiveSignal(Core::NodeSignal signal)
@@ -35,7 +52,15 @@ namespace Game
 
     bool BasicScene::handleEvent(const Core::IOEvent &event)
     {
-        std::cout << "BasicScene::handleEvent " << event.x << "," << event.y << std::endl;
+        std::cout << "BasicScene::handleEvent " << event.x << "," << event.y << " : " << static_cast<int>(event.type) << std::endl;
+        if (env->isKeyPressed(event.key))
+        {
+            std::cout << event.key << std::endl;
+        }
+        // if (event.type == Core::IOEvent::Type::Key)
+        // {
+        //     std::cout << event.key << std::endl;
+        // }
         return true;
     }
 } // namespace GameApp

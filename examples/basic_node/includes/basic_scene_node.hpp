@@ -30,6 +30,7 @@ namespace Game
         ~BasicScene() = default;
 
         int build(Core::NodeManager &nodeMan) override;
+        void update(double dt) override;
 
         // void update(double dt) override;
         void render(const Core::Matrix4 &model) override;

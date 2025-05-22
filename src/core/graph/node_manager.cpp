@@ -33,7 +33,7 @@ namespace Core
             nodeShPtr front = nodes.front();
             std::cout << "Unregistering potential timing target: " << front << std::endl;
 
-            unRegisterTarget(front);
+            unRegisterForTimingUpdates(front);
 
             pop();
             popTheTop = false; // Make sure we don't pop again.
@@ -105,12 +105,12 @@ namespace Core
         return node->id == nodes.front()->id;
     }
 
-    void NodeManager::registerTarget(nodeShPtr node)
+    void NodeManager::registerForTimingUpdates(nodeShPtr node)
     {
         timingTargets.push_back(node);
     }
 
-    void NodeManager::unRegisterTarget(nodeShPtr node)
+    void NodeManager::unRegisterForTimingUpdates(nodeShPtr node)
     {
         timingTargets.remove_if([node](nodeShPtr n)
                                 { return n->name == node->name; });
@@ -124,7 +124,7 @@ namespace Core
         }
     }
 
-    void NodeManager::registerForEvent(nodeShPtr node)
+    void NodeManager::registerForEvents(nodeShPtr node)
     {
         eventTargets.push_back(node);
     }

@@ -6,6 +6,7 @@
 
 #include <static_mono_atlas.hpp>
 #include <io_event.hpp>
+#include <camera.hpp>
 
 namespace Core
 {
@@ -24,6 +25,9 @@ namespace Core
         StaticMonoAtlas atlas{};
 
         std::unordered_set<int> pressedKeys;
+
+        /// @brief This is the camera
+        Camera camera{};
 
         Environment(/* args */) { std::cout << "Environment ctor" << std::endl; };
         ~Environment() = default;

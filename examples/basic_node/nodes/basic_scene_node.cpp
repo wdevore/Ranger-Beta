@@ -1,7 +1,6 @@
 #include <memory>
 
 #include <basic_scene_node.hpp>
-// #include <shape_generator.hpp>
 #include <static_mono_atlas.hpp>
 #include <environment.hpp>
 #include <square_node.hpp>
@@ -10,13 +9,16 @@ namespace Game
 {
     int BasicScene::build(Core::NodeManager &nodeMan)
     {
-        auto squareNode = std::make_shared<SquareNode>("SquareNode", env, shared_from_this());
+        zoomNode = std::make_shared<Core::ZoomNode>("Zoom", env, shared_from_this());
+        zoomNode->build(nodeMan);
+        appendChild(zoomNode);
+
+        auto squareNode = std::make_shared<SquareNode>("SquareNode", env, zoomNode);
         squareNode->build(nodeMan);
         squareNode->setScale(env->deviceHeight / 4, env->deviceHeight / 4);
+        zoomNode->appendChild(squareNode);
 
-        appendChild(squareNode);
-
-        nodeMan.registerForEvents(shared_from_this());
+        // nodeMan.registerForEvents(shared_from_this());
         nodeMan.registerForTimingUpdates(shared_from_this());
 
         return 1;
@@ -52,11 +54,11 @@ namespace Game
 
     bool BasicScene::handleEvent(const Core::IOEvent &event)
     {
-        std::cout << "BasicScene::handleEvent " << event.x << "," << event.y << " : " << static_cast<int>(event.type) << std::endl;
-        if (env->isKeyPressed(event.key))
-        {
-            std::cout << event.key << std::endl;
-        }
+        // std::cout << "BasicScene::handleEvent " << event.x << "," << event.y << " : " << static_cast<int>(event.type) << std::endl;
+        // if (env->isKeyPressed(event.key))
+        // {
+        //     std::cout << event.key << std::endl;
+        // }
         // if (event.type == Core::IOEvent::Type::Key)
         // {
         //     std::cout << event.key << std::endl;

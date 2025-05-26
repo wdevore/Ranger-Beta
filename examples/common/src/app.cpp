@@ -213,7 +213,7 @@ namespace Game
 
     Core::IOEvent::Action App::actionToEnum(int action)
     {
-        Core::IOEvent::Action act{Core::IOEvent::Action::UnKnown};
+        Core::IOEvent::Action act{Core::IOEvent::Action::Unknown};
         if (action == GLFW_PRESS)
         {
             act = Core::IOEvent::Action::Press;
@@ -284,6 +284,7 @@ namespace Game
         Game::App *app = static_cast<Game::App *>(glfwGetWindowUserPointer(window));
         if (app)
         {
+            // app->ioEvent.reset();
             app->ioEvent.setMouseMoveEvent(xpos, ypos);
             app->processIOEvent();
         }
@@ -295,6 +296,7 @@ namespace Game
         Game::App *app = static_cast<Game::App *>(glfwGetWindowUserPointer(window));
         if (app)
         {
+            // app->ioEvent.reset();
             app->ioEvent.setMouseButtonEvent(app->buttonToEnum(button), app->actionToEnum(action), app->modifierToEnum(mods));
             app->processIOEvent();
         }

@@ -8,16 +8,21 @@
 #include <node_manager.hpp>
 #include <color4.hpp>
 #include <io_event.hpp>
+#include <zoom_node.hpp>
 
 namespace Game
 {
     using nodeWkPtr = std::weak_ptr<Core::Node>;
+
+    // class ZoomNode;
+    using zoomNodeShPtr = std::shared_ptr<Core::ZoomNode>;
 
     class BasicScene final : public Core::Node, public std::enable_shared_from_this<BasicScene>
     {
     private:
         /* data */
         Color4 bgClearColor{0.2f, 0.2f, 0.2f, 1.0f};
+        zoomNodeShPtr zoomNode;
 
     public:
         BasicScene() = default;

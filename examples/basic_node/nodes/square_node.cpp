@@ -3,6 +3,8 @@
 #include <environment.hpp>
 #include <shader.hpp>
 #include <shape_generator.hpp>
+#include <spaces.hpp>
+#include <vector2d.hpp>
 
 namespace Game
 {
@@ -17,15 +19,20 @@ namespace Game
             Core::Shape &shape = generator.shape;
             rectangleAtlasId_ = shape.id;
             env->atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
+            generator.generateABBox(bounds);
         }
         else
         {
             rectangleAtlasId_ = squareShape->id;
         }
 
-        setPosition(100.0f, 100.0f);
+        setPosition(env->deviceWidth / 2, env->deviceHeight / 2);
+        // setRotation(45.0f * Core::DEGREES_TO_RADIANS);
 
         nodeMan.registerForTimingUpdates(shared_from_this());
+        nodeMan.registerForEvents(shared_from_this());
+
+        dragState.initialize(shared_from_this(), env, bounds);
 
         return 1;
     }
@@ -61,8 +68,20 @@ namespace Game
 
     void SquareNode::render(const Core::Matrix4 &model)
     {
-        env->atlas.setColor({1.0, 0.5, 0.5, 1.0});
+
+        if (dragState.pointInside)
+            env->atlas.setColor({1.0, 0.75, 0.75, 1.0});
+        else
+            env->atlas.setColor({1.0, 0.5, 0.5, 1.0});
+
         env->atlas.render(rectangleAtlasId_, model);
+    }
+
+    bool SquareNode::handleEvent(const Core::IOEvent &event)
+    {
+        dragState.handleEvent(event);
+
+        return true;
     }
 
 } // namespace Game

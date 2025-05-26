@@ -20,29 +20,29 @@ namespace Core
 
         enum class Button
         {
+            Unknown,
             Left,
             Right,
             Middle,
             X1,
-            X2,
-            Unknown
+            X2
         };
 
         enum class Action
         {
+            Unknown,
             Press,
             Release,
-            Repeat,
-            UnKnown
+            Repeat
         };
 
         enum class Modifier
         {
+            Unknown,
             Shift,
             Control,
             Alt,
-            Super,
-            Unknown
+            Super
         };
 
         enum class Key
@@ -101,8 +101,9 @@ namespace Core
         // Offset/Position data (relevant for most events)
         double x{};
         double y{};
+
         Button button{Button::Unknown};
-        Action action{Action::UnKnown};
+        Action action{Action::Unknown};
         // 'mods' indicates which modifier keys (Shift, Ctrl, Alt, Super) were held down
         Modifier mods{Modifier::Unknown};
         int key{};
@@ -110,9 +111,22 @@ namespace Core
 
         Type type{Type::None};
 
+        // ---------- Dragging ---------------
+        bool isDragging{false};
+        bool isDragStart{false};
+        bool isDragDown{false};
+        // bool isDragUpdate{false};
+        bool isDragEnd{false};
+        int px{0};
+        int py{0};
+        int dx{0};
+        int dy{0};
+        // ------------------------------------
+
         IOEvent(/* args */) = default;
         ~IOEvent() = default;
 
+        void reset();
         void setMouseWheelEvent(double x, double y);
         void setMouseMoveEvent(double x, double y);
         void setMouseEnterExitEvent(bool entered);

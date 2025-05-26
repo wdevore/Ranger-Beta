@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 
 #include <vector2d.hpp>
@@ -25,29 +27,29 @@ namespace Core
     private:
         /* data */
     public:
-        double left{0.0};
-        double top{0.0};
-        double bottom{0.0};
-        double right{0.0};
-        double width{0.0};
-        double height{0.0};
+        float left{0.0};
+        float top{0.0};
+        float bottom{0.0};
+        float right{0.0};
+        float width{0.0};
+        float height{0.0};
         Vector2D center{};
 
         Rectangle(/* args */) = default;
         ~Rectangle() = default;
 
         void set(const Rectangle &rec);
-        void set(double width, double height);
-        void set(double minX, double minY, double maxX, double maxY);
-        void set(const std::vector<double> &vertices);
-        void setCenter(double x, double y);
-        void setSize(double w, double h);
+        void set(float width, float height);
+        void set(float minX, float minY, float maxX, float maxY);
+        void set(const std::vector<float> &vertices);
+        void setCenter(float x, float y);
+        void setSize(float w, float h);
 
-        void expand(double wx, double wy);
-        double area() const;
+        void expand(float wx, float wy);
+        float area() const;
         bool pointContained(const Vector2D &p) const;
         bool pointInside(const Vector2D &p) const;
-        bool coordsInside(double x, double y) const;
+        bool coordsInside(float x, float y) const;
         bool intersects(const Rectangle &r) const;
         bool contains(const Rectangle &r) const;
 

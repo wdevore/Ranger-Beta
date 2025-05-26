@@ -3,6 +3,7 @@
 
 #include <dynamic_mono_atlas.hpp>
 #include <constants.hpp>
+#include <environment.hpp>
 
 namespace Core
 {
@@ -146,7 +147,7 @@ namespace Core
         Matrix4 pm = projection.getMatrix();
         glUniformMatrix4fv(projLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, pm.data());
 
-        glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, camera.viewspace.data());
+        glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, environment->camera.viewspace.data());
 
         return ErrorConditions::None;
     }

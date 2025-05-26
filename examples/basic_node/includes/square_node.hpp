@@ -2,6 +2,9 @@
 
 #include <node.hpp>
 #include <node_manager.hpp>
+#include <vector2d.hpp>
+#include <rectangle.hpp>
+#include <drag_state.hpp>
 
 namespace Game
 {
@@ -13,7 +16,10 @@ namespace Game
         /* data */
         int rectangleAtlasId_{};
         float angle{0};
-        float angularVelocityRadiansPerSecond{0.05f * Core::DEGREES_TO_RADIANS};
+        float angularVelocityRadiansPerSecond{0.01f * Core::DEGREES_TO_RADIANS};
+
+        Core::Rectangle bounds{};
+        Core::DragState dragState{};
 
     public:
         SquareNode(/* args */) = default;
@@ -22,6 +28,7 @@ namespace Game
         {
             std::cout << "BasicScene Node Constructor: '" << name << "'" << id << std::endl;
             env = environment;
+            // dragState.initialize(shared_from_this(), env);
         };
         ~SquareNode() = default;
 
@@ -30,6 +37,7 @@ namespace Game
         void receiveSignal(Core::NodeSignal signal) override;
         void update(double dt);
         void render(const Core::Matrix4 &model) override;
+        bool handleEvent(const Core::IOEvent &event) override;
     };
 
 } // namespace Game

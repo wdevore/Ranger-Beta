@@ -15,7 +15,7 @@ namespace Core
         height = rec.height;
     }
 
-    void Rectangle::set(double width, double height)
+    void Rectangle::set(float width, float height)
     {
         // bottom = 0.0;  // This is if +Y is upward.
         // left = 0.0;
@@ -29,7 +29,7 @@ namespace Core
         this->height = height;
     }
 
-    void Rectangle::set(double minX, double minY, double maxX, double maxY)
+    void Rectangle::set(float minX, float minY, float maxX, float maxY)
     {
         left = minX;
         right = maxX;
@@ -42,20 +42,20 @@ namespace Core
     /// @brief Expands/Fits rectangle to fit vertex cloud and set center.
     ///        vector is structured as: [x,y,x,y...]
     /// @param vertices
-    void Rectangle::set(const std::vector<double> &vertices)
+    void Rectangle::set(const std::vector<float> &vertices)
     {
-        using nlimits = std::numeric_limits<double>;
+        using nlimits = std::numeric_limits<float>;
 
-        double minX = nlimits::infinity();
-        double minY = nlimits::infinity();
-        double maxX = -nlimits::infinity();
-        double maxY = -nlimits::infinity();
+        float minX = nlimits::infinity();
+        float minY = nlimits::infinity();
+        float maxX = -nlimits::infinity();
+        float maxY = -nlimits::infinity();
 
         // Find min/max points
-        for (double i = 0; i < vertices.size(); i += 2)
+        for (float i = 0; i < vertices.size(); i += 2)
         {
-            double x = vertices[i];
-            double y = vertices[i + 1];
+            float x = vertices[i];
+            float y = vertices[i + 1];
 
             minX = fmin(minX, x);
             minY = fmin(minY, y);
@@ -68,23 +68,23 @@ namespace Core
         setCenter(left + width / 2.0, bottom + height / 2.0);
     }
 
-    void Rectangle::setCenter(double x, double y)
+    void Rectangle::setCenter(float x, float y)
     {
         center.set(x, y);
     }
 
-    void Rectangle::setSize(double w, double h)
+    void Rectangle::setSize(float w, float h)
     {
         width = w;
         height = h;
     }
 
-    void Rectangle::expand(double wx, double wy)
+    void Rectangle::expand(float wx, float wy)
     {
-        double minX = left;
-        double minY = bottom;
-        double maxX = right;
-        double maxY = top;
+        float minX = left;
+        float minY = bottom;
+        float maxX = right;
+        float maxY = top;
 
         minX = fmin(minX, wx);
         minY = fmin(minY, wy);
@@ -96,7 +96,7 @@ namespace Core
         setCenter(left + width / 2.0, bottom + height / 2.0);
     }
 
-    double Rectangle::area() const
+    float Rectangle::area() const
     {
         return width * height;
     }
@@ -132,7 +132,7 @@ namespace Core
         return coordsInside(p.x, p.y);
     }
 
-    bool Rectangle::coordsInside(double x, double y) const
+    bool Rectangle::coordsInside(float x, float y) const
     {
         //  Canvas's device coordinate space is:
         //        Top-Left
@@ -150,10 +150,11 @@ namespace Core
         //
         // Because the Canvas's +Y is downward the bottom is positive so the check is:
         // y is < bottom and y is >= top.
-        std::cout << (x >= left) << std::endl;
-        std::cout << (x < right) << std::endl;
-        std::cout << (y < bottom) << std::endl;
-        std::cout << (y >= top) << std::endl;
+        // std::cout << (x >= left) << "L:"
+        //           << (x < right) << "R:"
+        //           << (y < bottom) << "B:"
+        //           << (y >= top) << "B"
+        //           << std::endl;
 
         return x >= left && x < right && y < bottom && y >= top;
     }

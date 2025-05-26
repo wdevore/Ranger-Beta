@@ -5,7 +5,6 @@
 #include <glad/gl.h>
 
 #include "ortho_projection.hpp"
-#include "camera.hpp"
 
 namespace Core
 {
@@ -28,8 +27,6 @@ namespace Core
 
         /// @brief This sets the project and positions the Origin.
         OrthoProjection projection{};
-        /// @brief This is the camera
-        Camera camera{};
 
         environmentShPtr environment;
 

@@ -90,9 +90,13 @@ namespace Core
         void visit(TransformStack &transformStack, double interpolation, double width, double height);
 
         void setPosition(float x, float y);
+        Vector2D &getPosition();
         void setRotation(float radians);
         void setScale(float scale);
         void setScale(float scaleX, float scaleY);
+
+        void rippleDirty(bool dirty);
+        virtual AffineTransform &calcTransform();
 
         /// @brief
         /// render() provides a default render--which is to draw nothing.

@@ -255,4 +255,16 @@ namespace Core
             shape.indices.push_back(index++);
         }
     }
+
+    Rectangle ShapeGenerator::generateABBox()
+    {
+        Rectangle rect{};
+        rect.set(shape.vertices);
+        return rect;
+    }
+
+    void ShapeGenerator::generateABBox(Rectangle &box)
+    {
+        box.set(shape.vertices);
+    }
 } // namespace Core

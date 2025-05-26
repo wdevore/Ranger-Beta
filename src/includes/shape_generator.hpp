@@ -3,6 +3,7 @@
 
 #include "shape.hpp"
 #include "constants.hpp"
+#include "rectangle.hpp"
 
 namespace Core
 {
@@ -40,6 +41,9 @@ namespace Core
         void generateUnitPlus(); // A "+"
         void generateUnitCircle(int segmentCount, ShapeControls fillType);
         void generateArc(float startAngle, float endAngle, int segmentCount, ShapeControls fillType);
+
+        Rectangle generateABBox();
+        void generateABBox(Rectangle &box);
     };
 
 } // namespace Core

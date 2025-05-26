@@ -3,6 +3,7 @@
 
 #include <static_mono_atlas.hpp>
 #include <constants.hpp>
+#include <environment.hpp>
 
 namespace Core
 {
@@ -167,7 +168,7 @@ namespace Core
         if (err < 0)
             return ErrorConditions::GLFunctionError;
 
-        glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, camera.viewspace.data());
+        glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, environment->camera.viewspace.data());
         err = checkGLError("StaticMonoAtlas::configureUniforms:glUniformMatrix4fv(2)");
         if (err < 0)
             return ErrorConditions::GLFunctionError;
@@ -279,6 +280,11 @@ namespace Core
             glUniformMatrix4fv(modelLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, model.data());
             glDrawElements(shape->primitiveMode, shape->indicesCount, GL_UNSIGNED_INT, shape->dataIndicesOffset());
         }
+    }
+
+    void StaticMonoAtlas::render(const Matrix4 &model)
+    {
+        glUniformMatrix4fv(modelLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, model.data());
     }
 
 } // namespace Core

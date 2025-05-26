@@ -19,11 +19,12 @@ namespace Core
 
         Vector2D zoomPoint{};
         ZoomTransform zoom{};
+        int debug{};
 
     public:
         ZoomNode(/* args */) = default;
-        explicit ZoomNode(std::string name, Core::environmentShPtr environment, nodeWkPtr parent = std::weak_ptr<Node>{})
-            : Core::Node(name, parent)
+        explicit ZoomNode(std::string name, environmentShPtr environment, nodeWkPtr parent = std::weak_ptr<Node>{})
+            : Node(name, parent)
         {
             std::cout << "ZoomNode Node Constructor: '" << name << "'" << id << std::endl;
             env = environment;
@@ -63,9 +64,12 @@ namespace Core
         void zoomIn();
         void zoomOut();
 
-        AffineTransform &calcTransform();
+        /// @brief Zoom nodes manage their own transform differently.
+        /// @return
+        AffineTransform &calcTransform() override;
 
         bool handleEvent(const IOEvent &event) override;
+        void receiveSignal(NodeSignal signal) override {}
     };
 
 } // namespace Core

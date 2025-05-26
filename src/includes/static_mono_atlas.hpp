@@ -85,6 +85,7 @@ namespace Core
         void setColor(const std::array<GLfloat, 4> &color);
 
         void render(int id, const Matrix4 &model);
+        void render(const Matrix4 &model);
     };
 
     using staticAtlasShPtr = std::shared_ptr<StaticMonoAtlas>;

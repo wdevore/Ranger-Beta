@@ -69,7 +69,7 @@ namespace Core
         // interpolation first.
         // node.interpolate(interpolation);
 
-        auto aft = transform_.calcTransform(dirty);
+        auto aft = calcTransform();
         // std::cout << aft << std::endl;
 
         transformStack.applyTransform(aft);
@@ -105,14 +105,19 @@ namespace Core
         // TODO add ripple call
         transform_.position.x = x;
         transform_.position.y = y;
-        dirty = true;
+        rippleDirty(true);
+    }
+
+    Vector2D &Node::getPosition()
+    {
+        return transform_.position;
     }
 
     void Node::setRotation(float radians)
     {
         // TODO add ripple call
         transform_.rotation = radians;
-        dirty = true;
+        rippleDirty(true);
     }
 
     void Node::setScale(float scale)
@@ -120,14 +125,29 @@ namespace Core
         // TODO add ripple call
         transform_.scale.x = scale;
         transform_.scale.y = scale;
-        dirty = true;
+        rippleDirty(true);
     }
 
     void Node::setScale(float scaleX, float scaleY)
     {
         transform_.scale.x = scaleX;
         transform_.scale.y = scaleY;
-        dirty = true;
+        rippleDirty(true);
+    }
+
+    void Node::rippleDirty(bool dirty)
+    {
+        for (auto &&child : getChildren())
+        {
+            child->rippleDirty(dirty);
+        }
+
+        this->dirty = dirty;
+    }
+
+    AffineTransform &Node::calcTransform()
+    {
+        return transform_.calcTransform(dirty);
     }
 
     std::ostream &operator<<(std::ostream &os, NodeSignal s)

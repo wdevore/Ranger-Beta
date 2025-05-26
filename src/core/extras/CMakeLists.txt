@@ -12,6 +12,7 @@ set(EXTRAS_SOURCES
     viewport.cpp
     camera.cpp
     zoom_node.cpp
+    drag_state.cpp
 )
 
 # Add library as a ".a" file

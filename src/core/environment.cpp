@@ -8,6 +8,9 @@ namespace Core
         this->deviceHeight = deviceHeight;
 
         atlas.initialize(shared_from_this());
+
+        // An example of moving the camera (aka viewspace, aka viewMatrix)
+        // camera.moveTo(-200.0, -150.0);
     }
 
     void Environment::postInitialize()

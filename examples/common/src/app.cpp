@@ -6,7 +6,6 @@
 
 namespace Game
 {
-
     // System Events
     void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode);
     void framebuffer_size_callback(GLFWwindow *window, int width, int height);
@@ -21,6 +20,8 @@ namespace Game
     /// @return
     int App::initialize()
     {
+        preSetup();
+
         std::cout << "App::initialize" << std::endl;
 
         int initialized = glfwInit();

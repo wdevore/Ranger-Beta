@@ -34,79 +34,14 @@ A Shader has a program associated with it. You construct a Shader using Vertex a
 # Atlas
 An Atlas has a Shader associated with it. It contains vector shapes.
 
-# Junk
-        // Lock on to the drag
-        // if (pointInside && event.isDragStart)
-        // {
-        //     isDragLocked = true;
-        // }
-        // else if (event.button == Core::IOEvent::Button::Left && event.action == Core::IOEvent::Action::Release)
-        // {
-        //     isDragLocked = false;
-        // }
+# Fonts
 
-        // On initial press 
-        // we need a button down AND a drag!!!!!!!!!!!!!
-        // if (!parent.expired())
-        // {
-        //     std::shared_ptr<Node> lockedPtr = parent.lock();
-        //     if (lockedPtr)
-        //     {
-        //         mapDeviceToNode(*env, event.dx, event.dy, lockedPtr, mapPoint);
-        //     }
-        // }
-
-        // if (active)
-        // {
-        //     setPosition(mapPoint.x, mapPoint.y);
-        // }
-        // else if (active && event.isDragging)
-        // {
-        //     Core::Vector2D pos = getPosition();
-        //     setPosition(pos.x + mapPoint.x, pos.y + mapPoint.y);
-        // }
-
-        if (!parent.expired())
-        {
-            std::shared_ptr<Node> lockedPtr = parent.lock();
-            if (lockedPtr)
-            {
-                std::cout << *this << "--- N parent of active: " << *lockedPtr << std::endl;
-                mapDeviceToNode(*env, event.dx, event.dy, lockedPtr, mapPoint);
-                if (isDragLocked)
-                {
-                    std::cout << "active: " << mapPoint << std::endl;
-                    Core::Vector2D pos = getPosition();
-                    setPosition(pos.x + mapPoint.x, pos.y + mapPoint.y);
-                }
-                else
-                {
-                    // std::cout << "not active: " << mapPoint << debug++ << std::endl;
-                }
-            }
-        }
-        std::cout << "END SquareNode::handleEvent ---------------------------" << std::endl;
-
-        // if (event.isDragDown)
-        // {
-        //     if (pointInside)
-        //     {
-        //         std::cout << "square collide " << event.isDragDown << std::endl;
-        //         dragState.setButton(event.x, event.y,
-        //                             *env,
-        //                             Core::IOEvent::Button::Left, Core::IOEvent::Action::Press,
-        //                             shared_from_this());
-
-        //         return true;
-        //     }
-        // }
-
-        // if (event.isDragging && pointInside)
-        // {
-        //     std::cout << "dragging and inside" << std::endl;
-
-        //     dragState.setMotion(event.x, event.y, *env, shared_from_this());
-
-        //     Core::Vector2D position = getPosition();
-        //     setPosition(position.x + dragState.delta.x, position.y + dragState.delta.y);
-        // }
+0x18 24 42 42 24 18 00 00
+00011000 0x18
+00100100 0x24
+01000010 0x42
+01000010 0x42
+00100100 0x24
+00011000 0x18
+00000000 0x00
+00000000 0x00

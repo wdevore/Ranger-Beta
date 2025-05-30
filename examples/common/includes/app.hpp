@@ -55,6 +55,7 @@ namespace Game
         // ----------------------------------------------------------
         // Virtuals
         // ----------------------------------------------------------
+        virtual void preSetup() = 0;
 
         /// @brief Allows app to check if the app has been setup properly.
         /// @return

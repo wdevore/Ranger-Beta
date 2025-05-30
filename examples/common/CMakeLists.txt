@@ -18,6 +18,7 @@ add_library(CommonLib OBJECT
 target_include_directories(CommonLib
     PUBLIC includes
     PUBLIC ../../src/includes
+    
     PUBLIC ${GLAD_INCLUDES}
     PUBLIC ${glfw_SOURCE_DIR}/deps
     PUBLIC ${glfw_SOURCE_DIR}/include

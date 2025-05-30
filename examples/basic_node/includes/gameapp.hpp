@@ -22,6 +22,8 @@ namespace Game
         GameApp(unsigned int width, unsigned int height) : App(width, height) {};
         ~GameApp();
 
+        void preSetup() override;
+
         int verifyConfigured() override;
 
         int deconstruct() override;

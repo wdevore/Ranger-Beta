@@ -23,6 +23,7 @@ namespace Core
         std::string shadersPath{};
 
         StaticMonoAtlas atlas{};
+        StaticMonoAtlas atlasFont{};
 
         std::unordered_set<int> pressedKeys;
 

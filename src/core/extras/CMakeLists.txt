@@ -13,6 +13,7 @@ set(EXTRAS_SOURCES
     camera.cpp
     zoom_node.cpp
     drag_state.cpp
+    bitmap_font_base.cpp
 )
 
 # Add library as a ".a" file

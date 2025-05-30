@@ -47,8 +47,10 @@ add_executable(${PROJECT_NAME}
     main.cpp
     gameapp.cpp
     game_environment.cpp
+    darkrose_bitmap_font.cpp
     nodes/basic_scene_node.cpp
     nodes/square_node.cpp
+    
     ${GLAD_SOURCES}/glad.c
 )
 
@@ -83,6 +85,7 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC includes
     # PUBLIC ${SOURCE_DIR}/includes
     PUBLIC ${COMMON_DIR}/includes
+    PUBLIC ${COMMON_DIR}/assets/fonts/bitmaps
     PUBLIC ${GLAD_INCLUDES}
     PUBLIC ${glfw_SOURCE_DIR}/deps
     PUBLIC ${glfw_SOURCE_DIR}/include

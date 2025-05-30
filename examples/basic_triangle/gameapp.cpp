@@ -4,6 +4,9 @@
 
 namespace Game
 {
+    void GameApp::preSetup()
+    {
+    }
 
     int GameApp::verifyConfigured()
     {

@@ -18,53 +18,7 @@ namespace Game
     void GameApp::preSetup()
     {
         DarkroseBitmapFont font{};
-        font.build();
-
-        const float unitLength{1.0};
-        const int numberOfSquaresPerSide{8};
-        const int numberOfGaps = numberOfSquaresPerSide - 1;
-        const float gapSize{0.025}; // d
-        const float sideLenth =
-            (unitLength - (numberOfGaps * gapSize)) / numberOfSquaresPerSide; // s
-
-        float my{0.5}; // Initial start value
-        float y1 = my; // Start y position
-        float y2{0.0}; // End y position
-
-        float y{0.0};
-
-        for (int row = 0; row < numberOfSquaresPerSide + 1; row++)
-        {
-            // std::cout << "row: " << row << std::endl;
-            my -= sideLenth;
-            y2 = my;
-            y = y1;
-
-            std::cout << "Y vertex from: " << y1 << " to: " << y2 << std::endl;
-            // An edge doesn't have a gap
-            if (row < numberOfGaps)
-                my -= gapSize;
-            y1 = my;
-
-            float mx{-0.5}; // Initial start value
-            float x1 = mx;  // Start X position
-            float x2{0.0};  // End x position
-
-            for (int col = 0; col < numberOfSquaresPerSide; col++)
-            {
-                // std::cout << "col: " << col << std::endl;
-                mx += sideLenth;
-                x2 = mx;
-
-                // std::cout << "X vertex from: " << x1 << " to: " << x2 << std::endl;
-                // ------- Output ----------------
-                std::cout << "Edge: (" << x1 << "," << y << ")-(" << x2 << "," << y << ")" << std::endl;
-                // An edge doesn't have a gap
-                if (col < numberOfGaps)
-                    mx += gapSize;
-                x1 = mx;
-            }
-        }
+        font.build(environment->atlas);
     }
 
     int GameApp::verifyConfigured()

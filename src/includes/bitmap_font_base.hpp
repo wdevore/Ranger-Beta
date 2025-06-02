@@ -1,5 +1,7 @@
 #pragma once
 
+#include <static_mono_atlas.hpp>
+
 namespace Core
 {
     /// @brief Bitmap fonts defined as pixels.
@@ -15,7 +17,7 @@ namespace Core
         BitmapFontBase(/* args */) = default;
         ~BitmapFontBase() = default;
 
-        virtual void build();
+        virtual void build(Core::StaticMonoAtlas &atlas);
     };
 
 } // namespace Core

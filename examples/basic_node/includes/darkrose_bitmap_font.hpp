@@ -1,18 +1,9 @@
 #pragma once
 
+#include <map>
+
 #include <bitmap_font_base.hpp>
 #include <color4.hpp>
-
-// Our bitmap font is made up of two triangles forming a rectangle.
-// For each 0 pixel we render with a dark color
-// For each 1 pixel we render with a light color.
-// We use the Rectangle shape from the StaticMonoAtlas.
-// In the render call we use a localModel that is composited with the incoming
-// model. The localModel has appended a translation equal to 1.0.
-// The fontNode has a scale equal to font size.
-
-// Pass in an environment with the font atlas
-// use Generator to create PixelCell shape
 
 namespace Game
 {
@@ -22,12 +13,28 @@ namespace Game
         /* data */
         Color4 fgColor{1.0, 0.5, 0.0, 1.0};
         Color4 bgColor{0.2, 0.2, 0.2, 1.0};
+        // Map of <string, int-offset>
+        std::map<std::string, int> indicesOffsets{};
 
     public:
         DarkroseBitmapFont(/* args */) = default;
         ~DarkroseBitmapFont() = default;
 
-        void build() override;
+        void build(Core::StaticMonoAtlas &atlas) override;
+
+        /// @brief Calculates the 6 EBO indices for a specific square in a grid.
+        ///
+        /// @param grid_x The 0-indexed column of the target square.
+        /// @param grid_y The 0-indexed row of the target square.
+        /// @param squaresPerSide The number of squares along one side of the grid (e.g., 8 for an 8x8 grid).
+        /// @param out_indices A reference to a std::vector<GLuint> where the 6 calculated indices will be stored.
+        ///                    The vector will be cleared before adding new indices.
+        /// @throws std::out_of_range if grid_x or grid_y are out of bounds
+        void getSubSquareEboIndices(
+            int grid_x,
+            int grid_y,
+            int squaresPerSide,
+            std::vector<GLuint> &out_indices);
     };
 
 } // namespace Game

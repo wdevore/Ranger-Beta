@@ -17,6 +17,7 @@ namespace Core
         static const std::string UnitPlus;
         static const std::string UnitCircle;
         static const std::string UnitArc;
+        static const std::string FontCell;
     };
 
     class ShapeGenerator
@@ -36,13 +37,17 @@ namespace Core
 
         void generateUnitRectangle(ShapeControls alignment, ShapeControls fillType);
         void generateUnitTriangle(ShapeControls alignment, ShapeControls fillType);
-        void generateHLine();
-        void generateVLine();
+        void generateUnitHLine();
+        void generateUnitVLine();
         void generateUnitPlus(); // A "+"
         void generateUnitCircle(int segmentCount, ShapeControls fillType);
-        void generateArc(float startAngle, float endAngle, int segmentCount, ShapeControls fillType);
+        void generateUnitArc(float startAngle, float endAngle, int segmentCount, ShapeControls fillType);
+
+        void generateFontCells(int numberOfSquaresPerSide, float gapSize, ShapeControls fillType);
 
         Rectangle generateABBox();
+        Rectangle generateABBox(const Shape &shape);
+        Rectangle generateABBox(const std::vector<GLfloat> &vertices);
         void generateABBox(Rectangle &box);
     };
 

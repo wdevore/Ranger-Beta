@@ -68,12 +68,12 @@ namespace Game
         atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
         // 2
-        generator.generateHLine();
+        generator.generateUnitHLine();
         shape = generator.shape;
         atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
         // 3
-        generator.generateVLine();
+        generator.generateUnitVLine();
         shape = generator.shape;
         atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
@@ -88,7 +88,7 @@ namespace Game
         atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
         // 6
-        generator.generateArc(0.0, 45.0 * Core::DEGREES_TO_RADIANS, 6, Core::ShapeControls::Filled);
+        generator.generateUnitArc(0.0, 45.0 * Core::DEGREES_TO_RADIANS, 6, Core::ShapeControls::Filled);
         shape = generator.shape;
         atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 

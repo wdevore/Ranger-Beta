@@ -23,6 +23,14 @@ namespace Core
         ErrorConditions bake();
         ErrorConditions configureUniforms();
 
+        /// @brief This offset is byte offsets not integer numbers.
+        int indicesByteOffset{0};
+        // The atlas has shapes and each shape has vertices. These need to be
+        // combined into a single array and later copied into GL Buffer.
+        // At the same time each shape needs to be updated
+        // to adjust element offsets and counts.
+        int indiceBlockOffset{0};
+
         void vboBind(int bufferSize, const std::vector<GLfloat> &vertices);
         // Some may call this an "ibo" instead
         void eboBind(int bufferSize, const std::vector<GLuint> &indices);
@@ -69,13 +77,30 @@ namespace Core
         /// @return
         ErrorConditions burn();
 
+        /// @brief This only adds the shape to the collection. It doesn't shake it.
+        /// @param shape
+        /// @return
+        int addShape(const Shape &shape);
+        /// @brief Same as above.
+        /// @param name
+        /// @param vertices
+        /// @param indices
+        /// @param mode
+        /// @return
         int addShape(std::string name,
                      const std::vector<GLfloat> &vertices,
                      std::vector<GLuint> &indices,
                      GLenum mode);
 
+        int addShapeAndShake(Shape &shape);
+        /// @brief Adds a shape dynamically to the atlas.
+        /// @param shape
+        /// @return
+        int shakeShape(Shape &shape);
+
         shapeShPtr getShapeByName(const std::string &name) const;
         shapeShPtr getShapeById(const int id) const;
+        int getIndicesOffset() const;
 
         void use();
         void unUse();

@@ -5,18 +5,30 @@
 
 #include <darkrose_bitmap_font.hpp>
 #include <dark_rose.hpp>
+#include <shape_generator.hpp>
 
 namespace Game
 {
-    void DarkroseBitmapFont::build()
+    void DarkroseBitmapFont::build(Core::StaticMonoAtlas &atlas)
     {
+
+        Core::ShapeGenerator generator{};
+        generator.generateFontCells(8, 0.025, Core::ShapeControls::Filled);
+
+        // Now that we have a Shape with ONLY vertices we need to build
+        // indices blocks for each character in the font.
+        // In the end the shape will have a continous set of indices.
+
+        // getSubSquareEboIndices(0, 1, 8, generator.shape.indices);
+
+        // As we create index blocks we record there offsets.
+
+        // First get the current offset in the atlas.
 
         for (auto &&character : BitmapFonts::darkRose_font)
         {
-            // std::cout << "character: 0x" << std::hex << character << std::dec << std::endl;
+            std::cout << "character: 0x" << std::hex << character << std::dec << std::endl;
 #if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-            // Little
-            // std::cout << "Little Endian" << std::endl;
 
             // Little-endian systems store the LSB at the lowest memory address.
             // To get bytes in LSB to MSB order:
@@ -58,5 +70,40 @@ namespace Game
             }
 #endif
         }
+    }
+
+    void DarkroseBitmapFont::getSubSquareEboIndices(int grid_x, int grid_y, int squaresPerSide, std::vector<GLuint> &out_indices)
+    {
+        if (grid_x < 0 || grid_x >= squaresPerSide || grid_y < 0 || grid_y >= squaresPerSide)
+        {
+            throw std::out_of_range("grid_x or grid_y is out of bounds for the given squaresPerSide.");
+        }
+
+        // Calculate the four vertex indices for the square (grid_x, grid_y)
+        // N is used for brevity in the formulas.
+        const int N = squaresPerSide;
+
+        // Top-Left vertex index
+        GLuint idx_TL = static_cast<GLuint>((grid_y * 2 * N + grid_x) * 2);
+        // Top-Right vertex index
+        GLuint idx_TR = idx_TL + 1;
+
+        // Bottom-Left vertex index
+        GLuint idx_BL = static_cast<GLuint>(((grid_y * 2 + 1) * N + grid_x) * 2);
+        // Bottom-Right vertex index
+        GLuint idx_BR = idx_BL + 1;
+
+        out_indices.clear();
+        out_indices.reserve(6);
+
+        // Add indices for the first triangle (TR, TL, BR) - CCW
+        out_indices.push_back(idx_TR);
+        out_indices.push_back(idx_TL);
+        out_indices.push_back(idx_BR);
+
+        // Add indices for the second triangle (BR, TL, BL) - CCW
+        out_indices.push_back(idx_BR);
+        out_indices.push_back(idx_TL);
+        out_indices.push_back(idx_BL);
     }
 } // namespace Game

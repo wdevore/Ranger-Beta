@@ -18,7 +18,8 @@ namespace Game
             generator.generateUnitRectangle(Core::ShapeControls::Centered, Core::ShapeControls::Filled);
             Core::Shape &shape = generator.shape;
             rectangleAtlasId_ = shape.id;
-            env->atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
+            env->atlas.addShapeAndShake(shape);
+
             generator.generateABBox(bounds);
         }
         else

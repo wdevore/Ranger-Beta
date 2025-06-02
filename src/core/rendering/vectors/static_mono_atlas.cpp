@@ -7,7 +7,6 @@
 
 namespace Core
 {
-
     void StaticMonoAtlas::initialize(environmentShPtr environment)
     {
         BaseAtlas::initialize(environment);
@@ -29,30 +28,25 @@ namespace Core
         // ---------------------------------------------------------
         // Collect all vertices and indices for buffers
         // ---------------------------------------------------------
-        // The atlas has shapes and each shape has vertices. These need to be
-        // combined into a single array and later copied into GL Buffer.
-        // At the same time each shape needs to be updated
-        // to adjust element offsets and counts.
-        int indicesOffset = 0;
-        int indiceBlockOffset = 0;
-
         for (auto &&shape : shapes)
         {
-            shape->indicesOffset = indicesOffset;
+            shakeShape(*shape);
 
-            indicesOffset += shape->indices.size() * sizeof(GLuint); // bytes
+            // shape->indicesOffset = indicesByteOffset;
 
-            // Backing store
-            for (auto &&vertex : shape->vertices)
-                backingShape.vertices.push_back(vertex);
+            // indicesByteOffset += shape->indices.size() * sizeof(GLuint); // bytes
 
-            // The indice offset is always refering to a position within
-            // the vertices array.
-            for (auto &&i : shape->indices)
-                backingShape.indices.push_back(GLuint(i + indiceBlockOffset));
+            // // Backing store
+            // for (auto &&vertex : shape->vertices)
+            //     backingShape.vertices.push_back(vertex);
 
-            // Offset the indices based on the vertice block position.
-            indiceBlockOffset = GLuint(backingShape.vertices.size() / Core::XYZComponentCount);
+            // // The indice offset is always refering to a position within
+            // // the vertices array.
+            // for (auto &&i : shape->indices)
+            //     backingShape.indices.push_back(GLuint(i + indiceBlockOffset));
+
+            // // Offset the indices based on the vertice block position.
+            // indiceBlockOffset = GLuint(backingShape.vertices.size() / Core::XYZComponentCount);
         }
 
         return ErrorConditions::None;
@@ -114,6 +108,8 @@ namespace Core
         if (configureUniStatus != ErrorConditions::None)
             return configureUniStatus;
 
+        // We don't need the backing shape resources anymore now that data
+        // has been uploaded to the GPU.
         backingShape.vertices.clear();
         backingShape.indices.clear();
 
@@ -200,11 +196,28 @@ namespace Core
         if (configureStatus != ErrorConditions::None)
             return configureStatus;
 
-        shake();
+        // shake();
 
         ErrorConditions bakeStatus = bake();
 
         return bakeStatus;
+    }
+
+    int StaticMonoAtlas::addShape(const Shape &shape)
+    {
+        auto shapeShPtr = std::make_shared<Shape>();
+
+        shapeShPtr->id = nextID++;
+        shapeShPtr->name = shape.name;
+        shapeShPtr->dirty = false;
+        shapeShPtr->vertices = shape.vertices;
+        shapeShPtr->indices = shape.indices;
+        shapeShPtr->indicesCount = shape.indices.size();
+        shapeShPtr->primitiveMode = shape.primitiveMode;
+
+        shapes.push_back(shapeShPtr);
+
+        return shape.id;
     }
 
     int StaticMonoAtlas::addShape(std::string name, const std::vector<GLfloat> &vertices, std::vector<GLuint> &indices, GLenum mode)
@@ -224,6 +237,36 @@ namespace Core
         return shape->id;
     }
 
+    int StaticMonoAtlas::addShapeAndShake(Shape &shape)
+    {
+        addShape(shape);
+        shakeShape(shape);
+        return indiceBlockOffset;
+    }
+
+    int StaticMonoAtlas::shakeShape(Shape &shape)
+    {
+        // Assign current offset to this shape
+        shape.indicesOffset = indicesByteOffset;
+
+        // Calc the next offset for the next potential shape shake
+        indicesByteOffset += shape.indices.size() * sizeof(GLuint); // bytes
+
+        // Backing store
+        for (auto &&vertex : shape.vertices)
+            backingShape.vertices.push_back(vertex);
+
+        // The indice offset is always refering to a position within
+        // the vertices array.
+        for (auto &&i : shape.indices)
+            backingShape.indices.push_back(GLuint(i + indiceBlockOffset));
+
+        // Offset the indices based on the vertice block position.
+        indiceBlockOffset = GLuint(backingShape.vertices.size() / Core::XYZComponentCount);
+
+        return indiceBlockOffset;
+    }
+
     shapeShPtr StaticMonoAtlas::getShapeByName(const std::string &name) const
     {
         auto it = std::find_if(shapes.begin(), shapes.end(),
@@ -238,6 +281,11 @@ namespace Core
                                [id](shapeShPtr n)
                                { return n->id == id; });
         return it != shapes.end() ? *it : nullptr;
+    }
+
+    int StaticMonoAtlas::getIndicesOffset() const
+    {
+        return indicesByteOffset;
     }
 
     void StaticMonoAtlas::use()
@@ -282,6 +330,9 @@ namespace Core
         }
     }
 
+    /// @brief This is used by special nodes that don't render anything but instead
+    /// manipulate the mode, for example, ZoomNode.
+    /// @param model
     void StaticMonoAtlas::render(const Matrix4 &model)
     {
         glUniformMatrix4fv(modelLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, model.data());

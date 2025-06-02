@@ -45,3 +45,21 @@ An Atlas has a Shader associated with it. It contains vector shapes.
 00011000 0x18
 00000000 0x00
 00000000 0x00
+
+## Font tasks
+- For each 0 pixel we render with a dark color (to be done later)
+- For each 1 pixel we render with a light color.
+
+StaticMonoAtlas:
+
+We add a new shape that is built using 8x8=64 rectangles. Each rectangle is the shape is displaced by a gap. All rectangles fill the unit space.
+We then create Indices for each character. In the first draft only pixels a "1" are drawn. For example, to render an exclamation point you would need 5 indice definitions (aka offsets in the EBO). Basically we keep adding indices at the next available offset.
+
+We also keep a map of ```<String,int-offset>``` so we can lookup the characater index, the map is stored in darkrose_bitmap_font (dbf). dbf is given an ```evn``` for referencing the atlas. It then uses a generator to create rectangle unit squares. dbf then generates indices for each character.
+once complete the shape can be added to the atlas and then can be initialized env.postInitiailize();
+Note: that postInitiailize bakes the atlas and this can only be done once all the shapes are present.
+
+- In the render call we use a localModel that is composited with the incoming
+model. The localModel has appended a translation equal to 1.0.
+- The fontNode has a scale equal to font size.
+

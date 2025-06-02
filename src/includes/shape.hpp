@@ -22,7 +22,7 @@ namespace Core
         std::string name{};
         bool dirty{true};
 
-        // For static Atlases there vertices are discarded after construction.
+        // For static Atlases these vertices maybe discarded after construction.
         std::vector<GLfloat> vertices{};
         int vertexOffset;
 

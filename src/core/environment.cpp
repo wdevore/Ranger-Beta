@@ -13,6 +13,7 @@ namespace Core
         // camera.moveTo(-200.0, -150.0);
     }
 
+    /// @brief Called by GameApp construct
     void Environment::postInitialize()
     {
         atlas.burn();

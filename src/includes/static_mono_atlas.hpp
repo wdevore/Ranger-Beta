@@ -75,7 +75,7 @@ namespace Core
 
         /// @brief Main method to call to load and compile.
         /// @return
-        ErrorConditions burn();
+        ErrorConditions burn(bool andShake = false);
 
         /// @brief This only adds the shape to the collection. It doesn't shake it.
         /// @param shape

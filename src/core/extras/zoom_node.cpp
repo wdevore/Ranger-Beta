@@ -105,7 +105,7 @@ namespace Core
         }
         else if (event.type == IOEvent::Type::Scrolled)
         {
-            int dir = event.y;
+            int dir = event.scrollOffsetY;
             if (dir == 1)
             {
                 zoomIn();

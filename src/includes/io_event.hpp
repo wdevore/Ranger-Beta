@@ -102,6 +102,9 @@ namespace Core
         double x{};
         double y{};
 
+        int scrollOffsetX{};
+        int scrollOffsetY{};
+
         Button button{Button::Unknown};
         Action action{Action::Unknown};
         // 'mods' indicates which modifier keys (Shift, Ctrl, Alt, Super) were held down

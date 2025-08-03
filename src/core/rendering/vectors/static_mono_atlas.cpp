@@ -190,13 +190,17 @@ namespace Core
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, bufferSize, indices.data(), GL_STATIC_DRAW);
     }
 
-    ErrorConditions StaticMonoAtlas::burn()
+    /// @brief Called by environment post initialize
+    /// @param andShake
+    /// @return
+    ErrorConditions StaticMonoAtlas::burn(bool andShake)
     {
         ErrorConditions configureStatus = configure();
         if (configureStatus != ErrorConditions::None)
             return configureStatus;
 
-        // shake();
+        if (andShake)
+            shake();
 
         ErrorConditions bakeStatus = bake();
 

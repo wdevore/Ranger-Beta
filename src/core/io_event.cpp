@@ -18,8 +18,9 @@ namespace Core
     void IOEvent::setMouseWheelEvent(double x, double y)
     {
         reset();
-        this->x = x;
-        this->y = y; // Vertical scroll amount and direction.
+        this->scrollOffsetX = static_cast<int>(x); // Horizontal scroll amount and direction.
+        this->scrollOffsetY = static_cast<int>(y); // Vertical scroll amount and direction.
+        // this->y = y;
         type = Type::Scrolled;
     }
 

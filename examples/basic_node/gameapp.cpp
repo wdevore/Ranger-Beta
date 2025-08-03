@@ -15,6 +15,8 @@ namespace Game
     {
     }
 
+    /// @brief This is the earliest method called.
+    /// mostly for testing and debugging.
     void GameApp::preSetup()
     {
         DarkroseBitmapFont font{};

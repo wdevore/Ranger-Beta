@@ -294,6 +294,7 @@ namespace Game
     // Callback function for mouse button events
     void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
     {
+        // std::cout << "Mouse button (" << button << ")" << std::endl;
         Game::App *app = static_cast<Game::App *>(glfwGetWindowUserPointer(window));
         if (app)
         {

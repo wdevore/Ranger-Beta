@@ -47,6 +47,7 @@ An Atlas has a Shader associated with it. It contains vector shapes.
 00000000 0x00
 
 ## Font tasks
+- Bug. After zoom--without moving mouse--drag doesn't work until mouse moves
 - For each 0 pixel we render with a dark color (to be done later)
 - For each 1 pixel we render with a light color.
 

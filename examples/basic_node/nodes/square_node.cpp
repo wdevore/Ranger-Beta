@@ -69,16 +69,17 @@ namespace Game
 
     void SquareNode::render(const Core::Matrix4 &model)
     {
-        env->atlas.use();
+        auto &atlas = env->atlas;
+        atlas.use();
 
         if (dragState.pointInside)
-            env->atlas.setColor({1.0, 0.75, 0.75, 1.0});
+            atlas.setColor({1.0, 0.75, 0.75, 1.0});
         else
-            env->atlas.setColor({1.0, 0.5, 0.5, 1.0});
+            atlas.setColor({1.0, 0.5, 0.5, 1.0});
 
-        env->atlas.render(rectangleAtlasId_, model);
+        atlas.render(rectangleAtlasId_, model);
 
-        env->atlas.unUse();
+        atlas.unUse();
     }
 
     bool SquareNode::handleEvent(const Core::IOEvent &event)

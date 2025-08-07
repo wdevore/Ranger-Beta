@@ -7,6 +7,18 @@ This project was started in April 2025 and is a mixture of:
 - [Ranger-Go-IDE](https://github.com/wdevore/Ranger-Go-IGE) was done is 2020
 - [SimpleOpenGL-Go](https://github.com/wdevore/SimpleOpenGL-Go) was done in 2020
 
+# Dev Notes:
+When you want to create a new project (aka another folder under examples) You
+need to do a few things:
+1) update *Ranger-Beta/.vscode/settings.json* and change <path> to the folder where the project is located.
+2) update the ```examples/<path to project>/CmakeList.txt``` such that the project name matches the *settings.json* file:
+```cmake
+project(<your project-name> VERSION 0.1.0 LANGUAGES C CXX)
+```
+3) (potentially optional) run ```Delete Catch and Reconfigure```
+
+You now be able to be able to go to the CMake extension and hover over the *Build* item and click on the *Edit* icon. This should bring up a list of targets. Select that matches the *settings.json* file.
+
 # Checkmark ✔
 
 # Tasks

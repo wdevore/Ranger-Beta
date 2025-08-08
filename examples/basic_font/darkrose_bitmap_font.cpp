@@ -17,36 +17,80 @@ namespace Game
 
         // Now that we have a Shape with ONLY vertices we need to build
         // indices blocks for each character in the font.
-        // In the end the shape will have a continous set of indices.
-
-        // getSubSquareEboIndices(0, 1, 8, generator.shape.indices);
-
-        // As we create index blocks we record there offsets.
+        // In the end the shape will have a continous set of indices broken into
+        // groups.
 
         // First get the current offset in the atlas.
+        constexpr int SQUARES_PRE_SIDE = 8;
+        constexpr int BITS = 8 - 1;
+        constexpr int BYTES = 8;
 
         for (auto &&character : BitmapFonts::darkRose_font)
         {
-            std::cout << "character: 0x" << std::hex << character << std::dec << std::endl;
+            // std::ios_base::fmtflags originalFlags = std::cout.flags();
+            std::cout << "char: 0x" << std::hex << std::setw(16) << std::setfill('0') << character << std::dec << std::endl;
 #if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 
             // Little-endian systems store the LSB at the lowest memory address.
             // To get bytes in LSB to MSB order:
-            std::vector<uint8_t> bytes_lsb_first;
-            bytes_lsb_first.resize(8);
+            // For example: "0x0808080800080000"
+            //                 |              |
+            //           (last) \MSB           \LSB (first)
+            std::vector<uint8_t> bytes;
+            bytes.resize(8);
 
-            for (int i = 0; i < 8; ++i)
+            // Visually the top is LSB, so we put the bytes in reverse order.
+            int shiftPosition = 0;
+            for (int byteIndex = BYTES - 1; byteIndex >= 0; byteIndex--)
             {
                 // For byte 0 (LSB), shift by 0 bits
                 // For byte 1, shift by 8 bits
                 // ...
                 // For byte 7 (MSB), shift by 56 bits
-                int shift = i * 8;
+                int shift = shiftPosition * (BITS + 1);
+                // Isolate the byte
                 uint8_t byte = (character >> shift) & 0xFF;
-                bytes_lsb_first[i] = byte;
+                bytes[byteIndex] = byte;
                 // std::cout << "byte: 0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte) << std::endl;
+                shiftPosition++;
             }
-            // std::cout << "byte: 0x" << std::dec << std::endl;
+            std::cout << std::endl;
+            // std::cout.flags(originalFlags);
+            int grid_row = 0;
+
+            int idx_row = 0; // Row is vertical (bytes)
+            int idx_col = 0; // Column is horizontal (bits)
+
+            // Now we take each byte in the array and iterate through each bit
+            // in the byte.
+            for (auto &&byte_row : bytes)
+            {
+                // std::cout << "byte_row: " << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte_row) << std::endl;
+
+                idx_col = 0;
+                // Iterate on each column bit
+                for (int grid_col = BITS; grid_col >= 0; grid_col--)
+                {
+                    // isolate bit.
+                    int bit = (byte_row >> grid_col) & 1;
+
+                    std::cout << bit;
+
+                    if (bit == 1) // Find a pixel that is lit.
+                    {
+                        std::cout << " (" << idx_col << "," << idx_row << ")" << std::endl;
+                        // Add indices Quad
+                        getSubSquareEboIndices(idx_col, idx_row, SQUARES_PRE_SIDE, generator.shape.indices);
+                    }
+                    idx_col++; // Move to next bit column
+                }
+                std::cout << std::endl;
+
+                idx_row++; // Move to next byte row
+                grid_row++;
+            }
+
+            // As we create index blocks we record there offsets.
 
 #elif defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
             // Big

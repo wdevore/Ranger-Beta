@@ -21,7 +21,7 @@ namespace Game
         };
         ~BasicScene() = default;
 
-        int build(static &atlas) override;
+        int build(Core::NodeManager &nodeMan) override;
 
         void receiveSignal(Core::NodeSignal signal) override;
     };

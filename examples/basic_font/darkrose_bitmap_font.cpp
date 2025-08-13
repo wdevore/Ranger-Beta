@@ -1,7 +1,7 @@
 #include <cstdint>
-#include <vector>
 #include <iostream>
 #include <iomanip> // Required for std::setw and std::setfill
+#include <bitset>  // For std::bitset
 
 #include <darkrose_bitmap_font.hpp>
 #include <dark_rose.hpp>
@@ -11,20 +11,38 @@ namespace Game
 {
     void DarkroseBitmapFont::build(Core::StaticMonoAtlas &atlas)
     {
+        // We need to generate vertices and indices.
+        // What is different that what apps do with geometric shapes is that
+        // our bitmap font will have a single group of vertices but multiple
+        // groups of indices for each character in the font.
+        //
+        // Typically with geometric shapes we create shapes where each shape
+        // has vertices and indices. Then add each shape separately to the atlas.
+        // Once all shapes are added the atlas will iterate each shape and pack
+        // each vertices an indices into a backing collection
+
+        // and once all shapes are added you call a "burn" method which would
+        // shake and bake them into the atlas. This
 
         Core::ShapeGenerator generator{};
-        generator.generateFontCells(8, 0.025, Core::ShapeControls::Filled);
+
+        // --------------------------------------------------------
+        // -------- Generate Vertices -----------------------------
+        // --------------------------------------------------------
+        generator.generateFontCells(SQUARES_PRE_SIDE, GAPSIZE, Core::ShapeControls::Filled);
 
         // Now that we have a Shape with ONLY vertices we need to build
         // indices blocks for each character in the font.
         // In the end the shape will have a continous set of indices broken into
         // groups.
 
-        // First get the current offset in the atlas.
-        constexpr int SQUARES_PRE_SIDE = 8;
-        constexpr int BITS = 8 - 1;
-        constexpr int BYTES = 8;
+        // First get the current offset in the atlas. This is where the first
+        // font character will start at.
+        int indicesOffset = atlas.getIndicesOffset();
 
+        // --------------------------------------------------------
+        // -------- Generate Indices ------------------------------
+        // --------------------------------------------------------
         for (auto &&character : BitmapFonts::darkRose_font)
         {
             // std::ios_base::fmtflags originalFlags = std::cout.flags();
@@ -37,10 +55,15 @@ namespace Game
             //                 |              |
             //           (last) \MSB           \LSB (first)
             std::vector<uint8_t> bytes;
-            bytes.resize(8);
+            bytes.resize(SQUARES_PRE_SIDE);
 
-            // Visually the top is LSB, so we put the bytes in reverse order.
+            // Visually the top is LSB, so we put the bytes in reverse order by
+            // Counting down.
             int shiftPosition = 0;
+
+            // ------------------------------
+            // Break uInt64 into bytes.
+            // ------------------------------
             for (int byteIndex = BYTES - 1; byteIndex >= 0; byteIndex--)
             {
                 // For byte 0 (LSB), shift by 0 bits
@@ -55,7 +78,11 @@ namespace Game
                 shiftPosition++;
             }
             std::cout << std::endl;
+
             // std::cout.flags(originalFlags);
+
+            // _printByteAndBitmap(bytes);
+
             int grid_row = 0;
 
             int idx_row = 0; // Row is vertical (bytes)
@@ -65,8 +92,6 @@ namespace Game
             // in the byte.
             for (auto &&byte_row : bytes)
             {
-                // std::cout << "byte_row: " << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte_row) << std::endl;
-
                 idx_col = 0;
                 // Iterate on each column bit
                 for (int grid_col = BITS; grid_col >= 0; grid_col--)
@@ -74,17 +99,16 @@ namespace Game
                     // isolate bit.
                     int bit = (byte_row >> grid_col) & 1;
 
-                    std::cout << bit;
-
                     if (bit == 1) // Find a pixel that is lit.
                     {
-                        std::cout << " (" << idx_col << "," << idx_row << ")" << std::endl;
+                        // std::cout << "(Col: " << idx_col << ", Row:" << idx_row << ")" << std::endl;
                         // Add indices Quad
+                        // Note: These indices are local-space and will eventually
+                        // be mapped to byte-buffer-space.
                         getSubSquareEboIndices(idx_col, idx_row, SQUARES_PRE_SIDE, generator.shape.indices);
                     }
                     idx_col++; // Move to next bit column
                 }
-                std::cout << std::endl;
 
                 idx_row++; // Move to next byte row
                 grid_row++;
@@ -137,6 +161,34 @@ namespace Game
         // Bottom-Right vertex index
         GLuint idx_BR = idx_BL + 1;
 
+        //   TL      TR
+        //   .-------.
+        //   | \ 1st |
+        //   |  \    |
+        //   |    \  |
+        //   | 2nd \ |
+        //   .-------.
+        //  BL       BR
+        std::cout << "TL--TR" << std::endl;
+        std::cout
+            << std::dec << std::setw(3) << std::setfill('0') << idx_TL << " "
+            << std::dec << std::setw(3) << std::setfill('0') << idx_TR
+            << std::endl;
+        std::cout << "BL--BR" << std::endl;
+        std::cout
+            << std::dec << std::setw(3) << std::setfill('0') << idx_BL << " "
+            << std::dec << std::setw(3) << std::setfill('0') << idx_BR
+            << std::endl;
+
+        std::cout << "TR  TL  BR  : BR  TL  BL" << std::endl;
+        std::cout << std::dec << std::setw(3) << std::setfill('0') << idx_TR << " "
+                  << std::dec << std::setw(3) << std::setfill('0') << idx_TL << " "
+                  << std::dec << std::setw(3) << std::setfill('0') << idx_BR << "   "
+                  << std::dec << std::setw(3) << std::setfill('0') << idx_BR << " "
+                  << std::dec << std::setw(3) << std::setfill('0') << idx_TL << " "
+                  << std::dec << std::setw(3) << std::setfill('0') << idx_BL
+                  << std::endl;
+
         out_indices.clear();
         out_indices.reserve(6);
 
@@ -149,5 +201,22 @@ namespace Game
         out_indices.push_back(idx_BR);
         out_indices.push_back(idx_TL);
         out_indices.push_back(idx_BL);
+    }
+
+    void DarkroseBitmapFont::_printBitmap(std::vector<uint8_t> bytes) const
+    {
+        for (auto &&byte : bytes)
+        {
+            std::cout << "byte: " << std::bitset<8>(byte) << std::endl;
+        }
+    }
+
+    void DarkroseBitmapFont::_printByteAndBitmap(std::vector<uint8_t> bytes) const
+    {
+        std::cout << "           01234567" << std::endl;
+        for (auto &&byte : bytes)
+        {
+            std::cout << "byte: " << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte) << " = " << std::bitset<8>(byte) << std::endl;
+        }
     }
 } // namespace Game

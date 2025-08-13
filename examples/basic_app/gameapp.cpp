@@ -13,6 +13,10 @@ namespace Game
     {
     }
 
+    void GameApp::preSetup()
+    {
+    }
+
     int GameApp::verifyConfigured()
     {
         std::cout << "GameApp::verifyConfigured" << std::endl;
@@ -29,7 +33,7 @@ namespace Game
     int GameApp::deconstruct()
     {
         std::cout << "GameApp::deconstruct" << std::endl;
-        atlas.dispose();
+        // atlas.dispose();
 
         return 1; // success
     }
@@ -49,53 +53,54 @@ namespace Game
     {
         std::cout << "GameApp::construct game" << std::endl;
 
+        auto env = environment;
+        env->initialize(width, height);
+
         // Create a single scene (aka Node) to hold a square.
         basicScene = std::make_shared<BasicScene>("BasicScene");
         nodeMan.push(basicScene);
-
-        atlas.initialize(width, height);
 
         // TODO Hack for now. Add a shape at this point.
         Core::ShapeGenerator generator{};
         // 0
         generator.generateUnitRectangle(Core::ShapeControls::Centered, Core::ShapeControls::Filled);
         Core::Shape &shape = generator.shape;
-        atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
+        env->atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
         // 1
         generator.generateUnitTriangle(Core::ShapeControls::Centered, Core::ShapeControls::Filled);
         shape = generator.shape;
-        atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
+        env->atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
         // 2
         generator.generateUnitHLine();
         shape = generator.shape;
-        atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
+        env->atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
         // 3
         generator.generateUnitVLine();
         shape = generator.shape;
-        atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
+        env->atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
         // 4
         generator.generateUnitPlus();
         shape = generator.shape;
-        atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
+        env->atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
         // 5
         generator.generateUnitCircle(12, Core::ShapeControls::Filled);
         shape = generator.shape;
-        atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
+        env->atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
         // 6
         generator.generateUnitArc(0.0, 45.0 * Core::DEGREES_TO_RADIANS, 6, Core::ShapeControls::Filled);
         shape = generator.shape;
-        atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
+        env->atlas.addShape(shape.name, shape.vertices, shape.indices, shape.primitiveMode);
 
-        atlas.burn();
-        atlas.use();
+        env->atlas.burn(true);
+        env->atlas.use();
 
-        atlas.setColor({1.0, 0.5, 0.0, 0.0});
+        env->atlas.setColor({1.0, 0.5, 0.0, 0.0});
 
         return 1;
     }
@@ -110,51 +115,57 @@ namespace Game
 
         // Render
         // nodeMan.visit(0.0, width, height);
+        auto env = environment;
 
         Core::Matrix4 model{true};
-        model.setScale(100.0, 100.0, 1.0);
-        atlas.setColor({1.0, 0.5, 0.0, 0.0});
-        atlas.render(0, model); // rectangle
+        model.translate(250.0, 250.0, 0.0);
+        model.scaleBy(100.0, 100.0, 1.0);
+        env->atlas.setColor({1.0, 0.5, 0.0, 0.0});
+        env->atlas.render(0, model); // rectangle
 
         model.toIdentity();
         // Order matters
-        model.translate(50.0, 50.0, 0.0);
+        model.translate(150.0, 450.0, 0.0);
         model.scaleBy(100.0, 100.0, 1.0);
         model.rotate(45.0 * Core::DEGREES_TO_RADIANS);
-        atlas.setColor({0.5, 1.0, 0.5, 0.0});
-        atlas.render(1, model); // triangle
+        env->atlas.setColor({0.5, 1.0, 0.5, 0.0});
+        env->atlas.render(1, model); // triangle
 
         model.toIdentity();
-        model.translate(-200.0, 0.0, 0.0);
+        model.translate(100.0, 100.0, 0.0);
         model.scaleBy(100.0, 100.0, 1.0);
-        atlas.setColor({1.0, 0.5, 0.5, 0.0});
-        atlas.render(2, model); // hline
+        env->atlas.setColor({1.0, 0.5, 0.5, 0.0});
+        env->atlas.render(2, model); // hline
 
         model.toIdentity();
-        model.translate(-200.0, 0.0, 0.0);
+        model.translate(300.0, 100.0, 0.0);
         model.scaleBy(100.0, 100.0, 1.0);
-        atlas.setColor({1.0, 0.0, 0.5, 0.0});
-        atlas.render(3, model); // vline
+        env->atlas.setColor({1.0, 0.0, 0.5, 0.0});
+        env->atlas.render(3, model); // vline
 
         model.toIdentity();
-        model.translate(100.0, 200.0, 0.0);
+        model.translate(375.0, 275.0, 0.0);
         model.scaleBy(100.0, 100.0, 1.0);
-        atlas.setColor({1.0, 1.0, 0.0, 0.0});
-        atlas.render(4, model); // hplus
+        env->atlas.setColor({1.0, 1.0, 0.0, 0.0});
+        env->atlas.render(4, model); // hplus
 
         model.toIdentity();
-        model.translate(200.0, 0.0, 0.0);
+        model.translate(400.0, 150.0, 0.0);
         model.scaleBy(100.0, 100.0, 1.0);
-        atlas.setColor({0.5, 0.5, 1.0, 0.0});
-        atlas.render(5, model); // circle
+        env->atlas.setColor({0.5, 0.5, 1.0, 0.0});
+        env->atlas.render(5, model); // circle
 
         model.toIdentity();
-        model.translate(-100.0, 100.0, 0.0);
+        model.translate(500.0, 500.0, 0.0);
         model.scaleBy(100.0, 100.0, 1.0);
-        atlas.setColor({0.5, 0.5, 1.0, 0.0});
-        atlas.render(6, model); // arc
+        env->atlas.setColor({0.5, 0.5, 1.0, 0.0});
+        env->atlas.render(6, model); // arc
 
         // glBindVertexArray(0); // no need to unbind it every time
+    }
+
+    void GameApp::processIOEvent()
+    {
     }
 
     int GameApp::update(double dt)

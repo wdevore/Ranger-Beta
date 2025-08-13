@@ -24,6 +24,8 @@ namespace Core
         ErrorConditions configureUniforms();
 
         /// @brief This offset is byte offsets not integer numbers.
+        /// It represents a "index pointer" where the next group of indices
+        /// starts.
         int indicesByteOffset{0};
         // The atlas has shapes and each shape has vertices. These need to be
         // combined into a single array and later copied into GL Buffer.

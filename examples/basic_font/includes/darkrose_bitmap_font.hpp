@@ -1,12 +1,20 @@
 #pragma once
 
 #include <map>
+#include <vector>
 
 #include <bitmap_font_base.hpp>
 #include <color4.hpp>
 
 namespace Game
 {
+    constexpr int SQUARES_PRE_SIDE = 8;
+    constexpr int BITS = 8 - 1;
+    constexpr int BYTES = 8;
+    constexpr int GAPSIZE = 0.025;
+
+    /// @brief The a single character is defined as 8*8 byte shape that is
+    ///        compacted into a uInt64
     class DarkroseBitmapFont final : public Core::BitmapFontBase
     {
     private:
@@ -35,6 +43,9 @@ namespace Game
             int grid_y,
             int squaresPerSide,
             std::vector<GLuint> &out_indices);
+
+        void _printBitmap(std::vector<uint8_t> bytes) const;
+        void _printByteAndBitmap(std::vector<uint8_t> bytes) const;
     };
 
 } // namespace Game

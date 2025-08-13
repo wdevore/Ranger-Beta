@@ -31,22 +31,6 @@ namespace Core
         for (auto &&shape : shapes)
         {
             shakeShape(*shape);
-
-            // shape->indicesOffset = indicesByteOffset;
-
-            // indicesByteOffset += shape->indices.size() * sizeof(GLuint); // bytes
-
-            // // Backing store
-            // for (auto &&vertex : shape->vertices)
-            //     backingShape.vertices.push_back(vertex);
-
-            // // The indice offset is always refering to a position within
-            // // the vertices array.
-            // for (auto &&i : shape->indices)
-            //     backingShape.indices.push_back(GLuint(i + indiceBlockOffset));
-
-            // // Offset the indices based on the vertice block position.
-            // indiceBlockOffset = GLuint(backingShape.vertices.size() / Core::XYZComponentCount);
         }
 
         return ErrorConditions::None;
@@ -250,23 +234,31 @@ namespace Core
 
     int StaticMonoAtlas::shakeShape(Shape &shape)
     {
-        // Assign current offset to this shape
+        // Assign current offset to this shape. Each shape has a group of indices
+        // within the EBO buffer and assigns it to the shape.
         shape.indicesOffset = indicesByteOffset;
 
-        // Calc the next offset for the next potential shape shake
+        // Now calc the offset for the next potential shape shake call.
         indicesByteOffset += shape.indices.size() * sizeof(GLuint); // bytes
 
-        // Backing store
+        // Copy all shapes vertex data into Backing store
         for (auto &&vertex : shape.vertices)
             backingShape.vertices.push_back(vertex);
 
-        // The indice offset is always refering to a position within
-        // the vertices array.
-        for (auto &&i : shape.indices)
-            backingShape.indices.push_back(GLuint(i + indiceBlockOffset));
+        // The index offset is always refering to a position within
+        // the vertices array. It is a integer pointer offset where the pointer
+        // is defined in "byte count" not "integer count".
+        // We need to "remap" the indices from local-space to byte-buffer-space.
+        // For each integer we convert from integer index to byte index.
+        for (GLuint &i : shape.indices)
+        {
+            // std::cout << "i: " << i << ", offset: " << (i + indiceBlockOffset) << std::endl;
+            backingShape.indices.push_back(static_cast<GLuint>(i + indiceBlockOffset));
+        }
 
-        // Offset the indices based on the vertice block position.
-        indiceBlockOffset = GLuint(backingShape.vertices.size() / Core::XYZComponentCount);
+        // Calc the next block offset
+        // Offset the indices based on the vertex block position as a "byte count".
+        indiceBlockOffset = static_cast<GLuint>(backingShape.vertices.size() / Core::XYZComponentCount);
 
         return indiceBlockOffset;
     }

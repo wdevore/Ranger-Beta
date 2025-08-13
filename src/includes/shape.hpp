@@ -29,6 +29,7 @@ namespace Core
         std::vector<GLuint> indices{};
         // When you are using an EBO (which is the recommended way to handle
         // indexed drawing), the last parameter should be treated as a byte offset.
+        // Each shape has an offset into the EBO buffer and this field marks it.
         GLuint indicesOffset{}; // offset in Bytes
         GLsizei indicesCount{}; // EBO indices length
 

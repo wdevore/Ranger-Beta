@@ -4,8 +4,9 @@
 
 namespace Game
 {
-    int BasicScene::build(Core::StaticMonoAtlas &atlas)
+    int BasicScene::build(Core::NodeManager &nodeMan)
     {
+        return 0;
     }
 
     void BasicScene::receiveSignal(Core::NodeSignal signal)

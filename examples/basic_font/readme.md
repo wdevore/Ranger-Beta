@@ -67,9 +67,9 @@ Note: All vertices and indices are *packed* into the same atlas that may also ha
 
 An example, of an EBO grouping
 ```
-vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv
-|--------------------- A ------------------| |-------------------------- B -----------------------|
-0 offset                                     8 offset
+vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv
+|--------------------- A --------| |-------------------------- B -----------------------|
+0 offset                           (4*7)=28 offset
 ```
 
 ## Text

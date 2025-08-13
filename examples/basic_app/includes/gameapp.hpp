@@ -9,7 +9,7 @@
 
 namespace Game
 {
-    class GameApp : public App
+    class GameApp final : public App
     {
     private:
         /* data */
@@ -18,11 +18,14 @@ namespace Game
         std::shared_ptr<BasicScene> basicScene;
 
         Core::StaticMonoAtlas atlas{};
+        Color4 bgClearColor{0.2f, 0.2f, 0.2f, 1.0f};
 
     public:
         GameApp() = default;
         GameApp(unsigned int width, unsigned int height) : App(width, height) {};
         ~GameApp();
+
+        void preSetup() override;
 
         int verifyConfigured() override;
 
@@ -32,6 +35,8 @@ namespace Game
         int construct() override;
         int update(double dt) override;
         void render() override;
+
+        void processIOEvent() override;
     };
 
 } // namespace Game

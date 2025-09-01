@@ -9,21 +9,8 @@
 
 namespace Game
 {
-    void DarkroseBitmapFont::build(Core::StaticMonoAtlas &atlas)
+    void DarkroseBitmapFont::build()
     {
-        // We need to generate vertices and indices.
-        // What is different that what apps do with geometric shapes is that
-        // our bitmap font will have a single group of vertices but multiple
-        // groups of indices for each character in the font.
-        //
-        // Typically with geometric shapes we create shapes where each shape
-        // has vertices and indices. Then add each shape separately to the atlas.
-        // Once all shapes are added the atlas will iterate each shape and pack
-        // each vertices an indices into a backing collection
-
-        // and once all shapes are added you call a "burn" method which would
-        // shake and bake them into the atlas. This
-
         Core::ShapeGenerator generator{};
 
         // --------------------------------------------------------
@@ -32,21 +19,20 @@ namespace Game
         generator.generateFontCells(SQUARES_PRE_SIDE, GAPSIZE, Core::ShapeControls::Filled);
 
         // Now that we have a Shape with ONLY vertices we need to build
-        // indices blocks for each character in the font.
+        // indices groups for each character in the font.
         // In the end the shape will have a continous set of indices broken into
-        // groups.
-
-        // First get the current offset in the atlas. This is where the first
-        // font character will start at.
-        int indicesOffset = atlas.getIndicesOffset();
+        // groups one for each character. However, we need to track the start
+        // of each group, and later when the indices are mapped into the
+        // byte-buffer space we map the group offsets as well.
 
         // --------------------------------------------------------
         // -------- Generate Indices ------------------------------
         // --------------------------------------------------------
+        int charIndex = {0};
         for (auto &&character : BitmapFonts::darkRose_font)
         {
             // std::ios_base::fmtflags originalFlags = std::cout.flags();
-            std::cout << "char: 0x" << std::hex << std::setw(16) << std::setfill('0') << character << std::dec << std::endl;
+            // std::cout << "char: 0x" << std::hex << std::setw(16) << std::setfill('0') << character << std::dec << std::endl;
 #if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 
             // Little-endian systems store the LSB at the lowest memory address.
@@ -57,8 +43,12 @@ namespace Game
             std::vector<uint8_t> bytes;
             bytes.resize(SQUARES_PRE_SIDE);
 
-            // Visually the top is LSB, so we put the bytes in reverse order by
-            // Counting down.
+            // Capture group offset for current character.
+            // As we create indices groups we record start of the offset which
+            // is based on the current "size" of the indices count.
+            indicesOffsets[BitmapFonts::darkRose_chars[charIndex]] = generator.shape.indices.size();
+
+            // Shift scaler for bit positioning
             int shiftPosition = 0;
 
             // ------------------------------
@@ -77,13 +67,11 @@ namespace Game
                 // std::cout << "byte: 0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte) << std::endl;
                 shiftPosition++;
             }
-            std::cout << std::endl;
+            // std::cout << std::endl;
 
             // std::cout.flags(originalFlags);
 
             // _printByteAndBitmap(bytes);
-
-            int grid_row = 0;
 
             int idx_row = 0; // Row is vertical (bytes)
             int idx_col = 0; // Column is horizontal (bits)
@@ -105,16 +93,16 @@ namespace Game
                         // Add indices Quad
                         // Note: These indices are local-space and will eventually
                         // be mapped to byte-buffer-space.
-                        getSubSquareEboIndices(idx_col, idx_row, SQUARES_PRE_SIDE, generator.shape.indices);
+                        _getSubSquareEboIndices(idx_col, idx_row, SQUARES_PRE_SIDE, generator.shape.indices);
                     }
                     idx_col++; // Move to next bit column
                 }
 
                 idx_row++; // Move to next byte row
-                grid_row++;
             }
 
-            // As we create index blocks we record there offsets.
+            // Move to next char label.
+            charIndex++;
 
 #elif defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
             // Big
@@ -140,7 +128,7 @@ namespace Game
         }
     }
 
-    void DarkroseBitmapFont::getSubSquareEboIndices(int grid_x, int grid_y, int squaresPerSide, std::vector<GLuint> &out_indices)
+    void DarkroseBitmapFont::_getSubSquareEboIndices(int grid_x, int grid_y, int squaresPerSide, std::vector<GLuint> &out_indices)
     {
         if (grid_x < 0 || grid_x >= squaresPerSide || grid_y < 0 || grid_y >= squaresPerSide)
         {
@@ -169,28 +157,28 @@ namespace Game
         //   | 2nd \ |
         //   .-------.
         //  BL       BR
-        std::cout << "TL--TR" << std::endl;
-        std::cout
-            << std::dec << std::setw(3) << std::setfill('0') << idx_TL << " "
-            << std::dec << std::setw(3) << std::setfill('0') << idx_TR
-            << std::endl;
-        std::cout << "BL--BR" << std::endl;
-        std::cout
-            << std::dec << std::setw(3) << std::setfill('0') << idx_BL << " "
-            << std::dec << std::setw(3) << std::setfill('0') << idx_BR
-            << std::endl;
+        // std::cout << "TL--TR" << std::endl;
+        // std::cout
+        //     << std::dec << std::setw(3) << std::setfill('0') << idx_TL << " "
+        //     << std::dec << std::setw(3) << std::setfill('0') << idx_TR
+        //     << std::endl;
+        // std::cout << "BL--BR" << std::endl;
+        // std::cout
+        //     << std::dec << std::setw(3) << std::setfill('0') << idx_BL << " "
+        //     << std::dec << std::setw(3) << std::setfill('0') << idx_BR
+        //     << std::endl;
 
-        std::cout << "TR  TL  BR  : BR  TL  BL" << std::endl;
-        std::cout << std::dec << std::setw(3) << std::setfill('0') << idx_TR << " "
-                  << std::dec << std::setw(3) << std::setfill('0') << idx_TL << " "
-                  << std::dec << std::setw(3) << std::setfill('0') << idx_BR << "   "
-                  << std::dec << std::setw(3) << std::setfill('0') << idx_BR << " "
-                  << std::dec << std::setw(3) << std::setfill('0') << idx_TL << " "
-                  << std::dec << std::setw(3) << std::setfill('0') << idx_BL
-                  << std::endl;
+        // std::cout << "TR  TL  BR  : BR  TL  BL" << std::endl;
+        // std::cout << std::dec << std::setw(3) << std::setfill('0') << idx_TR << " "
+        //           << std::dec << std::setw(3) << std::setfill('0') << idx_TL << " "
+        //           << std::dec << std::setw(3) << std::setfill('0') << idx_BR << "   "
+        //           << std::dec << std::setw(3) << std::setfill('0') << idx_BR << " "
+        //           << std::dec << std::setw(3) << std::setfill('0') << idx_TL << " "
+        //           << std::dec << std::setw(3) << std::setfill('0') << idx_BL
+        //           << std::endl;
 
-        out_indices.clear();
-        out_indices.reserve(6);
+        // out_indices.clear();   <-- oops
+        // out_indices.reserve(6);
 
         // Add indices for the first triangle (TR, TL, BR) - CCW
         out_indices.push_back(idx_TR);

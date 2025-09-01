@@ -2,5 +2,5 @@
 
 namespace Core
 {
-    void BitmapFontBase::build(Core::StaticMonoAtlas &atlas) {}
+    void BitmapFontBase::build() {}
 } // namespace Core

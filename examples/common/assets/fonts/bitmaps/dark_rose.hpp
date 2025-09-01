@@ -17,6 +17,9 @@
  ************************************************************************/
 #include <cstdint>
 #include <array>
+
+// https://opengameart.org/content/8x8-ascii-bitmap-font-with-c-source
+
 // the values in this array are a 8x8 bitmap font for ascii characters
 // Originally 128, now 128-33=95  (33 = non visible chars)
 /*
@@ -78,6 +81,14 @@ namespace Game
 {
     namespace BitmapFonts
     {
+        static std::array<char, 95> darkRose_chars{
+            '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=', '>', '?',
+            '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '[', '\\', ']', '^', '_',
+            '`', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+            'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}', '~', ' '};
+
         // They are all top-left justified. We need to append 0s
         // Some of them have subtrihends indicate with "SUB"
         static std::array<uint64_t, 95> darkRose_font = {

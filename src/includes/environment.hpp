@@ -7,9 +7,12 @@
 #include <static_mono_atlas.hpp>
 #include <io_event.hpp>
 #include <camera.hpp>
+// #include <bitmap_vector_font_atlas.hpp>
 
 namespace Core
 {
+    // using bvFontAtlasUnqPtr = std::unique_ptr<BitmapVectorFontAtlas>;
+
     class Environment : public std::enable_shared_from_this<Environment>
     {
     private:
@@ -24,6 +27,9 @@ namespace Core
 
         StaticMonoAtlas atlas{};
 
+        // ---------- Fonts ---------------
+        // bvFontAtlasUnqPtr fontAtlas;
+
         std::unordered_set<int> pressedKeys;
 
         /// @brief This is the camera
@@ -35,6 +41,10 @@ namespace Core
         void initialize(int deviceWidth, int deviceHeight);
         void postInitialize();
         void dispose();
+
+        // /// @brief Takes ownership of provided Atlas
+        // /// @param fontAtlas
+        // void setFontAtlas(bvFontAtlasUnqPtr fontAtlas);
 
         // -----------------------------------------------------------
         // Events

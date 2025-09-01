@@ -26,4 +26,9 @@ namespace Core
         pressedKeys.clear();
     }
 
+    // void Environment::setFontAtlas(bvFontAtlasUnqPtr fontAtlas)
+    // {
+    //     this->fontAtlas = std::move(fontAtlas);
+    // }
+
 } // namespace Core

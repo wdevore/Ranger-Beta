@@ -22,7 +22,9 @@ namespace Core
         const GLintptr GLSubDataOffset{0};
         /// @brief Format is: xyzxyzxyz...
         const int VertexStride{3}; // xyz
+        /// TODO Add docs on this
         const GLsizei GLUniformMatrixCount{1};
+        /// TODO Add docs on this
         const GLboolean GLUniformMatrixTransposed{false};
 
         /// @brief This sets the project and positions the Origin.

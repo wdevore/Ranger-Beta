@@ -1,18 +1,18 @@
 #include <memory>    // std::make_shared
 #include <algorithm> // For std::find or std::find_if
 
-#include <static_mono_atlas.hpp>
+#include <bitmap_vector_font_atlas.hpp>
 #include <constants.hpp>
 #include <environment.hpp>
 
 namespace Core
 {
-    void StaticMonoAtlas::initialize(environmentShPtr environment)
+    void BitmapVectorFontAtlas::initialize(environmentShPtr environment)
     {
         BaseAtlas::initialize(environment);
     }
 
-    ErrorConditions StaticMonoAtlas::configure()
+    ErrorConditions BitmapVectorFontAtlas::configure()
     {
         // Load shader pograms
         shader.initialize(environment);
@@ -23,37 +23,36 @@ namespace Core
         return ErrorConditions::None;
     }
 
-    /// @brief Called by environment post initialize
-    /// @param andShake
-    /// @return
-    ErrorConditions StaticMonoAtlas::burn(bool andShake)
+    ErrorConditions BitmapVectorFontAtlas::burn()
     {
         ErrorConditions configureStatus = configure();
         if (configureStatus != ErrorConditions::None)
             return configureStatus;
 
-        if (andShake)
-            shake();
+        shake();
 
         ErrorConditions bakeStatus = bake();
 
         return bakeStatus;
     }
 
-    ErrorConditions StaticMonoAtlas::shake()
+    void BitmapVectorFontAtlas::configureFrom(bitmapFontBaseUnqPtr fontBase)
+    {
+        this->fontBase = std::move(fontBase);
+        this->fontBase->build();
+    }
+
+    ErrorConditions BitmapVectorFontAtlas::shake()
     {
         // ---------------------------------------------------------
         // Collect all vertices and indices for buffers
         // ---------------------------------------------------------
-        for (auto &&shape : shapes)
-        {
-            shakeShape(*shape);
-        }
+        shakeShape(*shape);
 
         return ErrorConditions::None;
     }
 
-    ErrorConditions StaticMonoAtlas::bake()
+    ErrorConditions BitmapVectorFontAtlas::bake()
     {
         // ---------------------------------------------------------
         // BEGIN VAO Scope and generate buffer ids
@@ -117,7 +116,7 @@ namespace Core
         return ErrorConditions::None;
     }
 
-    ErrorConditions StaticMonoAtlas::configureUniforms()
+    ErrorConditions BitmapVectorFontAtlas::configureUniforms()
     {
         std::cout << "StaticMonoAtlas::configureUniforms" << std::endl;
 
@@ -173,7 +172,7 @@ namespace Core
         return ErrorConditions::None;
     }
 
-    void StaticMonoAtlas::vboBind(int bufferSize, const std::vector<GLfloat> &vertices)
+    void BitmapVectorFontAtlas::vboBind(int bufferSize, const std::vector<GLfloat> &vertices)
     {
         // the buffer type of a vertex buffer object is GL_ARRAY_BUFFER
         // From this point on any buffer calls we make (on the GL_ARRAY_BUFFER target)
@@ -184,35 +183,18 @@ namespace Core
         glBufferData(GL_ARRAY_BUFFER, bufferSize, vertices.data(), GL_DYNAMIC_DRAW);
     }
 
-    void StaticMonoAtlas::eboBind(int bufferSize, const std::vector<GLuint> &indices)
+    void BitmapVectorFontAtlas::eboBind(int bufferSize, const std::vector<GLuint> &indices)
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
 
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, bufferSize, indices.data(), GL_STATIC_DRAW);
     }
 
-    int StaticMonoAtlas::addShape(const Shape &shape)
+    int BitmapVectorFontAtlas::addShape(std::string name, const std::vector<GLfloat> &vertices, std::vector<GLuint> &indices, GLenum mode)
     {
-        auto shapeShPtr = std::make_shared<Shape>();
+        shape = std::make_shared<Shape>();
 
-        shapeShPtr->id = nextID++;
-        shapeShPtr->name = shape.name;
-        shapeShPtr->dirty = false;
-        shapeShPtr->vertices = shape.vertices;
-        shapeShPtr->indices = shape.indices;
-        shapeShPtr->indicesCount = shape.indices.size();
-        shapeShPtr->primitiveMode = shape.primitiveMode;
-
-        shapes.push_back(shapeShPtr);
-
-        return shape.id;
-    }
-
-    int StaticMonoAtlas::addShape(std::string name, const std::vector<GLfloat> &vertices, std::vector<GLuint> &indices, GLenum mode)
-    {
-        auto shape = std::make_shared<Shape>();
-
-        shape->id = nextID++;
+        shape->id = 0;
         shape->name = name;
         shape->dirty = false;
         shape->vertices = vertices;
@@ -220,23 +202,14 @@ namespace Core
         shape->indicesCount = indices.size();
         shape->primitiveMode = mode;
 
-        shapes.push_back(shape);
-
         return shape->id;
     }
 
-    int StaticMonoAtlas::addShapeAndShake(Shape &shape)
+    int BitmapVectorFontAtlas::shakeShape(Shape &shape)
     {
-        addShape(shape);
-        shakeShape(shape);
-        return indiceBlockOffset;
-    }
+        std::cout << "Name: " << shape.name << std::endl;
 
-    int StaticMonoAtlas::shakeShape(Shape &shape)
-    {
-        // std::cout << "Name: " << shape.name << std::endl;
-
-        // std::cout << "indicesByteOffset: " << indicesByteOffset << std::endl;
+        std::cout << "indicesByteOffset: " << indicesByteOffset << std::endl;
         // Assign current offset to this shape. Each shape has a group of indices
         // --at a starting offset position-- within the EBO buffer and assigns
         // it to the shape.
@@ -264,7 +237,7 @@ namespace Core
             backingShape.indices.push_back(static_cast<GLuint>(i + indiceBlockOffset));
         }
 
-        std::cout << "indiceBlockOffset: " << indiceBlockOffset << std::endl;
+        // std::cout << "indiceBlockOffset: " << indiceBlockOffset << std::endl;
 
         // Calc the next block offset
         // Offset the indices based on the vertex block position as a "component count".
@@ -275,33 +248,17 @@ namespace Core
         indiceBlockOffset = static_cast<GLuint>(backingShape.vertices.size() / Core::XYZComponentCount);
         // std::cout << "Next indiceBlockOffset: " << indiceBlockOffset << std::endl;
 
-        // std::cout << "-------------------------------------------------" << std::endl;
+        std::cout << "-------------------------------------------------" << std::endl;
 
         return indiceBlockOffset;
     }
 
-    shapeShPtr StaticMonoAtlas::getShapeByName(const std::string &name) const
-    {
-        auto it = std::find_if(shapes.begin(), shapes.end(),
-                               [name](shapeShPtr n)
-                               { return n->name == name; });
-        return it != shapes.end() ? *it : nullptr;
-    }
-
-    shapeShPtr StaticMonoAtlas::getShapeById(const int id) const
-    {
-        auto it = std::find_if(shapes.begin(), shapes.end(),
-                               [id](shapeShPtr n)
-                               { return n->id == id; });
-        return it != shapes.end() ? *it : nullptr;
-    }
-
-    int StaticMonoAtlas::getIndicesOffset() const
+    int BitmapVectorFontAtlas::getIndicesOffset() const
     {
         return indicesByteOffset;
     }
 
-    void StaticMonoAtlas::use()
+    void BitmapVectorFontAtlas::use()
     {
         // See opengl wiki as to why "glBindVertexArray(0)" isn't really necessary here:
         // https://www.opengl.org/wiki/Vertex_Specification#Vertex_Buffer_Object
@@ -310,14 +267,14 @@ namespace Core
         glBindVertexArray(vaoID);
     }
 
-    void StaticMonoAtlas::unUse()
+    void BitmapVectorFontAtlas::unUse()
     {
         glBindVertexArray(UnBindID);
     }
 
-    void StaticMonoAtlas::dispose()
+    void BitmapVectorFontAtlas::dispose()
     {
-        std::cout << "StaticMonoAtlas::dispose" << std::endl;
+        std::cout << "BitmapVectorFontAtlas::dispose" << std::endl;
 
         glDeleteVertexArrays(1, &vaoID);
         glDeleteBuffers(1, &eboID);
@@ -327,14 +284,14 @@ namespace Core
         glDeleteProgram(program);
     }
 
-    void StaticMonoAtlas::setColor(const std::array<GLfloat, 4> &color)
+    void BitmapVectorFontAtlas::setColor(const std::array<GLfloat, 4> &color)
     {
         glUniform4fv(colorLoc, Uniform4vColorCompCount, color.data());
     }
 
-    void StaticMonoAtlas::render(int shapeId, const Matrix4 &model)
+    void BitmapVectorFontAtlas::renderText(std::string text, const Matrix4 &model)
     {
-        shapeShPtr shape = getShapeById(shapeId);
+        // shapeShPtr shape = getShapeById(shapeId);
         if (shape != nullptr)
         {
             // model.data() ==> (const GLfloat *)&model.e[0]
@@ -346,7 +303,7 @@ namespace Core
     /// @brief This is used by special nodes that don't render anything but instead
     /// manipulate the node, for example, ZoomNode.
     /// @param model
-    void StaticMonoAtlas::render(const Matrix4 &model)
+    void BitmapVectorFontAtlas::render(const Matrix4 &model)
     {
         glUniformMatrix4fv(modelLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, model.data());
     }

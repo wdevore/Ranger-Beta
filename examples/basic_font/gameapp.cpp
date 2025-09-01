@@ -8,6 +8,7 @@
 #include <constants.hpp>
 #include <environment.hpp>
 #include <darkrose_bitmap_font.hpp>
+#include <bitmap_vector_font_atlas.hpp>
 
 namespace Game
 {
@@ -19,8 +20,6 @@ namespace Game
     /// mostly for testing and debugging.
     void GameApp::preSetup()
     {
-        DarkroseBitmapFont font{};
-        font.build(environment->atlas);
     }
 
     int GameApp::verifyConfigured()
@@ -55,6 +54,15 @@ namespace Game
 
         auto env = environment;
         env->initialize(width, height);
+
+        auto fontAtlas = std::make_unique<Core::BitmapVectorFontAtlas>();
+
+        fontAtlas->initialize(env);
+        // The font generates the vertices and indices
+        auto font = std::make_unique<DarkroseBitmapFont>();
+        fontAtlas->configureFrom(std::move(font));
+
+        // env->setFontAtlas(std::move(fontAtlas));
 
         // Create a single scene (aka Node) to hold a square.
         // The Scene will have a background square for color.

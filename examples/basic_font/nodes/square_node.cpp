@@ -19,10 +19,12 @@ namespace Game
             Core::Shape &shape = generator.shape;
             rectangleAtlasId_ = shape.id;
 
+            // DEBUG stuff
             // generator.generateUnitTriangle(Core::ShapeControls::Centered, Core::ShapeControls::Filled);
             // const Core::Shape &shape2 = generator.shape;
             // env->atlas.addShape(shape2);
             // env->atlas.burn(true);
+
             env->atlas.addShapeAndShake(shape);
 
             generator.generateABBox(bounds);

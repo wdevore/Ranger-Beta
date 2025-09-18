@@ -30,7 +30,7 @@ namespace Game
     ///        example 50.0.
     ///
     ///        If the gap size is to large then each pixel quad becomes smaller
-    ///        causes pixel round off by OpenGL which leads to non-uniform
+    ///        causing pixel round off by OpenGL which leads to non-uniform
     ///        squares which doesn't look pleasent.
     constexpr float GAPSIZE = 0.06;
     constexpr int INDICES_PER_QUAD = 6; // Two triangles

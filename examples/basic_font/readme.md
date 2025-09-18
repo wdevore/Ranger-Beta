@@ -144,25 +144,28 @@ vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_
 
 Another way to look at it is: The entire font has a single set of vertices. These vertices represent the entire 8*8 grid of quads and each quad is 4 vertices which totals 256 vertices.
 
-### Example "!" character
+### "<span style='color: red'>!</span>" character
 Then, for each character there is a collection of indices that represent all visible "pixels". For example, "!" has 5 visible pixels (aka quads) based on the font definition file *dark_rose.hpp* and specifically ```0x0808080800080000, /* ! */``` which looks like this:
-```
-                                             0x0808080800080000
+
+Note: because OpenGL default Y axis is downward we need to iterate opposite of what is shown below because the font character would be upside down.
+```sh
+                                             0x0808080800080000  <== "!"
            01234567    0 1 2 3 4 5 6 7         | | | | | | | |
-byte: 08 = 00001000    □ □ □ □ ■ □ □ □ <-------+ | | | | | | |
-byte: 08 = 00001000    □ □ □ □ ■ □ □ □ <---------+ | | | | | |
-byte: 08 = 00001000    □ □ □ □ ■ □ □ □ <-----------+ | | | | |
-byte: 08 = 00001000    □ □ □ □ ■ □ □ □ <-------------+ | | | |
-byte: 00 = 00000000    □ □ □ □ □ □ □ □ <---------------+ | | |
-byte: 08 = 00001000    □ □ □ □ ■ □ □ □ <-----------------+ | |
-byte: 00 = 00000000    □ □ □ □ □ □ □ □ <-------------------+ |
+byte: 08 = 00001000    □ □ □ □ ■ □ □ □ <-------+ | | | | | | |             ^
+byte: 08 = 00001000    □ □ □ □ ■ □ □ □ <---------+ | | | | | |             |
+byte: 08 = 00001000    □ □ □ □ ■ □ □ □ <-----------+ | | | | |             |
+byte: 08 = 00001000    □ □ □ □ ■ □ □ □ <-------------+ | | | |             | Iterate in
+byte: 00 = 00000000    □ □ □ □ □ □ □ □ <---------------+ | | |             | this direction
+byte: 08 = 00001000    □ □ □ □ ■ □ □ □ <-----------------+ | |             |
+byte: 00 = 00000000    □ □ □ □ □ □ □ □ <-------------------+ |             |
 byte: 00 = 00000000    □ □ □ □ □ □ □ □ <---------------------+
 ```
 
 You can see that column 4 has all the visible pixels (i.e. 1s).
 This means that "!" has 5 * 6 = 30 indices.
 
-### """ character
+### "<span style='color: red'>"</span>" character
+```sh
            01234567    0 1 2 3 4 5 6 7
 byte: 28 = 00101000    □ □ ■ □ ■ □ □ □
 byte: 28 = 00101000    □ □ ■ □ ■ □ □ □
@@ -172,10 +175,11 @@ byte: 00 = 00000000    □ □ □ □ □ □ □ □
 byte: 00 = 00000000    □ □ □ □ □ □ □ □
 byte: 00 = 00000000    □ □ □ □ □ □ □ □
 byte: 00 = 00000000    □ □ □ □ □ □ □ □
-
+```
 This means that """ has 4 * 6 = 24 indices.
 
-### "#" character
+### "<span style='color: red'>#</span>" character
+```sh
            01234567    0 1 2 3 4 5 6 7
 byte: 00 = 00000000    □ □ □ □ □ □ □ □
 byte: 28 = 00101000    □ □ ■ □ ■ □ □ □
@@ -185,19 +189,22 @@ byte: 7c = 01111100    □ ■ ■ ■ ■ ■ □ □
 byte: 28 = 00101000    □ □ ■ □ ■ □ □ □
 byte: 00 = 00000000    □ □ □ □ □ □ □ □
 byte: 00 = 00000000    □ □ □ □ □ □ □ □
+```
 
 This means that "#" has 16 * 6 = 96 indices.
 
 With these 3 characters the buffer-space sent to OpenGL looks like this:
-
+```
        !               "                         #
 0              19 20          35 36                         99
 |---------------| |-----------|  |---------------------------|
+
 
 So our character map should be like this
 {"!",00},
 {'"',20},
 {"#",36}...etc.
+```
 
 Each "1/0" indexes into the same vertex collection, but note, those indices are in local-space and once the *burn* shake subprocess takes place they will be converted into buffer-space.
 

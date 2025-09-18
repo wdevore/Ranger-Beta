@@ -53,7 +53,7 @@ namespace Core
         void generateUnitArc(float startAngle, float endAngle,
                              int segmentCount, ShapeControls fillType);
 
-        void generateFontChar(ShapeControls fillType);
+        void generateFontChar(ShapeControls fillType, float gapSize);
         void generateFontVertices(int numberOfSquaresPerSide,
                                   float gapSize, ShapeControls fillType);
         void generateFontIndices(uint64_t char8x8,

@@ -25,7 +25,14 @@
 // shake and bake them into the atlas. This
 namespace Game
 {
-    constexpr int GAPSIZE = 0.025;
+    /// @brief A gap size of 0.06 works well for a font scaler of 25.0.
+    ///        A gap size of 0.025 works well for larger scalers sizes, for
+    ///        example 50.0.
+    ///
+    ///        If the gap size is to large then each pixel quad becomes smaller
+    ///        causes pixel round off by OpenGL which leads to non-uniform
+    ///        squares which doesn't look pleasent.
+    constexpr float GAPSIZE = 0.06;
     constexpr int INDICES_PER_QUAD = 6; // Two triangles
 
     /// @brief A single character is defined as 8*8 byte shape that is

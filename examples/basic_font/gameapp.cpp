@@ -79,7 +79,7 @@ namespace Game
         nodeMan.push(basicScene);
 
         Core::ShapeGenerator generator{};
-        generator.generateFontChar(Core::ShapeControls::Filled);
+        generator.generateFontChar(Core::ShapeControls::Filled, GAPSIZE);
         Core::Shape &shape = generator.shape;
 
         env->atlas.addShape(shape);
@@ -109,7 +109,8 @@ namespace Game
         env->atlas.use();
         Core::Matrix4 modelR{true};
         modelR.translate(50.0, 50.0, 0.0);
-        modelR.scaleBy(50.0, 50.0, 1.0);
+        // If the font is upside down we can scale the Y axis by a negative
+        modelR.scaleBy(25.0, 25.0, 1.0);
         env->atlas.setColor({1.0, 1.0, 0.0, 0.0});
         env->atlas.render(1, modelR); // Char font
         env->atlas.unUse();

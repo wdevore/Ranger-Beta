@@ -145,7 +145,7 @@ vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_vvvv_
 Another way to look at it is: The entire font has a single set of vertices. These vertices represent the entire 8*8 grid of quads and each quad is 4 vertices which totals 256 vertices.
 
 ### Example "!" character
-Then, for each character there is a collection of indices that represent all visible "pixels". For example, "!" has 5 visible pixels based on the font definition file *dark_rose.hpp* and specifically ```0x0808080800080000, /* ! */``` which looks like this:
+Then, for each character there is a collection of indices that represent all visible "pixels". For example, "!" has 5 visible pixels (aka quads) based on the font definition file *dark_rose.hpp* and specifically ```0x0808080800080000, /* ! */``` which looks like this:
 ```
                                              0x0808080800080000
            01234567    0 1 2 3 4 5 6 7         | | | | | | | |

@@ -1,5 +1,7 @@
 #include <cmath>
 #include <vector>
+#include <iomanip>
+// #include <ranges> // for using range loops: requires c++20
 
 #include <glad/gl.h>
 
@@ -262,15 +264,22 @@ namespace Core
 
     /// @brief ======== Just for testing ============
     /// @param fillType
-    void ShapeGenerator::generateFontChar(ShapeControls fillType)
+    void ShapeGenerator::generateFontChar(ShapeControls fillType, float gapSize)
     {
         // Use the generator to create the vertices
-        generateFontVertices(8, 0.025, ShapeControls::Filled);
+        generateFontVertices(8, gapSize, ShapeControls::Filled);
         shape.name = GeneratedShapeNames::BitMapFontX; // overwrite
 
         // These indices can be used with the same vertices. You don't need
         // separate vertex arrays.
-        uint64_t character = 0x0808080800080000; // "!"
+        // uint64_t character = 0x0808080800080000; // "!"
+        // uint64_t character = 0x081E281C0A3C0800; // "$"
+        // uint64_t character = 0x3C42423E023C0000; // "9"
+        // uint64_t character = 0x00003A46423E0202; // "q"
+        // uint64_t character = 0x0000422214081060; // "y"
+        // uint64_t character = 0x1C103030101C0000; // "{"
+        uint64_t character = 0x1818243C42420000; // "A"
+
         generateFontIndices(character, shape.indices, indicesOffsets, '!');
 
         // CCW
@@ -292,7 +301,7 @@ namespace Core
         shape.name = GeneratedShapeNames::FontCell;
         shape.id = nextId++;
 
-        const float unitLength{1.0};
+        const float unitLength{1.0F};
         const int numberOfGaps = numberOfSquaresPerSide - 1;
         const float sideLenth =
             (unitLength - (numberOfGaps * gapSize)) / numberOfSquaresPerSide; // s
@@ -360,11 +369,9 @@ namespace Core
                                              std::unordered_map<char, int> &indicesOffsets,
                                              char charSymbol)
     {
-        // int charIndex = {0};
-        // int indexGroupOffset{0};
-
         // std::ios_base::fmtflags originalFlags = std::cout.flags();
-        // std::cout << "char: 0x" << std::hex << std::setw(16) << std::setfill('0') << character << std::dec << std::endl;
+        // std::cout << "char '" << charSymbol << "': 0x" << std::hex << std::setw(16) << std::setfill('0') << char8x8 << std::dec << std::endl;
+
 #if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 
         // Little-endian systems store the LSB at the lowest memory address.
@@ -413,10 +420,19 @@ namespace Core
 
         // generator.indicesOffsets[darkChar] = indexGroupOffset;
 
+        // for (uint8_t byte_row : std::ranges::views::reverse(bytes)) // requires c++20
+
+        // for (auto &&byte_row : bytes) // This is the forward direction and the
+        // character is upside down. If you want to iterate in this direction then
+        // you will need to use a negative Y axis scaler to flip the character (not recommeded)
+        // for example: modelR.scaleBy(50.0, -50.0, 1.0);
+
         // Now we take each byte in the array and iterate through each bit
-        // in the byte.
-        for (auto &&byte_row : bytes)
+        // in the byte--in reverse: std::vector<uint8_t>::reverse_iterator
+        for (auto it = bytes.rbegin(); it != bytes.rend(); ++it)
         {
+            uint8_t byte_row = *it;
+
             idx_col = 0;
             // Iterate on each column bit
             for (int grid_col = BITS; grid_col >= 0; grid_col--)

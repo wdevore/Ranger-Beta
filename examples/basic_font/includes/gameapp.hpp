@@ -3,7 +3,7 @@
 #include <app.hpp>
 #include <node_manager.hpp>
 #include "basic_scene_node.hpp"
-// #include <game_environment.hpp>
+#include <bitmap_vector_font_atlas.hpp>
 
 namespace Game
 {
@@ -15,7 +15,7 @@ namespace Game
 
         std::shared_ptr<BasicScene> basicScene;
 
-        // gameEnvironmentShPtr environment = std::make_shared<GameEnvironment>();
+        // std::unique_ptr<Core::BitmapVectorFontAtlas> fontAtlas = std::make_unique<Core::BitmapVectorFontAtlas>();
 
     public:
         GameApp() = default;

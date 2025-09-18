@@ -61,6 +61,8 @@ namespace Core
         /// @return
         ErrorConditions burn();
 
+        void initialize(environmentShPtr environment) override;
+
         int addShape(std::string name,
                      const std::vector<GLfloat> &vertices,
                      std::vector<GLuint> &indices,

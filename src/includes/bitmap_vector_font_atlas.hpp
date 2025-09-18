@@ -26,9 +26,6 @@ namespace Core
     class BitmapVectorFontAtlas final : public BaseAtlas
     {
     private:
-        /* data */
-        ErrorConditions configure();
-        ErrorConditions shake();
         /// @brief // Bake finalizes the Atlas by "baking" the shapes into the buffers.
         /// @return
         ErrorConditions bake();
@@ -60,16 +57,29 @@ namespace Core
         GLint modelLoc{};
         GLint colorLoc{};
 
-        bitmapFontBaseUnqPtr fontBase; // Example: DarkroseBitmapFont
+        // bitmapFontBaseUnqPtr fontBase; // Example: DarkroseBitmapFont
 
     public:
-        // We only have a single shape.
-        shapeShPtr shape;
-        // "GLvoid *" is a pointer to an indice offset
-        std::unordered_map<std::string, GLvoid *> shapes{};
-
+        // -----------------------------------------------------
+        // Temporary stores
+        // -----------------------------------------------------
+        // We only have a single shape to hold temporary data. The data
+        // only lasts until the data is transferred to OpenGL.
+        // shapeShPtr shape;
         // For the Shaking process
         Shape backingShape{};
+
+        // -----------------------------------------------------
+        // Rendering vars
+        // -----------------------------------------------------
+        // We DO need to retain the indices byte offsets for rendering during
+        // glDrawElements. We use them as references into an OpenGL buffered
+        // array.
+        // Each entry is a character with an offset into a indices buffer.
+        // <char, pair<index, count>>
+        std::unordered_map<char, std::pair<int, GLuint>> indicesPairOffsets{};
+
+        GLenum primitiveMode{}; // Example: GL_TRIANGLES
 
         // Buffers
         GLuint vaoID{};
@@ -88,31 +98,12 @@ namespace Core
 
         void initialize(environmentShPtr environment) override;
 
-        /// @brief Main method to call to load and compile.
-        /// @return
-        ErrorConditions burn();
+        /* data */
+        ErrorConditions configure();
 
         /// @brief Takes ownership of provided Atlas
-        /// @param fontAtlas
+        /// @param fontBase std::unique_ptr<BitmapFontBase>
         void configureFrom(bitmapFontBaseUnqPtr fontBase);
-
-        /// @brief Same as above.
-        /// @param name
-        /// @param vertices
-        /// @param indices
-        /// @param mode
-        /// @return
-        int addShape(std::string name,
-                     const std::vector<GLfloat> &vertices,
-                     std::vector<GLuint> &indices,
-                     GLenum mode);
-
-        /// @brief Adds a shape dynamically to the atlas.
-        /// @param shape
-        /// @return
-        int shakeShape(Shape &shape);
-
-        int getIndicesOffset() const;
 
         void use();
         void unUse();
@@ -121,7 +112,7 @@ namespace Core
 
         void setColor(const std::array<GLfloat, 4> &color);
 
-        void renderText(std::string text, const Matrix4 &model);
+        void renderText(std::list<int> offsets, const Matrix4 &model);
         void render(const Matrix4 &model);
     };
 

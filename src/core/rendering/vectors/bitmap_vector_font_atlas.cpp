@@ -1,19 +1,24 @@
 #include <memory>    // std::make_shared
 #include <algorithm> // For std::find or std::find_if
+#include <utility>
 
 #include <bitmap_vector_font_atlas.hpp>
 #include <constants.hpp>
 #include <environment.hpp>
+#include <shape_generator.hpp>
 
 namespace Core
 {
     void BitmapVectorFontAtlas::initialize(environmentShPtr environment)
     {
         BaseAtlas::initialize(environment);
+        name = "BitmapVectorFontAtlas";
     }
 
     ErrorConditions BitmapVectorFontAtlas::configure()
     {
+        std::cout << name << "::configure" << std::endl;
+
         // Load shader pograms
         shader.initialize(environment);
         ErrorConditions buildStatus = shader.build();
@@ -23,33 +28,48 @@ namespace Core
         return ErrorConditions::None;
     }
 
-    ErrorConditions BitmapVectorFontAtlas::burn()
-    {
-        ErrorConditions configureStatus = configure();
-        if (configureStatus != ErrorConditions::None)
-            return configureStatus;
-
-        shake();
-
-        ErrorConditions bakeStatus = bake();
-
-        return bakeStatus;
-    }
-
     void BitmapVectorFontAtlas::configureFrom(bitmapFontBaseUnqPtr fontBase)
     {
-        this->fontBase = std::move(fontBase);
-        this->fontBase->build();
-    }
+        // Use fontBase to obtain vertices and local-indices
 
-    ErrorConditions BitmapVectorFontAtlas::shake()
-    {
-        // ---------------------------------------------------------
-        // Collect all vertices and indices for buffers
-        // ---------------------------------------------------------
-        shakeShape(*shape);
+        // TODO we don't really need to take ownership of the fontBase
+        // because once we have copied what we need we can discard it.
+        // For now we will keep it.
+        // this->fontBase = std::move(fontBase);
 
-        return ErrorConditions::None;
+        Core::ShapeGenerator generator = fontBase->getGenerator(); // Contains vertices
+        std::unordered_map<char, int> indicesOffsets = fontBase->getIndicesOffsets();
+
+        // These need to be "remapped" into byte offsets.
+        for (auto &&pair : indicesOffsets)
+        {
+            auto byteIndex = static_cast<int>(pair.second * sizeof(GLuint));
+            std::cout << "Char: '" << pair.first << "' Offset: " << pair.second << " byteIndex: " << byteIndex << std::endl;
+            indicesPairOffsets[pair.first] = {byteIndex, pair.second};
+        }
+
+        primitiveMode = GL_TRIANGLES;
+
+        // ---------------------------------------------------------
+        // Shake
+        // ---------------------------------------------------------
+        // Copy all shapes vertex data into Backing store
+        for (auto &&vertex : generator.shape.vertices)
+            backingShape.vertices.push_back(vertex);
+
+        // The index offset is always refering to a position within
+        // the vertices array. It is a integer pointer offset where the pointer
+        // is defined as an "integer count".
+        // We use the current block marker to map each local-index-space into
+        // buffer-index-space.
+        indiceBlockOffset = 0; // There is only one "shape"
+        for (GLuint &i : generator.shape.indices)
+            backingShape.indices.push_back(static_cast<GLuint>(i + indiceBlockOffset));
+
+        // ---------------------------------------------------------
+        // Bake into OpenGL
+        // ---------------------------------------------------------
+        bake();
     }
 
     ErrorConditions BitmapVectorFontAtlas::bake()
@@ -118,7 +138,7 @@ namespace Core
 
     ErrorConditions BitmapVectorFontAtlas::configureUniforms()
     {
-        std::cout << "StaticMonoAtlas::configureUniforms" << std::endl;
+        std::cout << name << "::configureUniforms" << std::endl;
 
         shader.use();
 
@@ -128,7 +148,7 @@ namespace Core
         if (modelLoc < 0)
         {
             lastError = "Couldn't find 'model' uniform variable";
-            std::cout << lastError << std::endl;
+            std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
 
@@ -136,7 +156,7 @@ namespace Core
         if (colorLoc < 0)
         {
             lastError = "Couldn't find 'fragColor' uniform variable";
-            std::cout << lastError << std::endl;
+            std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
 
@@ -145,7 +165,7 @@ namespace Core
         if (projLoc < 0)
         {
             lastError = "Couldn't find 'projection' uniform variable";
-            std::cout << lastError << std::endl;
+            std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
 
@@ -153,19 +173,19 @@ namespace Core
         if (viewLoc < 0)
         {
             lastError = "Couldn't find 'view' uniform variable";
-            std::cout << lastError << std::endl;
+            std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
 
         int err = 0;
         Matrix4 pm = projection.getMatrix();
         glUniformMatrix4fv(projLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, pm.data());
-        err = checkGLError("StaticMonoAtlas::configureUniforms:glUniformMatrix4fv(1)");
+        err = checkGLError(name + "::configureUniforms:glUniformMatrix4fv(1)");
         if (err < 0)
             return ErrorConditions::GLFunctionError;
 
         glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, environment->camera.viewspace.data());
-        err = checkGLError("StaticMonoAtlas::configureUniforms:glUniformMatrix4fv(2)");
+        err = checkGLError(name + "::configureUniforms:glUniformMatrix4fv(2)");
         if (err < 0)
             return ErrorConditions::GLFunctionError;
 
@@ -188,74 +208,6 @@ namespace Core
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
 
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, bufferSize, indices.data(), GL_STATIC_DRAW);
-    }
-
-    int BitmapVectorFontAtlas::addShape(std::string name, const std::vector<GLfloat> &vertices, std::vector<GLuint> &indices, GLenum mode)
-    {
-        shape = std::make_shared<Shape>();
-
-        shape->id = 0;
-        shape->name = name;
-        shape->dirty = false;
-        shape->vertices = vertices;
-        shape->indices = indices;
-        shape->indicesCount = indices.size();
-        shape->primitiveMode = mode;
-
-        return shape->id;
-    }
-
-    int BitmapVectorFontAtlas::shakeShape(Shape &shape)
-    {
-        std::cout << "Name: " << shape.name << std::endl;
-
-        std::cout << "indicesByteOffset: " << indicesByteOffset << std::endl;
-        // Assign current offset to this shape. Each shape has a group of indices
-        // --at a starting offset position-- within the EBO buffer and assigns
-        // it to the shape.
-        shape.indicesOffset = indicesByteOffset;
-
-        // Now calc the offset for the next potential shape shake call.
-        // std::cout << "Total indices: " << shape.indices.size() << std::endl;
-        // std::cout << "Size of GLuint: " << sizeof(GLuint) << std::endl;
-
-        indicesByteOffset += shape.indices.size() * sizeof(GLuint); // bytes
-        // std::cout << "Next indicesByteOffset: " << indicesByteOffset << std::endl;
-
-        // Copy all shapes vertex data into Backing store
-        for (auto &&vertex : shape.vertices)
-            backingShape.vertices.push_back(vertex);
-
-        // The index offset is always refering to a position within
-        // the vertices array. It is a integer pointer offset where the pointer
-        // is defined as an "integer count".
-        // We use the current block marker to map each local-index-space into
-        // buffer-index-space.
-        for (GLuint &i : shape.indices)
-        {
-            // std::cout << "i: " << i << ", offset: " << (i + indiceBlockOffset) << std::endl;
-            backingShape.indices.push_back(static_cast<GLuint>(i + indiceBlockOffset));
-        }
-
-        // std::cout << "indiceBlockOffset: " << indiceBlockOffset << std::endl;
-
-        // Calc the next block offset
-        // Offset the indices based on the vertex block position as a "component count".
-        // We divide the total # of vertices by how large a vertex specification is.
-        // A vertex is specified using 3 components x,y,z. For example, a retangle has
-        // 4 vertices where each has 3 floats = 4 * 3 = 12.
-        // std::cout << "Total vertices in backing: " << backingShape.vertices.size() << std::endl;
-        indiceBlockOffset = static_cast<GLuint>(backingShape.vertices.size() / Core::XYZComponentCount);
-        // std::cout << "Next indiceBlockOffset: " << indiceBlockOffset << std::endl;
-
-        std::cout << "-------------------------------------------------" << std::endl;
-
-        return indiceBlockOffset;
-    }
-
-    int BitmapVectorFontAtlas::getIndicesOffset() const
-    {
-        return indicesByteOffset;
     }
 
     void BitmapVectorFontAtlas::use()
@@ -289,19 +241,19 @@ namespace Core
         glUniform4fv(colorLoc, Uniform4vColorCompCount, color.data());
     }
 
-    void BitmapVectorFontAtlas::renderText(std::string text, const Matrix4 &model)
+    void BitmapVectorFontAtlas::renderText(std::list<int> offsets, const Matrix4 &model)
     {
-        // shapeShPtr shape = getShapeById(shapeId);
-        if (shape != nullptr)
-        {
-            // model.data() ==> (const GLfloat *)&model.e[0]
-            glUniformMatrix4fv(modelLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, model.data());
-            glDrawElements(shape->primitiveMode, shape->indicesCount, GL_UNSIGNED_INT, shape->dataIndicesOffset());
-        }
+        glUniformMatrix4fv(modelLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, model.data());
+
+        auto pair = indicesPairOffsets['x'];
+        glDrawElements(primitiveMode,
+                       pair.second, // Count
+                       GL_UNSIGNED_INT,
+                       static_cast<void *>(static_cast<char *>(nullptr) + pair.first)); // Offset
     }
 
     /// @brief This is used by special nodes that don't render anything but instead
-    /// manipulate the node, for example, ZoomNode.
+    /// manipulate the node's transform, for example, ZoomNode.
     /// @param model
     void BitmapVectorFontAtlas::render(const Matrix4 &model)
     {

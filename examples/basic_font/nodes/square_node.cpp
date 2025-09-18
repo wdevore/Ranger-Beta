@@ -25,7 +25,8 @@ namespace Game
             // env->atlas.addShape(shape2);
             // env->atlas.burn(true);
 
-            env->atlas.addShapeAndShake(shape);
+            // env->atlas.addShapeAndShake(shape);
+            env->atlas.addShape(shape);
 
             generator.generateABBox(bounds);
         }

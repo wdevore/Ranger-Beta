@@ -7,7 +7,7 @@
 #include <static_mono_atlas.hpp>
 #include <io_event.hpp>
 #include <camera.hpp>
-// #include <bitmap_vector_font_atlas.hpp>
+#include <bitmap_vector_font_atlas.hpp>
 
 namespace Core
 {
@@ -26,6 +26,7 @@ namespace Core
         std::string shadersPath{};
 
         StaticMonoAtlas atlas{};
+        BitmapVectorFontAtlas fontAtlas{};
 
         // ---------- Fonts ---------------
         // bvFontAtlasUnqPtr fontAtlas;

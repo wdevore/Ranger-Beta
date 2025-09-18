@@ -36,6 +36,8 @@ namespace Core
 
         bool dirty{true};
 
+        std::string name{};
+
     public:
         BaseAtlas(/* args */) = default;
         ~BaseAtlas() = default;

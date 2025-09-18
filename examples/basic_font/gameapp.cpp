@@ -8,7 +8,6 @@
 #include <constants.hpp>
 #include <environment.hpp>
 #include <darkrose_bitmap_font.hpp>
-#include <bitmap_vector_font_atlas.hpp>
 
 namespace Game
 {
@@ -52,24 +51,38 @@ namespace Game
     {
         std::cout << "GameApp::construct game" << std::endl;
 
+        // ----------------------------------------------------------
+        // Setup environment
+        // Constructs Atlases etc.
+        // ----------------------------------------------------------
         auto env = environment;
         env->initialize(width, height);
 
-        auto fontAtlas = std::make_unique<Core::BitmapVectorFontAtlas>();
-
-        fontAtlas->initialize(env);
+        // ----------------------------------------------------------
+        // Setup Bitmap vector font
+        // ----------------------------------------------------------
         // The font generates the vertices and indices
-        auto font = std::make_unique<DarkroseBitmapFont>();
-        fontAtlas->configureFrom(std::move(font));
+        // auto font = std::make_unique<DarkroseBitmapFont>();
+        // font->build();
 
-        // env->setFontAtlas(std::move(fontAtlas));
+        // // Use vertices/indices to configure the atlas buffers
+        // env->fontAtlas.configureFrom(std::move(font));
 
+        // ----------------------------------------------------------
+        // Setup Scenes and Nodes
+        // ----------------------------------------------------------
         // Create a single scene (aka Node) to hold a square.
         // The Scene will have a background square for color.
         basicScene = std::make_shared<BasicScene>("BasicScene", env);
         basicScene->build(nodeMan);
 
         nodeMan.push(basicScene);
+
+        Core::ShapeGenerator generator{};
+        generator.generateFontChar(Core::ShapeControls::Filled);
+        Core::Shape &shape = generator.shape;
+
+        env->atlas.addShape(shape);
 
         env->postInitialize();
 
@@ -83,12 +96,23 @@ namespace Game
         // Render
         nodeMan.visit(0.0, width, height);
 
-        // Core::Matrix4 model{true};
-        // model.setScale(100.0, 100.0, 1.0);
-        // atlas->setColor({1.0, 0.5, 0.0, 0.0});
-        // atlas->render(0, model); // rectangle
+        auto env = environment;
 
-        // glBindVertexArray(0); // no need to unbind it every time
+        // env->fontAtlas.use();
+        // Core::Matrix4 model{true};
+        // model.translate(250.0, 250.0, 0.0);
+        // model.setScale(100.0, 100.0, 1.0);
+        // env->fontAtlas.setColor({1.0, 0.5, 0.0, 0.0});
+        // env->fontAtlas.renderText({}, model);
+        // env->fontAtlas.unUse();
+
+        env->atlas.use();
+        Core::Matrix4 modelR{true};
+        modelR.translate(50.0, 50.0, 0.0);
+        modelR.scaleBy(50.0, 50.0, 1.0);
+        env->atlas.setColor({1.0, 1.0, 0.0, 0.0});
+        env->atlas.render(1, modelR); // Char font
+        env->atlas.unUse();
     }
 
     int GameApp::update(double dt)

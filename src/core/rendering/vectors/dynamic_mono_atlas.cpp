@@ -7,6 +7,12 @@
 
 namespace Core
 {
+    void DynamicMonoAtlas::initialize(environmentShPtr environment)
+    {
+        BaseAtlas::initialize(environment);
+        name = "DynamicMonoAtlas";
+    }
+
     ErrorConditions DynamicMonoAtlas::configure()
     {
         // Load shader pograms

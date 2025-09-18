@@ -10,10 +10,13 @@ namespace Core
     void StaticMonoAtlas::initialize(environmentShPtr environment)
     {
         BaseAtlas::initialize(environment);
+        name = "StaticMonoAtlas";
     }
 
     ErrorConditions StaticMonoAtlas::configure()
     {
+        std::cout << name << "::configure" << std::endl;
+
         // Load shader pograms
         shader.initialize(environment);
         ErrorConditions buildStatus = shader.build();
@@ -28,6 +31,8 @@ namespace Core
     /// @return
     ErrorConditions StaticMonoAtlas::burn(bool andShake)
     {
+        std::cout << name << "::burn" << std::endl;
+
         ErrorConditions configureStatus = configure();
         if (configureStatus != ErrorConditions::None)
             return configureStatus;
@@ -119,7 +124,7 @@ namespace Core
 
     ErrorConditions StaticMonoAtlas::configureUniforms()
     {
-        std::cout << "StaticMonoAtlas::configureUniforms" << std::endl;
+        std::cout << name << "::configureUniforms" << std::endl;
 
         shader.use();
 
@@ -129,7 +134,7 @@ namespace Core
         if (modelLoc < 0)
         {
             lastError = "Couldn't find 'model' uniform variable";
-            std::cout << lastError << std::endl;
+            std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
 
@@ -137,7 +142,7 @@ namespace Core
         if (colorLoc < 0)
         {
             lastError = "Couldn't find 'fragColor' uniform variable";
-            std::cout << lastError << std::endl;
+            std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
 
@@ -146,7 +151,7 @@ namespace Core
         if (projLoc < 0)
         {
             lastError = "Couldn't find 'projection' uniform variable";
-            std::cout << lastError << std::endl;
+            std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
 
@@ -154,19 +159,19 @@ namespace Core
         if (viewLoc < 0)
         {
             lastError = "Couldn't find 'view' uniform variable";
-            std::cout << lastError << std::endl;
+            std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
 
         int err = 0;
         Matrix4 pm = projection.getMatrix();
         glUniformMatrix4fv(projLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, pm.data());
-        err = checkGLError("StaticMonoAtlas::configureUniforms:glUniformMatrix4fv(1)");
+        err = checkGLError(name + "::configureUniforms:glUniformMatrix4fv(1)");
         if (err < 0)
             return ErrorConditions::GLFunctionError;
 
         glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, environment->camera.viewspace.data());
-        err = checkGLError("StaticMonoAtlas::configureUniforms:glUniformMatrix4fv(2)");
+        err = checkGLError(name + "::configureUniforms:glUniformMatrix4fv(2)");
         if (err < 0)
             return ErrorConditions::GLFunctionError;
 

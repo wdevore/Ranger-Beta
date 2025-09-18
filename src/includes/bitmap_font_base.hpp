@@ -1,11 +1,13 @@
 #pragma once
 
-// #include <base_atlas.hpp>
-// #include <static_mono_atlas.hpp>
+#include <unordered_map>
+
+#include <shape_generator.hpp>
 
 namespace Core
 {
     /// @brief Bitmap fonts defined as pixels.
+    /// Abstract
     class BitmapFontBase
     {
     private:
@@ -18,7 +20,9 @@ namespace Core
         BitmapFontBase(/* args */) = default;
         ~BitmapFontBase() = default;
 
-        virtual void build();
-    };
+        virtual void build() = 0;
 
+        virtual Core::ShapeGenerator getGenerator() = 0;
+        virtual std::unordered_map<char, int> getIndicesOffsets() = 0;
+    };
 } // namespace Core

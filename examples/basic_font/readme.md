@@ -147,15 +147,16 @@ Another way to look at it is: The entire font has a single set of vertices. Thes
 ### Example "!" character
 Then, for each character there is a collection of indices that represent all visible "pixels". For example, "!" has 5 visible pixels based on the font definition file *dark_rose.hpp* and specifically ```0x0808080800080000, /* ! */``` which looks like this:
 ```
-           01234567    0 1 2 3 4 5 6 7
-byte: 08 = 00001000    □ □ □ □ ■ □ □ □
-byte: 08 = 00001000    □ □ □ □ ■ □ □ □
-byte: 08 = 00001000    □ □ □ □ ■ □ □ □
-byte: 08 = 00001000    □ □ □ □ ■ □ □ □
-byte: 00 = 00000000    □ □ □ □ □ □ □ □
-byte: 08 = 00001000    □ □ □ □ ■ □ □ □
-byte: 00 = 00000000    □ □ □ □ □ □ □ □
-byte: 00 = 00000000    □ □ □ □ □ □ □ □
+                                             0x0808080800080000
+           01234567    0 1 2 3 4 5 6 7         | | | | | | | |
+byte: 08 = 00001000    □ □ □ □ ■ □ □ □ <-------+ | | | | | | |
+byte: 08 = 00001000    □ □ □ □ ■ □ □ □ <---------+ | | | | | |
+byte: 08 = 00001000    □ □ □ □ ■ □ □ □ <-----------+ | | | | |
+byte: 08 = 00001000    □ □ □ □ ■ □ □ □ <-------------+ | | | |
+byte: 00 = 00000000    □ □ □ □ □ □ □ □ <---------------+ | | |
+byte: 08 = 00001000    □ □ □ □ ■ □ □ □ <-----------------+ | |
+byte: 00 = 00000000    □ □ □ □ □ □ □ □ <-------------------+ |
+byte: 00 = 00000000    □ □ □ □ □ □ □ □ <---------------------+
 ```
 
 You can see that column 4 has all the visible pixels (i.e. 1s).
@@ -185,7 +186,7 @@ byte: 28 = 00101000    □ □ ■ □ ■ □ □ □
 byte: 00 = 00000000    □ □ □ □ □ □ □ □
 byte: 00 = 00000000    □ □ □ □ □ □ □ □
 
-This means that """ has 16 * 6 = 96 indices.
+This means that "#" has 16 * 6 = 96 indices.
 
 With these 3 characters the buffer-space sent to OpenGL looks like this:
 
@@ -209,6 +210,5 @@ Each "1/0" indexes into the same vertex collection, but note, those indices are 
 ## Text
 To render text we make draw element calls using the group offsets. For example, to render "Hello", this would require 5 draw calls. Each call would translate each character based on an accumulating offset, otherwise each char would appear on top of the other.
 
-
-
+When a Static Text Node is created we calc as much as possible up front, for example, for each character we get the offset and save it in a static array. This saves a lookup and we simply iterate the array when drawing.
 

@@ -39,7 +39,7 @@ namespace Core
         ShapeGenerator(/* args */) = default;
         ~ShapeGenerator() = default;
 
-        std::unordered_map<char, int> indicesOffsets{};
+        std::unordered_map<char, std::pair<int, int>> indicesOffsets{};
 
         // These shape generators define vertices and indices that represent
         // unit-sized vector shapes. These shapes are then loaded into an Atlas.
@@ -53,13 +53,14 @@ namespace Core
         void generateUnitArc(float startAngle, float endAngle,
                              int segmentCount, ShapeControls fillType);
 
-        void generateFontChar(ShapeControls fillType, float gapSize);
+        void generateFontChar(uint64_t character, ShapeControls fillType, float gapSize);
         void generateFontVertices(int numberOfSquaresPerSide,
                                   float gapSize, ShapeControls fillType);
-        void generateFontIndices(uint64_t char8x8,
-                                 std::vector<GLuint> &indices,
-                                 std::unordered_map<char, int> &indicesOffsets,
-                                 char charSymbol);
+        int generateFontIndices(uint64_t char8x8,
+                                std::vector<GLuint> &indices,
+                                //                   Group count----|    |------ Group Offset
+                                std::unordered_map<char, std::pair<int, int>> &indicesOffsets,
+                                char charSymbol);
         void getSubSquareEboIndices(int grid_x, int grid_y,
                                     int squaresPerSide,
                                     std::vector<GLuint> &out_indices);

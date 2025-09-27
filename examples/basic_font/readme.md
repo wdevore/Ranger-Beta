@@ -50,51 +50,76 @@ Finally the backing arrays are cleared as they are not needed once the engine is
 ```
 Name: UnitRectangle
 indicesByteOffset: 0
-Next indicesByteOffset: 24  <-- 6 * sizeof(int) = 6 * 4 = 24
+Total indices: 6
+Total vertices: 4
+Total vertex floats: 12
+Size of GLuint: 4
+Next indicesByteOffset: 24 <-- 6 * sizeof(int) = 6 * 4 = 24
 i: 0, offset: 0
 i: 3, offset: 3
 i: 1, offset: 1
 i: 1, offset: 1
 i: 3, offset: 3
 i: 2, offset: 2
-indiceBlockOffset: 0
-Next indiceBlockOffset: 4
+verticesBlockOffset: 0
+Total vertices in backing: 12
+Next verticesBlockOffset: 4
 -------------------------------------------------
 Name: UnitTriangle
 indicesByteOffset: 24  <-- in the vertex buffer this is the offset in bytes
+Total indices: 3
+Total vertices: 3
+Total vertex floats: 9
+Size of GLuint: 4
 Next indicesByteOffset: 36
 i: 0, offset: 4
 i: 1, offset: 5
 i: 2, offset: 6
-indiceBlockOffset: 4
-Next indiceBlockOffset: 7
+verticesBlockOffset: 4
+Total vertices in backing: 21
+Next verticesBlockOffset: 7
 -------------------------------------------------
 Name: UnitHLine
 indicesByteOffset: 36
+Total indices: 2
+Total vertices: 2
+Total vertex floats: 6
+Size of GLuint: 4
 Next indicesByteOffset: 44
 i: 0, offset: 7
 i: 1, offset: 8
-indiceBlockOffset: 7
-Next indiceBlockOffset: 9
+verticesBlockOffset: 7
+Total vertices in backing: 27
+Next verticesBlockOffset: 9
 -------------------------------------------------
 Name: UnitVLine
 indicesByteOffset: 44
+Total indices: 2
+Total vertices: 2
+Total vertex floats: 6
+Size of GLuint: 4
 Next indicesByteOffset: 52
 i: 0, offset: 9
 i: 1, offset: 10
-indiceBlockOffset: 9
-Next indiceBlockOffset: 11
+verticesBlockOffset: 9
+Total vertices in backing: 33
+Next verticesBlockOffset: 11
 -------------------------------------------------
 Name: UnitPlus
 indicesByteOffset: 52
+Total indices: 4
+Total vertices: 4
+Total vertex floats: 12
+Size of GLuint: 4
 Next indicesByteOffset: 68
 i: 0, offset: 11
 i: 1, offset: 12
 i: 2, offset: 13
 i: 3, offset: 14
-indiceBlockOffset: 11
-Next indiceBlockOffset: 15
-
+verticesBlockOffset: 11
+Total vertices in backing: 45
+Next verticesBlockOffset: 15
+-------------------------------------------------
 ```
 
 ## Pixel Vector Font (PV)

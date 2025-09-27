@@ -31,7 +31,7 @@ namespace Core
         // combined into a single array and later copied into GL Buffer.
         // At the same time each shape needs to be updated
         // to adjust element offsets and counts.
-        int indiceBlockOffset{0};
+        int verticesBlockOffset{0};
 
         void vboBind(int bufferSize, const std::vector<GLfloat> &vertices);
         // Some may call this an "ibo" instead

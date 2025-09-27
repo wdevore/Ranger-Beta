@@ -86,7 +86,7 @@ namespace Core
 
         vboBind(vboBufferSize, backingShape.vertices);
 
-        eboBind(vboBufferSize, backingShape.indices);
+        eboBind(eboBufferSize, backingShape.indices);
 
         // Count == (xyz=3) * sizeof(float32)=4 == 12 thus each
         // vertex is 12 bytes
@@ -234,25 +234,27 @@ namespace Core
     {
         addShape(shape);
         shakeShape(shape);
-        return indiceBlockOffset;
+        return verticesBlockOffset;
     }
 
     int StaticMonoAtlas::shakeShape(Shape &shape)
     {
-        // std::cout << "Name: " << shape.name << std::endl;
+        std::cout << "Name: " << shape.name << std::endl;
 
-        // std::cout << "indicesByteOffset: " << indicesByteOffset << std::endl;
+        std::cout << "indicesByteOffset: " << indicesByteOffset << std::endl;
         // Assign current offset to this shape. Each shape has a group of indices
         // --at a starting offset position-- within the EBO buffer and assigns
         // it to the shape.
         shape.indicesOffset = indicesByteOffset;
 
         // Now calc the offset for the next potential shape shake call.
-        // std::cout << "Total indices: " << shape.indices.size() << std::endl;
-        // std::cout << "Size of GLuint: " << sizeof(GLuint) << std::endl;
+        std::cout << "Total indices: " << shape.indices.size() << std::endl;
+        std::cout << "Total vertices: " << shape.vertices.size() / Core::XYZComponentCount << std::endl;
+        std::cout << "Total vertex floats: " << shape.vertices.size() << std::endl;
+        std::cout << "Size of GLuint: " << sizeof(GLuint) << std::endl;
 
         indicesByteOffset += shape.indices.size() * sizeof(GLuint); // bytes
-        // std::cout << "Next indicesByteOffset: " << indicesByteOffset << std::endl;
+        std::cout << "Next indicesByteOffset: " << indicesByteOffset << std::endl;
 
         // Copy all shapes vertex data into Backing store
         for (auto &&vertex : shape.vertices)
@@ -265,24 +267,25 @@ namespace Core
         // buffer-index-space.
         for (GLuint &i : shape.indices)
         {
-            // std::cout << "i: " << i << ", offset: " << (i + indiceBlockOffset) << std::endl;
-            backingShape.indices.push_back(static_cast<GLuint>(i + indiceBlockOffset));
+            std::cout << "i: " << i << ", offset: " << (i + verticesBlockOffset) << std::endl;
+            backingShape.indices.push_back(static_cast<GLuint>(i + verticesBlockOffset));
         }
 
-        std::cout << "indiceBlockOffset: " << indiceBlockOffset << std::endl;
+        std::cout << "verticesBlockOffset: " << verticesBlockOffset << std::endl;
 
         // Calc the next block offset
         // Offset the indices based on the vertex block position as a "component count".
         // We divide the total # of vertices by how large a vertex specification is.
         // A vertex is specified using 3 components x,y,z. For example, a retangle has
         // 4 vertices where each has 3 floats = 4 * 3 = 12.
-        // std::cout << "Total vertices in backing: " << backingShape.vertices.size() << std::endl;
-        indiceBlockOffset = static_cast<GLuint>(backingShape.vertices.size() / Core::XYZComponentCount);
-        // std::cout << "Next indiceBlockOffset: " << indiceBlockOffset << std::endl;
+        std::cout << "Total vertices in backing: " << backingShape.vertices.size() << std::endl;
 
-        // std::cout << "-------------------------------------------------" << std::endl;
+        verticesBlockOffset = static_cast<GLuint>(backingShape.vertices.size() / Core::XYZComponentCount);
+        std::cout << "Next verticesBlockOffset: " << verticesBlockOffset << std::endl;
 
-        return indiceBlockOffset;
+        std::cout << "-------------------------------------------------" << std::endl;
+
+        return verticesBlockOffset;
     }
 
     shapeShPtr StaticMonoAtlas::getShapeByName(const std::string &name) const

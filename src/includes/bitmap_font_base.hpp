@@ -23,6 +23,6 @@ namespace Core
         virtual void build() = 0;
 
         virtual Core::ShapeGenerator getGenerator() = 0;
-        virtual std::unordered_map<char, int> getIndicesOffsets() = 0;
+        virtual std::unordered_map<char, std::pair<int, int>> getIndicesGroupCounts() = 0;
     };
 } // namespace Core

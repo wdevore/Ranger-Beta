@@ -59,16 +59,6 @@ namespace Game
         env->initialize(width, height);
 
         // ----------------------------------------------------------
-        // Setup Bitmap vector font
-        // ----------------------------------------------------------
-        // The font generates the vertices and indices
-        // auto font = std::make_unique<DarkroseBitmapFont>();
-        // font->build();
-
-        // // Use vertices/indices to configure the atlas buffers
-        // env->fontAtlas.configureFrom(std::move(font));
-
-        // ----------------------------------------------------------
         // Setup Scenes and Nodes
         // ----------------------------------------------------------
         // Create a single scene (aka Node) to hold a square.
@@ -78,11 +68,34 @@ namespace Game
 
         nodeMan.push(basicScene);
 
-        Core::ShapeGenerator generator{};
-        generator.generateFontChar(Core::ShapeControls::Filled, GAPSIZE);
-        Core::Shape &shape = generator.shape;
+        // ----------------------------------------------------------
+        // Setup Bitmap vector font
+        // ----------------------------------------------------------
+        // The font generates the vertices and indices
+        auto font = std::make_unique<DarkroseBitmapFont>();
+        font->build();
 
-        env->atlas.addShape(shape);
+        // // Use vertices/indices to configure the atlas buffers
+        env->fontAtlas.configureFrom(std::move(font));
+        // ----------------------------------------------------------
+
+        // ----------------------------------------------------------
+        // OR: Test a single font char
+        // ----------------------------------------------------------
+        // Core::ShapeGenerator generator{};
+        // // uint64_t character = 0x0808080800080000; // "!"
+        // uint64_t character = 0x081E281C0A3C0800; // "$"
+        // // uint64_t character = 0x3C42423E023C0000; // "9"
+        // // uint64_t character = 0x00003A46423E0202; // "q"
+        // // uint64_t character = 0x0000422214081060; // "y"
+        // // uint64_t character = 0x1C103030101C0000; // "{"
+        // // uint64_t character = 0x1818243C42420000; // "A"
+
+        // generator.generateFontChar(character, Core::ShapeControls::Filled, GAPSIZE);
+        // Core::Shape &shape = generator.shape;
+
+        // env->atlas.addShape(shape);
+        // ----------------------------------------------------------
 
         env->postInitialize();
 
@@ -98,22 +111,55 @@ namespace Game
 
         auto env = environment;
 
-        // env->fontAtlas.use();
-        // Core::Matrix4 model{true};
-        // model.translate(250.0, 250.0, 0.0);
-        // model.setScale(100.0, 100.0, 1.0);
-        // env->fontAtlas.setColor({1.0, 0.5, 0.0, 0.0});
-        // env->fontAtlas.renderText({}, model);
-        // env->fontAtlas.unUse();
+        float xPos{50.0};
+        const float horzOffset{45.0};
+        int offset{0};
 
-        env->atlas.use();
-        Core::Matrix4 modelR{true};
-        modelR.translate(50.0, 50.0, 0.0);
-        // If the font is upside down we can scale the Y axis by a negative
-        modelR.scaleBy(25.0, 25.0, 1.0);
-        env->atlas.setColor({1.0, 1.0, 0.0, 0.0});
-        env->atlas.render(1, modelR); // Char font
-        env->atlas.unUse();
+        env->fontAtlas.use();
+
+        env->fontAtlas.setColor({1.0, 1.0, 0.0, 0.0});
+
+        Core::Matrix4 model{true};
+        model.translate(xPos, 50.0, 0.0);
+        offset += horzOffset;
+        model.scaleBy(50.0, 50.0, 1.0);
+        env->fontAtlas.renderChar('H', {}, model);
+
+        model.toIdentity();
+        model.translate(xPos + offset, 50.0, 0.0);
+        offset += horzOffset;
+        model.scaleBy(50.0, 50.0, 1.0);
+        env->fontAtlas.renderChar('e', {}, model);
+
+        model.toIdentity();
+        model.translate(xPos + offset, 50.0, 0.0);
+        offset += horzOffset;
+        model.scaleBy(50.0, 50.0, 1.0);
+        env->fontAtlas.renderChar('l', {}, model);
+
+        model.toIdentity();
+        model.translate(xPos + offset, 50.0, 0.0);
+        offset += horzOffset;
+        model.scaleBy(50.0, 50.0, 1.0);
+        env->fontAtlas.renderChar('l', {}, model);
+
+        model.toIdentity();
+        model.translate(xPos + offset, 50.0, 0.0);
+        offset += horzOffset;
+        model.scaleBy(50.0, 50.0, 1.0);
+        env->fontAtlas.renderChar('o', {}, model);
+
+        env->fontAtlas.unUse();
+
+        // env->atlas.use();
+        // Core::Matrix4 modelR{true};
+        // modelR.translate(50.0, 50.0, 0.0);
+        // // If the font is upside down we can scale the Y axis by a negative.
+        // // Instead I fixed the generator to iterate each from bottom to top.
+        // modelR.scaleBy(25.0, 25.0, 1.0);
+        // env->atlas.setColor({1.0, 1.0, 0.0, 0.0});
+        // env->atlas.render(1, modelR); // Char font
+        // env->atlas.unUse();
     }
 
     int GameApp::update(double dt)

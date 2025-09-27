@@ -57,7 +57,7 @@ namespace Core
         GLint modelLoc{};
         GLint colorLoc{};
 
-        // bitmapFontBaseUnqPtr fontBase; // Example: DarkroseBitmapFont
+        bitmapFontBaseUnqPtr fontBase; // Example: DarkroseBitmapFont
 
     public:
         // -----------------------------------------------------
@@ -112,6 +112,7 @@ namespace Core
 
         void setColor(const std::array<GLfloat, 4> &color);
 
+        void renderChar(char character, std::list<int> offsets, const Matrix4 &model);
         void renderText(std::list<int> offsets, const Matrix4 &model);
         void render(const Matrix4 &model);
     };

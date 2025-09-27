@@ -15,18 +15,29 @@ namespace Game
         if (squareShape == nullptr)
         {
             Core::ShapeGenerator generator{};
+
             generator.generateUnitRectangle(Core::ShapeControls::Centered, Core::ShapeControls::Filled);
             Core::Shape &shape = generator.shape;
             rectangleAtlasId_ = shape.id;
+            env->atlas.addShape(shape);
 
-            // DEBUG stuff
+            // DEBUG stuff ------------------
             // generator.generateUnitTriangle(Core::ShapeControls::Centered, Core::ShapeControls::Filled);
             // const Core::Shape &shape2 = generator.shape;
             // env->atlas.addShape(shape2);
-            // env->atlas.burn(true);
 
-            // env->atlas.addShapeAndShake(shape);
-            env->atlas.addShape(shape);
+            // generator.generateUnitHLine();
+            // const Core::Shape &shape3 = generator.shape;
+            // env->atlas.addShape(shape3);
+
+            // generator.generateUnitVLine();
+            // const Core::Shape &shape4 = generator.shape;
+            // env->atlas.addShape(shape4);
+
+            // generator.generateUnitPlus();
+            // const Core::Shape &shape5 = generator.shape;
+            // env->atlas.addShape(shape5);
+            // ------------------------------------
 
             generator.generateABBox(bounds);
         }

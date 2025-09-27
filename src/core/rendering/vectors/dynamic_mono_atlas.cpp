@@ -89,7 +89,7 @@ namespace Core
 
         vboBind(vboBufferSize, backingShape.vertices);
 
-        eboBind(vboBufferSize, backingShape.indices);
+        eboBind(eboBufferSize, backingShape.indices);
 
         // Count == (xyz=3) * sizeof(float32)=4 == 12 thus each
         // vertex is 12 bytes

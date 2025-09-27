@@ -26,6 +26,9 @@
 namespace Game
 {
     /// @brief A gap size of 0.06 works well for a font scaler of 25.0.
+    ///
+    ///        A gap size of 0.085 works with a scaler of 20.0
+    ///
     ///        A gap size of 0.025 works well for larger scalers sizes, for
     ///        example 50.0.
     ///
@@ -33,7 +36,6 @@ namespace Game
     ///        causing pixel round off by OpenGL which leads to non-uniform
     ///        squares which doesn't look pleasent.
     constexpr float GAPSIZE = 0.06;
-    constexpr int INDICES_PER_QUAD = 6; // Two triangles
 
     /// @brief A single character is defined as 8*8 byte shape that is
     ///        compacted into a uInt64
@@ -53,7 +55,8 @@ namespace Game
         ///        Indices.
         ///
         /// An Atlas should convert them into byte-buffer-space.
-        std::unordered_map<char, int> indicesOffsets{};
+        ///                  Group count----|     |------ Group Offset
+        std::unordered_map<char, std::pair<int, int>> indicesGroupCounts{};
 
     public:
         DarkroseBitmapFont(/* args */) = default;
@@ -62,7 +65,7 @@ namespace Game
         void build() override;
 
         Core::ShapeGenerator getGenerator() override { return generator; }
-        std::unordered_map<char, int> getIndicesOffsets() override { return indicesOffsets; }
+        std::unordered_map<char, std::pair<int, int>> getIndicesGroupCounts() override { return indicesGroupCounts; }
     };
 
     static void generateIndices(uint64_t char8x8,

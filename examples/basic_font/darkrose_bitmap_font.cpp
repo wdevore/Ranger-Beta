@@ -27,15 +27,21 @@ namespace Game
         // -------- Generate Indices ------------------------------
         // --------------------------------------------------------
         int charIndex{0};
+
+        // By reserving memory we improve efficiency and minimize any king
+        // scrambling by the allocator. I shouldn't rely on this strategy.
+        indicesGroupCounts.reserve(BitmapFonts::darkRose_font.size());
+
         for (auto &&char8x8 : BitmapFonts::darkRose_font)
         {
-            generator.generateFontIndices(char8x8,
-                                          generator.shape.indices,
-                                          indicesOffsets,
-                                          BitmapFonts::darkRose_chars[charIndex]);
+            char charSymbol = BitmapFonts::darkRose_chars[charIndex];
+
+            int indicesCount = generator.generateFontIndices(char8x8,
+                                                             generator.shape.indices,
+                                                             indicesGroupCounts,
+                                                             charSymbol);
+
             charIndex++;
-            // std::ios_base::fmtflags originalFlags = std::cout.flags();
-            // std::cout << "char: 0x" << std::hex << std::setw(16) << std::setfill('0') << character << std::dec << std::endl;
         }
     }
 

@@ -35,36 +35,45 @@ namespace Core
         // TODO we don't really need to take ownership of the fontBase
         // because once we have copied what we need we can discard it.
         // For now we will keep it.
-        // this->fontBase = std::move(fontBase);
+        this->fontBase = std::move(fontBase);
 
-        Core::ShapeGenerator generator = fontBase->getGenerator(); // Contains vertices
-        std::unordered_map<char, int> indicesOffsets = fontBase->getIndicesOffsets();
-
-        // These need to be "remapped" into byte offsets.
-        for (auto &&pair : indicesOffsets)
-        {
-            auto byteIndex = static_cast<int>(pair.second * sizeof(GLuint));
-            std::cout << "Char: '" << pair.first << "' Offset: " << pair.second << " byteIndex: " << byteIndex << std::endl;
-            indicesPairOffsets[pair.first] = {byteIndex, pair.second};
-        }
+        // Generator contains vertices, Fontbase has indices.
+        Core::ShapeGenerator generator = this->fontBase->getGenerator();
 
         primitiveMode = GL_TRIANGLES;
 
         // ---------------------------------------------------------
         // Shake
         // ---------------------------------------------------------
-        // Copy all shapes vertex data into Backing store
+        // Copy all shapes vertex data into Backing store. This is the only set
+        // of vertices because all indices refer to it.
         for (auto &&vertex : generator.shape.vertices)
             backingShape.vertices.push_back(vertex);
+
+        // We need to simulate what StaticMonoAtlas::shakeShape does but only
+        // for indices. For each indice group we simulate adding a shape.
+
+        // Each offset represents a group of indices for a single character
+        std::unordered_map<char, std::pair<int, int>> indicesGroupData = this->fontBase->getIndicesGroupCounts();
+
+        // These need to be "remapped" into byte offsets.
+        for (auto &&pair : indicesGroupData)
+        {
+            char character = pair.first;
+            int indicesGroupCount = pair.second.first; // This must be in bytes
+            int indiceGroupOffset = pair.second.second;
+
+            // std::cout << "Char: '" << character << "' GroupOffset: " << indiceGroupOffset << " GroupCount: " << indicesGroupCount << std::endl;
+            indicesPairOffsets[character] = {indicesGroupCount, indiceGroupOffset * sizeof(GLuint)};
+        }
 
         // The index offset is always refering to a position within
         // the vertices array. It is a integer pointer offset where the pointer
         // is defined as an "integer count".
         // We use the current block marker to map each local-index-space into
         // buffer-index-space.
-        indiceBlockOffset = 0; // There is only one "shape"
-        for (GLuint &i : generator.shape.indices)
-            backingShape.indices.push_back(static_cast<GLuint>(i + indiceBlockOffset));
+        for (GLuint &index : generator.shape.indices)
+            backingShape.indices.push_back(static_cast<GLuint>(index));
 
         // ---------------------------------------------------------
         // Bake into OpenGL
@@ -100,11 +109,11 @@ namespace Core
 
         vboBind(vboBufferSize, backingShape.vertices);
 
-        eboBind(vboBufferSize, backingShape.indices);
+        eboBind(eboBufferSize, backingShape.indices);
 
         // Count == (xyz=3) * sizeof(float32)=4 == 12 thus each
         // vertex is 12 bytes
-        int vertexSize = GLuint(Core::XYZComponentCount) * sizeof(GLfloat);
+        GLuint vertexSize = static_cast<GLuint>(Core::XYZComponentCount * sizeof(GLfloat));
 
         // Some shaders may have normals and/or textures coords.
         // We only have one attribute (position) in the shader, so the
@@ -241,15 +250,32 @@ namespace Core
         glUniform4fv(colorLoc, Uniform4vColorCompCount, color.data());
     }
 
+    void BitmapVectorFontAtlas::renderChar(char character, std::list<int> offsets, const Matrix4 &model)
+    {
+        glUniformMatrix4fv(modelLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, model.data());
+
+        // TODO !!!!! This is making a copy. We want a reference!
+        auto pair = indicesPairOffsets[character];
+
+        // Examples:
+        // 30, sizeof(GLuint) * 0 !
+        // 24, 4*30 "
+        // 96, 4*54 #
+        glDrawElements(primitiveMode,
+                       pair.first, // Count
+                       GL_UNSIGNED_INT,
+                       static_cast<void *>(static_cast<char *>(nullptr) + pair.second)); // Offset
+    }
+
     void BitmapVectorFontAtlas::renderText(std::list<int> offsets, const Matrix4 &model)
     {
         glUniformMatrix4fv(modelLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, model.data());
 
-        auto pair = indicesPairOffsets['x'];
+        auto pair = indicesPairOffsets['#'];
         glDrawElements(primitiveMode,
-                       pair.second, // Count
+                       pair.first, // Count
                        GL_UNSIGNED_INT,
-                       static_cast<void *>(static_cast<char *>(nullptr) + pair.first)); // Offset
+                       static_cast<void *>(static_cast<char *>(nullptr) + pair.second)); // Offset
     }
 
     /// @brief This is used by special nodes that don't render anything but instead

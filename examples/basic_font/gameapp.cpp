@@ -112,8 +112,9 @@ namespace Game
         auto env = environment;
 
         float xPos{50.0};
-        const float horzOffset{45.0};
+        const float horzOffset{25.0};
         int offset{0};
+        float fontScale{25.0};
 
         env->fontAtlas.use();
 
@@ -122,31 +123,31 @@ namespace Game
         Core::Matrix4 model{true};
         model.translate(xPos, 50.0, 0.0);
         offset += horzOffset;
-        model.scaleBy(50.0, 50.0, 1.0);
+        model.scaleBy(fontScale, fontScale, 1.0);
         env->fontAtlas.renderChar('H', {}, model);
 
         model.toIdentity();
         model.translate(xPos + offset, 50.0, 0.0);
         offset += horzOffset;
-        model.scaleBy(50.0, 50.0, 1.0);
+        model.scaleBy(fontScale, fontScale, 1.0);
         env->fontAtlas.renderChar('e', {}, model);
 
         model.toIdentity();
         model.translate(xPos + offset, 50.0, 0.0);
         offset += horzOffset;
-        model.scaleBy(50.0, 50.0, 1.0);
+        model.scaleBy(fontScale, fontScale, 1.0);
         env->fontAtlas.renderChar('l', {}, model);
 
         model.toIdentity();
         model.translate(xPos + offset, 50.0, 0.0);
         offset += horzOffset;
-        model.scaleBy(50.0, 50.0, 1.0);
+        model.scaleBy(fontScale, fontScale, 1.0);
         env->fontAtlas.renderChar('l', {}, model);
 
         model.toIdentity();
         model.translate(xPos + offset, 50.0, 0.0);
         offset += horzOffset;
-        model.scaleBy(50.0, 50.0, 1.0);
+        model.scaleBy(fontScale, fontScale, 1.0);
         env->fontAtlas.renderChar('o', {}, model);
 
         env->fontAtlas.unUse();

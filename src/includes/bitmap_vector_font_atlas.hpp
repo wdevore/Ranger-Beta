@@ -11,6 +11,8 @@
 #include "constants.hpp"
 #include "base_atlas.hpp"
 #include "bitmap_font_base.hpp"
+#include "matrix4.hpp"
+#include "vector3.hpp"
 
 namespace Core
 {
@@ -76,10 +78,15 @@ namespace Core
         // glDrawElements. We use them as references into an OpenGL buffered
         // array.
         // Each entry is a character with an offset into a indices buffer.
-        // <char, pair<index, count>>
-        std::unordered_map<char, std::pair<int, GLuint>> indicesPairOffsets{};
+        //                          Count --|     |--- Offset in bytes
+        std::unordered_map<char, std::pair<int, GLuint>> indicesPairData{};
 
         GLenum primitiveMode{}; // Example: GL_TRIANGLES
+        Core::Matrix4 model{true};
+        Core::Vector3 position{0.0, 0.0, 0.0};
+        Core::Vector3 scale{1.0, 1.0, 1.0};
+        float xIncOffset{0};
+        float horzOffset{0.0};
 
         // Buffers
         GLuint vaoID{};
@@ -113,7 +120,8 @@ namespace Core
         void setColor(const std::array<GLfloat, 4> &color);
 
         void renderChar(char character, std::list<int> offsets, const Matrix4 &model);
-        void renderText(std::list<int> offsets, const Matrix4 &model);
+        void renderText(const std::list<char> &characters, const Matrix4 &model);
+        void renderText(const std::list<char> &characters);
         void render(const Matrix4 &model);
     };
 

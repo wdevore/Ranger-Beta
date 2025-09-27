@@ -117,6 +117,7 @@ namespace Core
         void setScale(double sx, double sy);
         void setScale(double sx, double sy, double sz);
         void scaleBy(double sx, double sy, double sz);
+        void scaleBy(const Vector3 &vector);
         double getPsuedoScale();
 
         void transformVertices(const std::vector<double> &inV, std::vector<double> &out);

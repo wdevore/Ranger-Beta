@@ -244,6 +244,11 @@ namespace Core
         set(mulM_);
     }
 
+    void Matrix4::scaleBy(const Vector3 &vector)
+    {
+        scaleBy(vector.x, vector.y, vector.z);
+    }
+
     /// @brief This is a rough approximation under certain conditions. Use it with
     ///        extreme caution!
     /// @return double

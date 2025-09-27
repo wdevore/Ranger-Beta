@@ -47,33 +47,26 @@ namespace Core
         // ---------------------------------------------------------
         // Copy all shapes vertex data into Backing store. This is the only set
         // of vertices because all indices refer to it.
-        for (auto &&vertex : generator.shape.vertices)
-            backingShape.vertices.push_back(vertex);
+        backingShape.vertices = generator.shape.vertices;
 
         // We need to simulate what StaticMonoAtlas::shakeShape does but only
         // for indices. For each indice group we simulate adding a shape.
 
         // Each offset represents a group of indices for a single character
-        std::unordered_map<char, std::pair<int, int>> indicesGroupData = this->fontBase->getIndicesGroupCounts();
+        std::unordered_map<char, std::pair<int, int>> indicesGroupData = this->fontBase->getIndicesGroupData();
 
-        // These need to be "remapped" into byte offsets.
         for (auto &&pair : indicesGroupData)
         {
             char character = pair.first;
-            int indicesGroupCount = pair.second.first; // This must be in bytes
-            int indiceGroupOffset = pair.second.second;
+            int indicesGroupCount = pair.second.first;
+            // These need to be "remapped" into byte offsets.
+            int indiceGroupOffset = pair.second.second * sizeof(GLuint); // This must be in bytes
 
             // std::cout << "Char: '" << character << "' GroupOffset: " << indiceGroupOffset << " GroupCount: " << indicesGroupCount << std::endl;
-            indicesPairOffsets[character] = {indicesGroupCount, indiceGroupOffset * sizeof(GLuint)};
+            indicesPairData[character] = {indicesGroupCount, indiceGroupOffset};
         }
 
-        // The index offset is always refering to a position within
-        // the vertices array. It is a integer pointer offset where the pointer
-        // is defined as an "integer count".
-        // We use the current block marker to map each local-index-space into
-        // buffer-index-space.
-        for (GLuint &index : generator.shape.indices)
-            backingShape.indices.push_back(static_cast<GLuint>(index));
+        backingShape.indices = generator.shape.indices;
 
         // ---------------------------------------------------------
         // Bake into OpenGL
@@ -255,7 +248,7 @@ namespace Core
         glUniformMatrix4fv(modelLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, model.data());
 
         // TODO !!!!! This is making a copy. We want a reference!
-        auto pair = indicesPairOffsets[character];
+        auto pair = indicesPairData[character];
 
         // Examples:
         // 30, sizeof(GLuint) * 0 !
@@ -267,15 +260,41 @@ namespace Core
                        static_cast<void *>(static_cast<char *>(nullptr) + pair.second)); // Offset
     }
 
-    void BitmapVectorFontAtlas::renderText(std::list<int> offsets, const Matrix4 &model)
+    void BitmapVectorFontAtlas::renderText(const std::list<char> &characters, const Matrix4 &model)
     {
         glUniformMatrix4fv(modelLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, model.data());
 
-        auto pair = indicesPairOffsets['#'];
-        glDrawElements(primitiveMode,
-                       pair.first, // Count
-                       GL_UNSIGNED_INT,
-                       static_cast<void *>(static_cast<char *>(nullptr) + pair.second)); // Offset
+        for (char character : characters)
+        {
+            auto pair = indicesPairData[character];
+            glDrawElements(primitiveMode,
+                           pair.first, // Count
+                           GL_UNSIGNED_INT,
+                           static_cast<void *>(static_cast<char *>(nullptr) + pair.second)); // Offset
+        }
+    }
+
+    void BitmapVectorFontAtlas::renderText(const std::list<char> &characters)
+    {
+        xIncOffset = 0.0;
+
+        for (char character : characters)
+        {
+            auto pair = indicesPairData[character];
+            model.toIdentity();
+            model.translate(position.x + xIncOffset, position.y, position.z);
+            // If the font is upside down we can scale the Y axis by a negative.
+            // Instead I fixed the generator to iterate each from bottom to top.
+            model.scaleBy(scale);
+            xIncOffset += horzOffset;
+
+            glUniformMatrix4fv(modelLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, model.data());
+
+            glDrawElements(primitiveMode,
+                           pair.first, // Count
+                           GL_UNSIGNED_INT,
+                           static_cast<void *>(static_cast<char *>(nullptr) + pair.second)); // Offset in bytes
+        }
     }
 
     /// @brief This is used by special nodes that don't render anything but instead

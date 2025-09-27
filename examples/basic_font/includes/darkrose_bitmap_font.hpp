@@ -65,7 +65,7 @@ namespace Game
         void build() override;
 
         Core::ShapeGenerator getGenerator() override { return generator; }
-        std::unordered_map<char, std::pair<int, int>> getIndicesGroupCounts() override { return indicesGroupCounts; }
+        std::unordered_map<char, std::pair<int, int>> getIndicesGroupData() override { return indicesGroupCounts; }
     };
 
     static void generateIndices(uint64_t char8x8,

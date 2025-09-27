@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <list>
+
 #include <app.hpp>
 #include <node_manager.hpp>
 #include "basic_scene_node.hpp"
@@ -16,6 +19,11 @@ namespace Game
         std::shared_ptr<BasicScene> basicScene;
 
         // std::unique_ptr<Core::BitmapVectorFontAtlas> fontAtlas = std::make_unique<Core::BitmapVectorFontAtlas>();
+
+        std::string text{};
+        std::list<char> textList{};
+
+        void textToList(const std::string &text);
 
     public:
         GameApp() = default;

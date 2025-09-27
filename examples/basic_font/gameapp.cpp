@@ -38,7 +38,8 @@ namespace Game
     {
         std::cout << "GameApp::setup" << std::endl;
 
-        // atlas = std::make_shared<Core::StaticMonoAtlas>();
+        text = "Basic Font";
+        textToList(text);
 
         // Load any assets, for example vector font.
 
@@ -77,24 +78,9 @@ namespace Game
 
         // // Use vertices/indices to configure the atlas buffers
         env->fontAtlas.configureFrom(std::move(font));
-        // ----------------------------------------------------------
-
-        // ----------------------------------------------------------
-        // OR: Test a single font char
-        // ----------------------------------------------------------
-        // Core::ShapeGenerator generator{};
-        // // uint64_t character = 0x0808080800080000; // "!"
-        // uint64_t character = 0x081E281C0A3C0800; // "$"
-        // // uint64_t character = 0x3C42423E023C0000; // "9"
-        // // uint64_t character = 0x00003A46423E0202; // "q"
-        // // uint64_t character = 0x0000422214081060; // "y"
-        // // uint64_t character = 0x1C103030101C0000; // "{"
-        // // uint64_t character = 0x1818243C42420000; // "A"
-
-        // generator.generateFontChar(character, Core::ShapeControls::Filled, GAPSIZE);
-        // Core::Shape &shape = generator.shape;
-
-        // env->atlas.addShape(shape);
+        env->fontAtlas.scale.set(25.0, 25.0, 1.0);
+        env->fontAtlas.position.set(20.0, 20.0, 0.0);
+        env->fontAtlas.horzOffset = 25.0;
         // ----------------------------------------------------------
 
         env->postInitialize();
@@ -111,56 +97,13 @@ namespace Game
 
         auto env = environment;
 
-        float xPos{50.0};
-        const float horzOffset{25.0};
-        int offset{0};
-        float fontScale{25.0};
-
         env->fontAtlas.use();
 
         env->fontAtlas.setColor({1.0, 1.0, 0.0, 0.0});
 
-        Core::Matrix4 model{true};
-        model.translate(xPos, 50.0, 0.0);
-        offset += horzOffset;
-        model.scaleBy(fontScale, fontScale, 1.0);
-        env->fontAtlas.renderChar('H', {}, model);
-
-        model.toIdentity();
-        model.translate(xPos + offset, 50.0, 0.0);
-        offset += horzOffset;
-        model.scaleBy(fontScale, fontScale, 1.0);
-        env->fontAtlas.renderChar('e', {}, model);
-
-        model.toIdentity();
-        model.translate(xPos + offset, 50.0, 0.0);
-        offset += horzOffset;
-        model.scaleBy(fontScale, fontScale, 1.0);
-        env->fontAtlas.renderChar('l', {}, model);
-
-        model.toIdentity();
-        model.translate(xPos + offset, 50.0, 0.0);
-        offset += horzOffset;
-        model.scaleBy(fontScale, fontScale, 1.0);
-        env->fontAtlas.renderChar('l', {}, model);
-
-        model.toIdentity();
-        model.translate(xPos + offset, 50.0, 0.0);
-        offset += horzOffset;
-        model.scaleBy(fontScale, fontScale, 1.0);
-        env->fontAtlas.renderChar('o', {}, model);
+        env->fontAtlas.renderText(textList);
 
         env->fontAtlas.unUse();
-
-        // env->atlas.use();
-        // Core::Matrix4 modelR{true};
-        // modelR.translate(50.0, 50.0, 0.0);
-        // // If the font is upside down we can scale the Y axis by a negative.
-        // // Instead I fixed the generator to iterate each from bottom to top.
-        // modelR.scaleBy(25.0, 25.0, 1.0);
-        // env->atlas.setColor({1.0, 1.0, 0.0, 0.0});
-        // env->atlas.render(1, modelR); // Char font
-        // env->atlas.unUse();
     }
 
     int GameApp::update(double dt)
@@ -182,6 +125,12 @@ namespace Game
         environment->dispose();
 
         return 1; // success
+    }
+
+    void GameApp::textToList(const std::string &text)
+    {
+        for (char c : text)
+            textList.push_back(c);
     }
 
 } // namespace Game

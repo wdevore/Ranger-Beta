@@ -28,7 +28,7 @@ namespace Game
         // --------------------------------------------------------
         int charIndex{0};
 
-        // By reserving memory we improve efficiency and minimize any king
+        // By reserving memory we improve efficiency and minimize any kind
         // scrambling by the allocator. I shouldn't rely on this strategy.
         indicesGroupCounts.reserve(BitmapFonts::darkRose_font.size());
 

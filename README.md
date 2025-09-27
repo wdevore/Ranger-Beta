@@ -31,10 +31,12 @@ You now be able to be able to go to the CMake extension and hover over the *Buil
 * Zones
 * Interpolation
 * Fonts
-  * Vector <-- **WORKING**
-  * Bitmap
+  * Vector <-- **INPROGRESS**
+  * Bitmap ✔
 * Box2D
 * Particles
+* Physics
+  * Ship motion <-- **WORKING**
 * Filters
 * Animation (tweening) *Using tanema's library*: https://github.com/tanema/gween
 

@@ -55,10 +55,15 @@ namespace Core
             vShaderFile.open(vertexPath_);
             fShaderFile.open(fragmentPath_);
 
+            std::cout << "Shader:: Opened shaders" << std::endl;
+
+            // Read file's buffer contents into streams
             std::stringstream vShaderStream, fShaderStream;
             // Read file's buffer contents into streams
             vShaderStream << vShaderFile.rdbuf();
             fShaderStream << fShaderFile.rdbuf();
+
+            std::cout << "Shader:: Read shader's buffers" << std::endl;
 
             // close file handlers
             vShaderFile.close();
@@ -160,7 +165,7 @@ namespace Core
         ErrorConditions readStatus = read();
         if (readStatus != ErrorConditions::None)
             return readStatus;
-        std::cout << "Shader::build read shaders" << std::endl;
+        std::cout << "Shader::build read in shaders" << std::endl;
 
         ErrorConditions compileStatus = compile();
         if (compileStatus != ErrorConditions::None)

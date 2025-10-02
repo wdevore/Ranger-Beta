@@ -8,9 +8,11 @@ namespace Core
         this->deviceHeight = deviceHeight;
 
         atlas.initialize(shared_from_this());
-        fontAtlas.initialize(shared_from_this());
 
-        fontAtlas.configure();
+        bitmapFontAtlas.initialize(shared_from_this());
+        bitmapFontAtlas.configure();
+
+        vectorFontAtlas.initialize(shared_from_this());
 
         // An example of moving the camera (aka viewspace, aka viewMatrix)
         // camera.moveTo(-200.0, -150.0);
@@ -27,8 +29,11 @@ namespace Core
         atlas.unUse();
         atlas.dispose();
 
-        fontAtlas.unUse();
-        fontAtlas.dispose();
+        bitmapFontAtlas.unUse();
+        bitmapFontAtlas.dispose();
+
+        vectorFontAtlas.unUse();
+        vectorFontAtlas.dispose();
 
         pressedKeys.clear();
     }

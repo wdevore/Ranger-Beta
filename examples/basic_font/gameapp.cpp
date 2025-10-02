@@ -8,6 +8,7 @@
 #include <constants.hpp>
 #include <environment.hpp>
 #include <darkrose_bitmap_font.hpp>
+#include <basic_vector_font.hpp>
 
 namespace Game
 {
@@ -70,18 +71,32 @@ namespace Game
         nodeMan.push(basicScene);
 
         // ----------------------------------------------------------
-        // Setup Bitmap vector font
+        // Setup Bitmap font
         // ----------------------------------------------------------
         // The font generates the vertices and indices
         auto font = std::make_unique<DarkroseBitmapFont>();
         font->build();
-
-        // // Use vertices/indices to configure the atlas buffers
-        env->fontAtlas.configureFrom(std::move(font));
-        env->fontAtlas.scale.set(25.0, 25.0, 1.0);
-        env->fontAtlas.position.set(20.0, 20.0, 0.0);
-        env->fontAtlas.horzOffset = 25.0;
+        env->bitmapFontAtlas.configureFrom(std::move(font));
+        env->bitmapFontAtlas.scale.set(25.0, 25.0, 1.0);
+        env->bitmapFontAtlas.position.set(20.0, 20.0, 0.0);
+        env->bitmapFontAtlas.horzOffset = 25.0;
         // ----------------------------------------------------------
+
+        // ----------------------------------------------------------
+        // Setup vector font
+        // ----------------------------------------------------------
+        // The font generates the vertices and indices
+
+        // Use vertices/indices to configure the atlas buffers
+        // env->vectorFontAtlas.configure(VectorFont::fontData);
+
+        // env->vectorFontAtlas.scale.set(25.0, 25.0, 1.0);
+        // env->vectorFontAtlas.position.set(20.0, 20.0, 0.0);
+        // env->vectorFontAtlas.horzOffset = 25.0;
+        // ----------------------------------------------------------
+
+        // ---------- Primitive debug tester
+        // _eboTest.configure(environment);
 
         env->postInitialize();
 
@@ -97,18 +112,32 @@ namespace Game
 
         auto env = environment;
 
-        env->fontAtlas.use();
+        // ------------ Bitmap vector font
+        env->bitmapFontAtlas.use();
+        env->bitmapFontAtlas.setColor({1.0, 1.0, 0.0, 0.0});
+        env->bitmapFontAtlas.renderText(textList);
+        env->bitmapFontAtlas.unUse();
 
-        env->fontAtlas.setColor({1.0, 1.0, 0.0, 0.0});
+        // ------------ Vector font
+        Core::Matrix4 model{true};
+        model.toIdentity();
+        model.translate(125.0, 125.0, 0.0);
+        model.scaleBy(25.0, 25.0, 1.0);
 
-        env->fontAtlas.renderText(textList);
+        // env->vectorFontAtlas.use();
+        // env->vectorFontAtlas.setColor({1.0, 1.0, 1.0, 1.0});
+        // env->vectorFontAtlas.renderChar('#', model);
+        // env->vectorFontAtlas.unUse();
 
-        env->fontAtlas.unUse();
+        // ---------- Primitive debug tester
+        // _eboTest.use();
+        // _eboTest.setColor({1.0, 1.0, 1.0, 0.0});
+        // _eboTest.render(model);
+        // _eboTest.unUse();
     }
 
     int GameApp::update(double dt)
     {
-
         nodeMan.update(dt);
 
         return 1; // Successful update

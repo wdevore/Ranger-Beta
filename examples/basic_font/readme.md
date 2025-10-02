@@ -49,29 +49,29 @@ Finally the backing arrays are cleared as they are not needed once the engine is
 
 ```
 Name: UnitRectangle
-indicesByteOffset: 0
+indicesByteOffset: 0   <-- in the vertex buffer this is the offset in bytes
 Total indices: 6
 Total vertices: 4
 Total vertex floats: 12
-Size of GLuint: 4
-Next indicesByteOffset: 24 <-- 6 * sizeof(int) = 6 * 4 = 24
-i: 0, offset: 0
-i: 3, offset: 3
-i: 1, offset: 1
-i: 1, offset: 1
-i: 3, offset: 3
-i: 2, offset: 2
-verticesBlockOffset: 0
-Total vertices in backing: 12
-Next verticesBlockOffset: 4
--------------------------------------------------
-Name: UnitTriangle
-indicesByteOffset: 24  <-- in the vertex buffer this is the offset in bytes
-Total indices: 3
-Total vertices: 3
-Total vertex floats: 9
-Size of GLuint: 4
-Next indicesByteOffset: 36
+Size of GLuint: 4  >--------------------------------V
+Next indicesByteOffset: 24   <-- 6 * sizeof(int) = 6 * 4 = 24
+i: 0, offset: 0                                            |
+i: 3, offset: 3                                            |
+i: 1, offset: 1                                            |
+i: 1, offset: 1                                            |
+i: 3, offset: 3                                            |
+i: 2, offset: 2                                            |
+verticesBlockOffset: 0                                     |
+Total vertices in backing: 12                              |
+Next verticesBlockOffset: 4                                |
+-------------------------------------------------          |
+Name: UnitTriangle                 /-----------------------/
+indicesByteOffset: 24              |
+Total indices: 3   >---------------|--------|
+Total vertices: 3                  |        |
+Total vertex floats: 9             V        |
+Size of GLuint: 4  >--------------------V   V
+Next indicesByteOffset: 36    <-- 24 + (4 * 3) = 36
 i: 0, offset: 4
 i: 1, offset: 5
 i: 2, offset: 6
@@ -85,7 +85,7 @@ Total indices: 2
 Total vertices: 2
 Total vertex floats: 6
 Size of GLuint: 4
-Next indicesByteOffset: 44
+Next indicesByteOffset: 44    <-- 36 + (4 * 2) = 44
 i: 0, offset: 7
 i: 1, offset: 8
 verticesBlockOffset: 7
@@ -98,7 +98,7 @@ Total indices: 2
 Total vertices: 2
 Total vertex floats: 6
 Size of GLuint: 4
-Next indicesByteOffset: 52
+Next indicesByteOffset: 52     <-- 44 + (4 * 2) = 52
 i: 0, offset: 9
 i: 1, offset: 10
 verticesBlockOffset: 9
@@ -111,7 +111,7 @@ Total indices: 4
 Total vertices: 4
 Total vertex floats: 12
 Size of GLuint: 4
-Next indicesByteOffset: 68
+Next indicesByteOffset: 68   <-- 52 + (4 * 4) = 68
 i: 0, offset: 11
 i: 1, offset: 12
 i: 2, offset: 13
@@ -122,7 +122,7 @@ Next verticesBlockOffset: 15
 -------------------------------------------------
 ```
 
-## Pixel Vector Font (PV)
+## Pixel Bitmap Font (PV)
 A *pixel* is a quad within a grid of 8x8 = 64 quads. Each "1" bit in the bitmap means we create a group of indices for that pixel.
 
 Note: in variations of this font technique we may create indices groups for "0" bits as well that may have a darker shade. TODO for the future!
@@ -238,6 +238,39 @@ Each "1/0" indexes into the same vertex collection, but note, those indices are 
 ![Bitmap image](../common/assets/fonts/bitmaps/darkrose_font.png)
 [Zip file](../common/assets/fonts/darkrose_font.zip)
 
+
+# Gemini generated Vector font
+```
+'z' indicesOffset size: 0, vertices: 0.4, 0.4, 0, 0, 0.4, 0, 0.4, 0, 0, 0, 0, 0, 
+Indices: 6 :: 0, 1, 2, 3, 4, 5, 
+Pair Data:: {6, 0}
+Next verticesBlockOffset: 4
+------------------------------------------------
+'y' indicesOffset size: 6, vertices: 0, 0.4, 0, 0.2, 0, 0, 0.4, 0.4, 0, 0.4, -0.1, 0, 
+Indices: 6 :: 4, 5, 6, 7, 8, 9, 
+Pair Data:: {6, 24}
+Next verticesBlockOffset: 8
+------------------------------------------------
+'x' indicesOffset size: 12, vertices: 0, 0.4, 0, 0.4, 0, 0, 0, 0, 0, 0.4, 0.4, 0, 
+Indices: 6 :: 8, 9, 10, 11, 12, 13, 
+Pair Data:: {6, 48}
+Next verticesBlockOffset: 12
+------------------------------------------------
+'w' indicesOffset size: 18, vertices: 0, 0.4, 0, 0.1, 0, 0, 0.2, 0.2, 0, 0.3, 0, 0, 0.4, 0.4, 0, 
+Indices: 7 :: 12, 13, 14, 15, 16, 17, 18, 
+Pair Data:: {7, 72}
+Next verticesBlockOffset: 17
+------------------------------------------------
+'v' indicesOffset size: 25, vertices: 0, 0.4, 0, 0.2, 0, 0, 0.4, 0.4, 0, 
+Indices: 4 :: 17, 18, 19, 20, 
+Pair Data:: {4, 100}
+Next verticesBlockOffset: 20
+------------------------------------------------
+'u' indicesOffset size: 29, vertices: 0, 0.4, 0, 0, 0, 0, 0.4, 0, 0, 0.4, 0.4, 0, 
+Indices: 6 :: 20, 21, 22, 23, 24, 25, 
+Pair Data:: {6, 116}
+Next verticesBlockOffset: 24
+```
 
 ## Text
 To render text we make draw element calls using the group offsets. For example, to render "Hello", this would require 5 draw calls. Each call would translate each character based on an accumulating offset, otherwise each char would appear on top of the other.

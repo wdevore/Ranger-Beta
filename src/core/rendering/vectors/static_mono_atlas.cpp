@@ -60,6 +60,11 @@ namespace Core
 
     ErrorConditions StaticMonoAtlas::bake()
     {
+        ErrorConditions configureUniStatus = configureUniforms();
+
+        if (configureUniStatus != ErrorConditions::None)
+            return configureUniStatus;
+
         // ---------------------------------------------------------
         // BEGIN VAO Scope and generate buffer ids
         // ---------------------------------------------------------
@@ -76,7 +81,8 @@ namespace Core
 
         // The total buffer sizes are count of types (i.e floats or ints) times
         // the size of the type. Thus the size is in Bytes
-        int vboBufferSize = backingShape.vertices.size() * Core::XYZComponentCount * sizeof(GLfloat);
+        int vboBufferSize = backingShape.vertices.size() * sizeof(GLfloat);
+        // int vboBufferSize = backingShape.vertices.size() * Core::XYZComponentCount * sizeof(GLfloat); // Needlessly bigger
         int eboBufferSize = backingShape.indices.size() * sizeof(GLuint);
 
         if (vboBufferSize == 0 || eboBufferSize == 0)
@@ -105,14 +111,10 @@ namespace Core
         // ----------------------------------------------
         // END VAO Scope
         // ----------------------------------------------
-        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(UnBindID);
 
-        glBindVertexArray(0);
-
-        ErrorConditions configureUniStatus = configureUniforms();
-
-        if (configureUniStatus != ErrorConditions::None)
-            return configureUniStatus;
+        glBindBuffer(GL_ARRAY_BUFFER, UnBindID);
+        glBindVertexArray(UnBindID);
 
         // We don't need the backing shape resources anymore now that data
         // has been uploaded to the GPU.
@@ -137,6 +139,7 @@ namespace Core
             std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
+        std::cout << name << "::configureUniforms: modelLoc: " << modelLoc << std::endl;
 
         colorLoc = glGetUniformLocation(program, uniColor.c_str());
         if (colorLoc < 0)
@@ -145,6 +148,7 @@ namespace Core
             std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
+        std::cout << name << "::configureUniforms: colorLoc: " << colorLoc << std::endl;
 
         // One time configuration of projection and view matrix
         GLint projLoc = glGetUniformLocation(program, uniProjection.c_str());
@@ -154,6 +158,7 @@ namespace Core
             std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
+        std::cout << name << "::configureUniforms: projLoc: " << projLoc << std::endl;
 
         GLint viewLoc = glGetUniformLocation(program, uniView.c_str());
         if (viewLoc < 0)
@@ -162,6 +167,7 @@ namespace Core
             std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
+        std::cout << name << "::configureUniforms: viewLoc: " << viewLoc << std::endl;
 
         int err = 0;
         Matrix4 pm = projection.getMatrix();
@@ -186,7 +192,7 @@ namespace Core
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
 
         // Create and fill buffer
-        glBufferData(GL_ARRAY_BUFFER, bufferSize, vertices.data(), GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, bufferSize, vertices.data(), GL_STATIC_DRAW);
     }
 
     void StaticMonoAtlas::eboBind(int bufferSize, const std::vector<GLuint> &indices)
@@ -311,11 +317,12 @@ namespace Core
 
     void StaticMonoAtlas::use()
     {
+        glBindVertexArray(vaoID);
+
         // See opengl wiki as to why "glBindVertexArray(0)" isn't really necessary here:
         // https://www.opengl.org/wiki/Vertex_Specification#Vertex_Buffer_Object
         // Note the line "Changing the GL_ARRAY_BUFFER binding changes nothing about vertex attribute 0..."
         shader.use();
-        glBindVertexArray(vaoID);
     }
 
     void StaticMonoAtlas::unUse()

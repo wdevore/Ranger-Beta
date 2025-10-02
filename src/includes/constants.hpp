@@ -30,6 +30,9 @@ namespace Core
 
     std::ostream &operator<<(std::ostream &os, ErrorConditions s);
 
+    /// @brief Indicates how many parts to a vertex (ex: vector font)
+    static const int XYComponentCount = 2;
+
     /// @brief Indicates how many parts to a vertex
     static const int XYZComponentCount = 3;
 

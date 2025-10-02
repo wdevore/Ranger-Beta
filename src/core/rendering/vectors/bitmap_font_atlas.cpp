@@ -2,7 +2,7 @@
 #include <algorithm> // For std::find or std::find_if
 #include <utility>
 
-#include <bitmap_vector_font_atlas.hpp>
+#include <bitmap_font_atlas.hpp>
 #include <constants.hpp>
 #include <environment.hpp>
 #include <shape_generator.hpp>
@@ -76,23 +76,31 @@ namespace Core
 
     ErrorConditions BitmapVectorFontAtlas::bake()
     {
+        ErrorConditions configureUniStatus = configureUniforms();
+
+        if (configureUniStatus != ErrorConditions::None)
+            return configureUniStatus;
+
         // ---------------------------------------------------------
         // BEGIN VAO Scope and generate buffer ids
         // ---------------------------------------------------------
         glGenVertexArrays(1, &vaoID);
+        checkGLError(name + ": BitmapVectorFontAtlas::bake Gen VAO");
 
         // This VAO bind starts the VAO Scope
         // Bind the Vertex Array Object first, then bind and set vertex buffer(s)
         // and attribute pointer(s).
         glBindVertexArray(vaoID); // Specifies the name of the vertex array to bind.
+        checkGLError(name + ": BitmapVectorFontAtlas::bake bind VAO");
 
         glGenBuffers(1, &vboID);
 
         glGenBuffers(1, &eboID);
+        checkGLError(name + ": BitmapVectorFontAtlas::bake Gen Buffers");
 
         // The total buffer sizes are count of types (i.e floats or ints) times
         // the size of the type. Thus the size is in Bytes
-        int vboBufferSize = backingShape.vertices.size() * Core::XYZComponentCount * sizeof(GLfloat);
+        int vboBufferSize = backingShape.vertices.size() * sizeof(GLfloat);
         int eboBufferSize = backingShape.indices.size() * sizeof(GLuint);
 
         if (vboBufferSize == 0 || eboBufferSize == 0)
@@ -101,8 +109,10 @@ namespace Core
         }
 
         vboBind(vboBufferSize, backingShape.vertices);
+        checkGLError(name + ": BitmapVectorFontAtlas::bake bound VBO");
 
         eboBind(eboBufferSize, backingShape.indices);
+        checkGLError(name + ": BitmapVectorFontAtlas::bake bound EBO");
 
         // Count == (xyz=3) * sizeof(float32)=4 == 12 thus each
         // vertex is 12 bytes
@@ -117,18 +127,16 @@ namespace Core
 
         // We can link the attribute position with the data in the vertexData array
         glVertexAttribPointer(positionIndex, GLuint(Core::XYZComponentCount), GL_FLOAT, normalized, vertexSize, (GLvoid *)(0));
+        checkGLError(name + ": BitmapVectorFontAtlas::bake link Attrib");
 
         // ----------------------------------------------
         // END VAO Scope
         // ----------------------------------------------
-        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(Core::VertexAttribIndex);
+        checkGLError(name + ": BitmapVectorFontAtlas::bake end VAO scope");
 
-        glBindVertexArray(0);
-
-        ErrorConditions configureUniStatus = configureUniforms();
-
-        if (configureUniStatus != ErrorConditions::None)
-            return configureUniStatus;
+        glBindBuffer(GL_ARRAY_BUFFER, UnBindID);
+        glBindVertexArray(UnBindID);
 
         // We don't need the backing shape resources anymore now that data
         // has been uploaded to the GPU.
@@ -153,6 +161,7 @@ namespace Core
             std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
+        std::cout << name << "::configureUniforms: modelLoc: " << modelLoc << std::endl;
 
         colorLoc = glGetUniformLocation(program, uniColor.c_str());
         if (colorLoc < 0)
@@ -161,6 +170,7 @@ namespace Core
             std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
+        std::cout << name << "::configureUniforms: colorLoc: " << colorLoc << std::endl;
 
         // One time configuration of projection and view matrix
         GLint projLoc = glGetUniformLocation(program, uniProjection.c_str());
@@ -170,6 +180,7 @@ namespace Core
             std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
+        std::cout << name << "::configureUniforms: projLoc: " << projLoc << std::endl;
 
         GLint viewLoc = glGetUniformLocation(program, uniView.c_str());
         if (viewLoc < 0)
@@ -178,6 +189,7 @@ namespace Core
             std::cout << name << ": " << lastError << std::endl;
             return ErrorConditions::GLUniformVarNotFound;
         }
+        std::cout << name << "::configureUniforms: viewLoc: " << viewLoc << std::endl;
 
         int err = 0;
         Matrix4 pm = projection.getMatrix();
@@ -214,11 +226,14 @@ namespace Core
 
     void BitmapVectorFontAtlas::use()
     {
+        glBindVertexArray(vaoID);
+        checkGLError(name + ": BitmapVectorFontAtlas::use(1)");
+
         // See opengl wiki as to why "glBindVertexArray(0)" isn't really necessary here:
         // https://www.opengl.org/wiki/Vertex_Specification#Vertex_Buffer_Object
         // Note the line "Changing the GL_ARRAY_BUFFER binding changes nothing about vertex attribute 0..."
         shader.use();
-        glBindVertexArray(vaoID);
+        checkGLError(name + ": BitmapVectorFontAtlas::use");
     }
 
     void BitmapVectorFontAtlas::unUse()
@@ -241,6 +256,7 @@ namespace Core
     void BitmapVectorFontAtlas::setColor(const std::array<GLfloat, 4> &color)
     {
         glUniform4fv(colorLoc, Uniform4vColorCompCount, color.data());
+        checkGLError(name + ": BitmapVectorFontAtlas::setColor");
     }
 
     void BitmapVectorFontAtlas::renderChar(char character, std::list<int> offsets, const Matrix4 &model)
@@ -258,6 +274,7 @@ namespace Core
                        pair.first, // Count
                        GL_UNSIGNED_INT,
                        static_cast<void *>(static_cast<char *>(nullptr) + pair.second)); // Offset
+        checkGLError(name + "::renderChar");
     }
 
     void BitmapVectorFontAtlas::renderText(const std::list<char> &characters, const Matrix4 &model)
@@ -272,6 +289,7 @@ namespace Core
                            GL_UNSIGNED_INT,
                            static_cast<void *>(static_cast<char *>(nullptr) + pair.second)); // Offset
         }
+        checkGLError(name + "::renderText(1)");
     }
 
     void BitmapVectorFontAtlas::renderText(const std::list<char> &characters)
@@ -295,6 +313,7 @@ namespace Core
                            GL_UNSIGNED_INT,
                            static_cast<void *>(static_cast<char *>(nullptr) + pair.second)); // Offset in bytes
         }
+        checkGLError(name + "::renderText(2)");
     }
 
     /// @brief This is used by special nodes that don't render anything but instead

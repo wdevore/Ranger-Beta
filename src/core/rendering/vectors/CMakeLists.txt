@@ -8,9 +8,10 @@ set(VECTOR_SOURCES
     shape.cpp
     dynamic_mono_atlas.cpp
     static_mono_atlas.cpp
-    bitmap_vector_font_atlas.cpp
+    bitmap_font_atlas.cpp
     shape_generator.cpp
     base_atlas.cpp
+    vector_font_atlas.cpp
 )
 
 # Add library as a ".a" file

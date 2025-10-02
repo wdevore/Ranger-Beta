@@ -11,13 +11,15 @@ namespace Core
     class Environment;
     using environmentShPtr = std::shared_ptr<Environment>;
 
+    const GLuint UnBindID{0};
+    const GLuint VertexAttribIndex{0};
+
     class BaseAtlas
     {
     private:
         /* data */
 
     protected:
-        const GLuint UnBindID{0};
         const GLsizei Uniform4vColorCompCount{1};
         const GLintptr GLSubDataOffset{0};
         /// @brief Format is: xyzxyzxyz...

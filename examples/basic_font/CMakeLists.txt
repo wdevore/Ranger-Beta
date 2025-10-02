@@ -86,6 +86,7 @@ target_include_directories(${PROJECT_NAME}
     # PUBLIC ${SOURCE_DIR}/includes
     PUBLIC ${COMMON_DIR}/includes
     PUBLIC ${COMMON_DIR}/assets/fonts/bitmaps
+    PUBLIC ${COMMON_DIR}/assets/fonts/vectors
     PUBLIC ${GLAD_INCLUDES}
     PUBLIC ${glfw_SOURCE_DIR}/deps
     PUBLIC ${glfw_SOURCE_DIR}/include

@@ -1,3 +1,5 @@
+#pragma once
+
 /************************************************************************
  * font.c
  * Copyright (C) Lisa Milne 2014 <lisa@ltmnet.com>

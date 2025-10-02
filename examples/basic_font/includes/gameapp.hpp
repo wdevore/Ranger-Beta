@@ -6,7 +6,9 @@
 #include <app.hpp>
 #include <node_manager.hpp>
 #include "basic_scene_node.hpp"
-#include <bitmap_vector_font_atlas.hpp>
+#include "primitive_ebo_test.hpp"
+
+#include <bitmap_font_atlas.hpp>
 
 namespace Game
 {
@@ -24,6 +26,9 @@ namespace Game
         std::list<char> textList{};
 
         void textToList(const std::string &text);
+
+        // -------------- DEBUG ----------------
+        PrimitiveEboTest _eboTest{};
 
     public:
         GameApp() = default;

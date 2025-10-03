@@ -26,12 +26,10 @@ namespace Core
         std::string examplePath{};
         std::string shadersPath{};
 
+        // ---------- Fonts ---------------
         StaticMonoAtlas atlas{};
         BitmapVectorFontAtlas bitmapFontAtlas{};
         VectorFontAtlas vectorFontAtlas{};
-
-        // ---------- Fonts ---------------
-        // bvFontAtlasUnqPtr fontAtlas;
 
         std::unordered_set<int> pressedKeys;
 

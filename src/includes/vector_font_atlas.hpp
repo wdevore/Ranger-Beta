@@ -101,7 +101,7 @@ namespace Core
 
         bool dirty{true};
 
-        VectorFontAtlas(/* args */) { std::cout << "BitmapVectorFontAtlas ctor" << std::endl; };
+        VectorFontAtlas(/* args */) { std::cout << "VectorFontAtlas ctor" << std::endl; };
 
         ~VectorFontAtlas() = default;
 

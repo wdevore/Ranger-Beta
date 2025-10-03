@@ -96,6 +96,8 @@ namespace Core
 
         // Vertex Shader
         vertex = glCreateShader(GL_VERTEX_SHADER);
+        Core::checkGLError("Shader::compile:glCreateShader");
+
         glShaderSource(vertex, 1, &vShaderCode, NULL);
         glCompileShader(vertex);
         ErrorConditions checkStatus = checkCompileErrors(vertex, "VERTEX");
@@ -112,9 +114,12 @@ namespace Core
 
         // Shader Program
         program_ = glCreateProgram();
+        Core::checkGLError("Shader::compile:glCreateProgram create program");
 
         glAttachShader(program_, vertex);
+        Core::checkGLError("Shader::compile:glAttachShader vertex");
         glAttachShader(program_, fragment);
+        Core::checkGLError("Shader::compile:glAttachShader fragment");
 
         glLinkProgram(program_);
         checkStatus = checkCompileErrors(program_, "PROGRAM");
@@ -123,7 +128,9 @@ namespace Core
 
         // Delete the shaders as they're linked into our program now and are no longer necessary
         glDeleteShader(vertex);
+        Core::checkGLError("Shader::compile:glDeleteShader fragment");
         glDeleteShader(fragment);
+        Core::checkGLError("Shader::compile:glDeleteShader fragment");
 
         return ErrorConditions::None;
     }

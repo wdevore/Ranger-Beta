@@ -332,7 +332,7 @@ namespace Core
 
     void StaticMonoAtlas::dispose()
     {
-        std::cout << "StaticMonoAtlas::dispose" << std::endl;
+        std::cout << name << "::dispose" << std::endl;
 
         glDeleteVertexArrays(1, &vaoID);
         glDeleteBuffers(1, &eboID);

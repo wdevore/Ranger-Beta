@@ -9,10 +9,10 @@ namespace Core
 
         atlas.initialize(shared_from_this());
 
-        bitmapFontAtlas.initialize(shared_from_this());
-        bitmapFontAtlas.configure();
+        // bitmapFontAtlas.initialize(shared_from_this());
+        // bitmapFontAtlas.configure();
 
-        vectorFontAtlas.initialize(shared_from_this());
+        // vectorFontAtlas.initialize(shared_from_this());
 
         // An example of moving the camera (aka viewspace, aka viewMatrix)
         // camera.moveTo(-200.0, -150.0);
@@ -21,7 +21,7 @@ namespace Core
     /// @brief Called by GameApp construct
     void Environment::postInitialize()
     {
-        atlas.burn(true);
+        // atlas.burn(true);
     }
 
     void Environment::dispose()
@@ -29,10 +29,10 @@ namespace Core
         atlas.unUse();
         atlas.dispose();
 
-        bitmapFontAtlas.unUse();
+        // bitmapFontAtlas.unUse();
         bitmapFontAtlas.dispose();
 
-        vectorFontAtlas.unUse();
+        // vectorFontAtlas.unUse();
         vectorFontAtlas.dispose();
 
         pressedKeys.clear();

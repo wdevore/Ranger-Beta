@@ -86,7 +86,7 @@ namespace Game
         }
 
         // Successfully loaded OpenGL
-        std::cout << "App::configure Loaded OpenGL "
+        std::cout << "App::configure Loaded GLAD version:"
                   << GLAD_VERSION_MAJOR(version) << "." << GLAD_VERSION_MINOR(version) << std::endl
                   << "--------------------------"
                   << " GL calls can now be made "
@@ -96,6 +96,22 @@ namespace Game
         // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
         // ---- Anything GL wise can be called after this point. -----
         // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+        const GLubyte *glVersion = glGetString(GL_VERSION);
+        const GLubyte *glVendor = glGetString(GL_VENDOR);
+        const GLubyte *glRenderer = glGetString(GL_RENDERER);
+
+        if (glVersion && glVendor && glRenderer)
+        {
+            std::cout << "OpenGL Version: " << glVersion << std::endl;
+            std::cout << "OpenGL Vendor: " << glVendor << std::endl;
+            std::cout << "OpenGL Renderer: " << glRenderer << std::endl;
+        }
+        else
+        {
+            std::cerr << "Failed to retrieve OpenGL information." << std::endl;
+        }
+
         glViewport(0, 0, width, height);
         int err = Core::checkGLError("App::createWindow:glViewport");
         if (err < 0)

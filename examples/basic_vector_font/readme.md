@@ -172,7 +172,19 @@ Another way to look at it is: The entire font has a single set of vertices. Thes
 ### "<span style='color: red'>!</span>" character
 Then, for each character there is a collection of indices that represent all visible "pixels". For example, "!" has 5 visible pixels (aka quads) based on the font definition file *dark_rose.hpp* and specifically ```0x0808080800080000, /* ! */``` which looks like this:
 
-Note: because OpenGL default Y axis is downward we need to iterate opposite of what is shown below because the font character would be upside down.
+Note: because OpenGL default +Y axis is downward we need to iterate opposite of what is shown below because the font character would be upside down.
+
+    OpenGL's +Y axis is downward
+               -y
+                |
+                |
+                |
+    -x ------------------- +x
+                |
+                |
+                |
+               +y
+
 ```sh
                                              0x0808080800080000  <== "!"
            01234567    0 1 2 3 4 5 6 7         | | | | | | | |

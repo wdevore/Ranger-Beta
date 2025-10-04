@@ -85,6 +85,11 @@ int main(int, char **)
     Game::SimpleTriangle triangle;
     triangle.configure(environment);
 
+    Core::Matrix4 model{true};
+    model.toIdentity();
+    model.translate(125.0, 125.0, 0.0);
+    model.scaleBy(25.0, 25.0, 1.0);
+
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -109,7 +114,7 @@ int main(int, char **)
         triangle.setColor({0.0f, greenValue, 0.0f, 1.0f});
 
         // render the triangle
-        triangle.render();
+        triangle.render(model);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------

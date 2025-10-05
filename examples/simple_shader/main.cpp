@@ -153,6 +153,7 @@ int main(int, char **)
     // ------------------------------------------------------------------------
     triangle.dispose();
     triangle2.dispose();
+    triangle3.dispose();
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------

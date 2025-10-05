@@ -85,10 +85,26 @@ int main(int, char **)
     Game::SimpleTriangle triangle;
     triangle.configure(environment);
 
+    Game::SimpleTriangle triangle2;
+    triangle2.configure(environment);
+
+    Game::SimpleTriangle triangle3;
+    triangle3.configure(environment);
+
     Core::Matrix4 model{true};
     model.toIdentity();
     model.translate(125.0, 125.0, 0.0);
-    model.scaleBy(25.0, 25.0, 1.0);
+    model.scaleBy(100.0, 100.0, 1.0);
+
+    Core::Matrix4 model2{true};
+    model2.toIdentity();
+    model2.translate(155.0, 155.0, 0.0);
+    model2.scaleBy(100.0, 100.0, 1.0);
+
+    Core::Matrix4 model3{true};
+    model3.toIdentity();
+    model3.translate(255.0, 255.0, 0.0);
+    model3.scaleBy(100.0, 100.0, 1.0);
 
     // render loop
     // -----------
@@ -106,6 +122,7 @@ int main(int, char **)
         Game::checkGLError("glClear");
 
         // be sure to activate the shader before any calls to glUniform
+        // -------- Triangle 1 ----------------------
         triangle.use();
 
         // update shader uniform
@@ -116,6 +133,16 @@ int main(int, char **)
         // render the triangle
         triangle.render(model);
 
+        // -------- Triangle 2 ----------------------
+        triangle2.use();
+        triangle2.setColor({1.0f, 0.5, 0.0f, 1.0f});
+        triangle2.render(model2);
+
+        // -------- Triangle 3 ----------------------
+        triangle3.use();
+        triangle3.setColor({0.0f, 0.5, 1.0f, 1.0f});
+        triangle3.render(model3);
+
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -125,6 +152,7 @@ int main(int, char **)
     // optional: de-allocate all resources once they've outlived their purpose:
     // ------------------------------------------------------------------------
     triangle.dispose();
+    triangle2.dispose();
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------

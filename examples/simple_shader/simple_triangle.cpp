@@ -27,6 +27,7 @@ namespace Game
         }
 
         program = shader.program();
+        std::cout << "Program: " << program << std::endl;
 
         bind();
 
@@ -151,6 +152,7 @@ namespace Game
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
+        std::cout << "VAO: " << VAO << ", VBO: " << VBO << ", EBO: " << EBO << std::endl;
 
         // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
         glBindVertexArray(VAO);

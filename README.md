@@ -31,12 +31,13 @@ You now be able to be able to go to the CMake extension and hover over the *Buil
 * Zones
 * Interpolation
 * Fonts
-  * Vector <-- **INPROGRESS**
+  * Vector <-- **INPROGRESS** Still needs vertices fixed. AI generated a mess.
   * Bitmap ✔
+  * Particle ✔
 * Box2D
 * Particles
 * Physics
-  * Ship motion <-- **WORKING**
+  * Ship motion <-- **WORKING** Will Use Coding Train's framework
 * Filters
 * Animation (tweening) *Using tanema's library*: https://github.com/tanema/gween
 

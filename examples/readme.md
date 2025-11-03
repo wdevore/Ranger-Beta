@@ -34,7 +34,7 @@ The error was caused by not re-uploading uniforms when switching between shaders
 6) Call *GameApp::run()*. Game doesn't end until the method returns.
 
 # Shaders
-An Atlas is a collection of vertices and indices. Each Atlas inherits from **BaseAtlas**.
+An Atlas is a collection of vertices and indices. Each Atlas inherits from **Atlas**.
 
 Each Atlas has a set of common attributes that all Atlases have:
 - Model

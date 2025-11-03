@@ -5,15 +5,20 @@
 
 #include <glad/gl.h>
 
-#include "game_environment.hpp"
-#include <basic_shader.hpp>
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
 
+#include <shader.hpp>
+#include <ortho_projection.hpp>
 namespace Game
 {
     class SimpleUbo
     {
     private:
-        gameEnvironmentShPtr environment;
+        int deviceWidth{0};
+        int deviceHeight{0};
+
+        // gameEnvironmentShPtr environment;
 
         /* data */
         // OpenGL's +Y axis is downward
@@ -38,7 +43,7 @@ namespace Game
         GLuint VBO, VAO, EBO;
 
         // Core::BasicShader shader{"mono_vertex.glsl", "mono_fragment.glsl"};
-        Core::BasicShader shader{"mono_vert_ubo.glsl", "mono_fragment.glsl"};
+        Core::Shader shader{"mono_vert_ubo.glsl", "mono_fragment.glsl"};
         GLuint program{0};
 
         // Fragment vars
@@ -71,7 +76,7 @@ namespace Game
 
         GLuint getProgram() { return program; }
 
-        void configure(gameEnvironmentShPtr environment);
+        void configure();
         void bind();
         void use();
         void fetchUniforms();

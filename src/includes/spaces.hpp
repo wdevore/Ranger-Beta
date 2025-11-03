@@ -3,7 +3,7 @@
 #include "vector2d.hpp"
 #include "affinetransform.hpp"
 #include "node.hpp"
-#include "environment.hpp"
+// #include "environment.hpp"
 
 namespace Core
 {
@@ -17,14 +17,14 @@ namespace Core
     /// @param dvy
     /// @param viewPoint Vector2D
     static void mapDeviceToView(
-        const Environment &environment,
+        const Matrix4 &invViewSpace,
         double dvx,
         double dvy,
         Vector2D &viewPoint)
     {
         viewPoint.set(dvx, dvy);
 
-        viewPoint.mul(environment.camera.invViewSpace);
+        viewPoint.mul(invViewSpace);
     }
 
     /// @brief
@@ -104,7 +104,7 @@ namespace Core
     /// @param node
     /// @param localPoint
     static void mapDeviceToNode(
-        const Environment &environment, int dvx, int dvy, nodeShPtr node, Vector2D &localPoint)
+        const Matrix4 &viewspace, int dvx, int dvy, nodeShPtr node, Vector2D &localPoint)
     {
         // Mapping from device to node requires transforms from two "directions"
         // 1st is upwards transform and the 2nd is downwards transform.
@@ -114,7 +114,7 @@ namespace Core
         //   dvy = world.deviceSize!.height.toInt() - dvy;
         //   print(dvy);
         // }
-        mapDeviceToView(environment, dvx, dvy, tViewPoint_);
+        mapDeviceToView(viewspace, dvx, dvy, tViewPoint_);
 
         // Canvas and OpenGL have inverted Y axis. Canvas is +Y downward.
         // OpenGL's +Y axis is upwards so we either flip the Y axis here
@@ -183,12 +183,12 @@ namespace Core
     /// @param world
     /// @param node
     /// @param devicePoint
-    static void mapNodeToDevice(const Environment &environment, nodeShPtr node, Vector2D &devicePoint)
+    static void mapNodeToDevice(const Matrix4 &viewspace, nodeShPtr node, Vector2D &devicePoint)
     {
         afft_.toIdentity();
         nodeToWorldTransform(node, nullptr, afft_);
         afft_.transform(0.0, 0.0, devicePoint);
-        devicePoint.mul(environment.camera.viewspace);
+        devicePoint.mul(viewspace);
     }
 
 }

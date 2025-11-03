@@ -5,9 +5,8 @@
 #include <glad/gl.h>
 
 #include "shader.hpp"
-#include "basic_shader.hpp"
-#include "constants.hpp"
-#include "environment.hpp"
+#include "shader.hpp"
+#include "global_data.hpp"
 #include "matrix4.hpp"
 #include "ortho_projection.hpp"
 
@@ -18,10 +17,10 @@ namespace Game
     private:
         /* data */
         GLuint VAO, VBO, EBO;
-        Core::BasicShader shader{"mono_vertex.glsl", "mono_fragment.glsl"};
+        Core::Shader shader{"mono_vertex.glsl", "mono_fragment.glsl"};
         std::string lastError{};
 
-        Core::environmentShPtr environment;
+        // Core::environmentShPtr environment;
 
         Core::ErrorConditions _loadShaders();
 
@@ -50,7 +49,7 @@ namespace Game
         ~PrimitiveEboTest();
 
         // configure
-        Core::ErrorConditions configure(Core::environmentShPtr environment);
+        Core::ErrorConditions configure();
         Core::ErrorConditions configureUniforms();
         void bind(const std::vector<float> &vertices,
                   const std::vector<unsigned int> &indices);

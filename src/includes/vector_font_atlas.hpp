@@ -7,8 +7,7 @@
 #include <glad/gl.h>
 
 #include "shape.hpp"
-#include "basic_shader.hpp"
-#include "constants.hpp"
+#include "shader.hpp"
 #include "base_atlas.hpp"
 #include "matrix4.hpp"
 #include "vector3.hpp"
@@ -23,7 +22,7 @@ namespace Core
     /// Each group is a single character.
     ///
     /// The atlas consumes basic_vector_font.hpp
-    class VectorFontAtlas
+    class VectorFontAtlas final : public BaseAtlas
     {
     private:
         environmentShPtr environment;
@@ -92,7 +91,7 @@ namespace Core
         GLuint vboID{};
         GLuint eboID{};
 
-        BasicShader shader{"mono_vertex.glsl", "mono_fragment.glsl"};
+        Shader shader{"mono_vertex.glsl", "mono_fragment.glsl"};
 
         /// @brief This sets the project and positions the Origin.
         OrthoProjection projection{};
@@ -105,7 +104,7 @@ namespace Core
 
         ~VectorFontAtlas() = default;
 
-        void initialize(environmentShPtr environment);
+        void initialize(const int deviceWidth, const int deviceHeight);
 
         /* data */
         ErrorConditions configure(const std::unordered_map<char, std::list<float>> &fontData);

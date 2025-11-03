@@ -2,8 +2,8 @@
 #include <string>
 #include <unordered_map>
 
+#include "global_data.hpp"
 #include "shape.hpp"
-#include "constants.hpp"
 #include "rectangle.hpp"
 
 namespace Core
@@ -56,11 +56,11 @@ namespace Core
         void generateFontChar(uint64_t character, ShapeControls fillType, float gapSize);
         void generateFontVertices(int numberOfSquaresPerSide,
                                   float gapSize, ShapeControls fillType);
-        int generateFontIndices(uint64_t char8x8,
-                                std::vector<GLuint> &indices,
-                                //                   Group count----|    |------ Group Offset
-                                std::unordered_map<char, std::pair<int, int>> &indicesOffsets,
-                                char charSymbol);
+        int generateBitmapFontIndices(uint64_t char8x8,
+                                      std::vector<GLuint> &indices,
+                                      //                   Group count----|    |------ Group Offset
+                                      std::unordered_map<char, std::pair<int, int>> &indicesOffsets,
+                                      char charSymbol);
         void getSubSquareEboIndices(int grid_x, int grid_y,
                                     int squaresPerSide,
                                     std::vector<GLuint> &out_indices);

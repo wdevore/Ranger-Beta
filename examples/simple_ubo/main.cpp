@@ -9,9 +9,9 @@
 // We don't need to include opengl <gl.h> because glfw does it already.
 #include <GLFW/glfw3.h>
 
+#include "global_data.hpp"
 #include <vector2d.hpp>
-#include <basic_shader.hpp>
-#include <game_environment.hpp>
+#include <shader.hpp>
 #include "misc.hpp"
 #include "simple_ubo.hpp"
 
@@ -23,8 +23,8 @@ void linkShaderUBO(GLuint shaderProgramID, const char *blockName, GLuint binding
 void updateCameraUBO(GLuint UBO_Camera, const Core::Matrix4 &projection, const Core::Matrix4 &view);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+// const unsigned int SCR_WIDTH = 800;
+// const unsigned int SCR_HEIGHT = 600;
 
 int main(int, char **)
 {
@@ -83,17 +83,17 @@ int main(int, char **)
     // ---------------------------------------------------------------
     // build and compile our shader program
     // ---------------------------------------------------------------
-    auto environment = std::make_shared<Game::GameEnvironment>();
-    environment->initialize(SCR_WIDTH, SCR_HEIGHT);
+    // auto environment = std::make_shared<Game::GameEnvironment>();
+    // environment->initialize(SCR_WIDTH, SCR_HEIGHT);
 
     Game::SimpleUbo triangle;
-    triangle.configure(environment);
+    triangle.configure();
 
     Game::SimpleUbo triangle2;
-    triangle2.configure(environment);
+    triangle2.configure();
 
     Game::SimpleUbo triangle3;
-    triangle3.configure(environment);
+    triangle3.configure();
 
     // ---------------------------------------------------------------
     // Configure UBO
@@ -125,7 +125,7 @@ int main(int, char **)
     linkShaderUBO(triangle3.getProgram(), "Matrices", 0);
 
     // 7. Just need to do this once
-    updateCameraUBO(UBO_Camera, triangle.projection.getMatrix(), environment->camera.viewspace);
+    updateCameraUBO(UBO_Camera, triangle.projection.getMatrix(), Core::viewSpace);
 
     // ----------------------------------------------------
     // Models

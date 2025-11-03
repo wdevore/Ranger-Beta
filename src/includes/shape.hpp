@@ -46,7 +46,7 @@ namespace Core
         Shape(/* args */) = default;
         ~Shape() = default;
 
-        void clear();
+        void clear(); // Note: This method modifies the object and cannot be const.
 
         // (GLvoid *)0
         GLvoid *dataIndicesOffset()
@@ -55,6 +55,11 @@ namespace Core
             // It first casts nullptr to a char* (since pointer arithmetic on
             // char* is byte-wise), adds the byte offset, and then casts the
             // result back to void*.
+            return static_cast<void *>(static_cast<char *>(nullptr) + indicesOffset);
+        }
+
+        GLvoid *dataIndicesOffset() const
+        {
             return static_cast<void *>(static_cast<char *>(nullptr) + indicesOffset);
         }
     };

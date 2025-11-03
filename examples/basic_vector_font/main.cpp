@@ -6,7 +6,7 @@
 
 // Window dimensions of GL canvas, not the OS window.
 const GLuint DEVICE_WIDTH = 800, DEVICE_HEIGHT = 600;
-const std::string title{"Basic Font"};
+const std::string title{"Basic Vector Font"};
 
 #include <gameapp.hpp>
 
@@ -14,16 +14,16 @@ int main(int, char **)
 {
     std::cout << "Game launching" << std::endl;
 
-    Game::GameApp app{DEVICE_WIDTH, DEVICE_HEIGHT};
+    Game::GameApp gameApp{DEVICE_WIDTH, DEVICE_HEIGHT};
 
-    int initialized = app.initialize();
+    int initialized = gameApp.initialize();
     if (initialized == GLFW_FALSE)
     {
         std::cout << "Failed to initialize GLFW" << std::endl;
         return -1;
     }
 
-    bool windowCreated = app.createWindow(title);
+    bool windowCreated = gameApp.createWindow(title);
     if (!windowCreated)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -31,21 +31,23 @@ int main(int, char **)
     }
 
     // Main configuration.
-    int configured = app.configure();
+    int configured = gameApp.configure();
     if (configured < 0)
     {
         std::cout << "Failed to configure OpenGL" << std::endl;
         return -1;
     }
 
-    app.construct();
+    gameApp.construct();
 
-    int runStatus = app.run();
+    int runStatus = gameApp.run();
 
     if (runStatus < 0)
     {
         std::cout << "App failed to launch" << std::endl;
     }
+
+    gameApp.dispose();
 
     std::cout << "Done. Goodbye!" << std::endl;
 }

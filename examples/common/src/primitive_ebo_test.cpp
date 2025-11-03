@@ -1,3 +1,4 @@
+#include "base_atlas.hpp"
 #include "primitive_ebo_test.hpp"
 
 namespace Game
@@ -10,12 +11,12 @@ namespace Game
     {
     }
 
-    Core::ErrorConditions PrimitiveEboTest::configure(Core::environmentShPtr environment)
+    Core::ErrorConditions PrimitiveEboTest::configure()
     {
         std::string name = "PrimitiveEboTest";
         std::cout << name << "::configure" << std::endl;
 
-        this->environment = environment;
+        // this->environment = environment;
 
         // Vertices for a single line segment
         std::vector<float> vertices = {
@@ -43,7 +44,7 @@ namespace Game
 
     Core::ErrorConditions PrimitiveEboTest::_loadShaders()
     {
-        shader.initialize(environment);
+        shader.initialize();
         Core::ErrorConditions buildStatus = shader.build();
 
         return buildStatus;
@@ -108,16 +109,16 @@ namespace Game
         }
         std::cout << name << "::configureUniforms: viewLoc: " << viewLoc << std::endl;
 
-        Core::Matrix4 pm = projection.getMatrix();
-        glUniformMatrix4fv(projLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, pm.data());
-        err = Core::checkGLError(name + "::configureUniforms:glUniformMatrix4fv(1)");
-        if (err < 0)
-            return Core::ErrorConditions::GLFunctionError;
+        // Core::Matrix4 pm = projection.getMatrix();
+        // glUniformMatrix4fv(projLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, pm.data());
+        // err = Core::checkGLError(name + "::configureUniforms:glUniformMatrix4fv(1)");
+        // if (err < 0)
+        //     return Core::ErrorConditions::GLFunctionError;
 
-        glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, environment->camera.viewspace.data());
-        err = Core::checkGLError(name + "::configureUniforms:glUniformMatrix4fv(2)");
-        if (err < 0)
-            return Core::ErrorConditions::GLFunctionError;
+        // glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, environment->camera.viewspace.data());
+        // err = Core::checkGLError(name + "::configureUniforms:glUniformMatrix4fv(2)");
+        // if (err < 0)
+        //     return Core::ErrorConditions::GLFunctionError;
 
         return Core::ErrorConditions::None;
     }

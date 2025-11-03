@@ -10,14 +10,12 @@ set(EXTRAS_SOURCES
     delay.cpp
     ortho_projection.cpp
     viewport.cpp
-    camera.cpp
     zoom_node.cpp
     drag_state.cpp
-    bitmap_font_base.cpp
 )
 
 # Add library as a ".a" file
-add_library(ExtrasLib OBJECT
+add_library(ExtrasLib STATIC
     ${EXTRAS_SOURCES}
 )
 
@@ -26,4 +24,8 @@ target_include_directories(ExtrasLib
     PUBLIC ${GLAD_INCLUDES}
     PUBLIC ${glfw_SOURCE_DIR}/deps
     PUBLIC ${glfw_SOURCE_DIR}/include
+)
+
+target_link_libraries(ExtrasLib
+    PUBLIC GlobalDataLib
 )

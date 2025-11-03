@@ -46,8 +46,6 @@ set(COMMON_DIR ../common)
 add_executable(${PROJECT_NAME}
     main.cpp
     gameapp.cpp
-    game_environment.cpp
-    darkrose_bitmap_font.cpp
     nodes/basic_scene_node.cpp
     simple_square.cpp
     simple_triangle.cpp

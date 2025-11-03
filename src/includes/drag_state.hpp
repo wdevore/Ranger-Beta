@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector2d.hpp>
-#include <environment.hpp>
 #include <node.hpp>
 #include <io_event.hpp>
 #include <rectangle.hpp>
@@ -26,7 +25,7 @@ namespace Core
         /// @brief Used for hit testing
         Rectangle bounds{};
 
-        environmentShPtr env;
+        Matrix4 viewSpace;
 
         bool isPointInside_(double x, double y);
 
@@ -36,7 +35,8 @@ namespace Core
         DragState() = default;
         ~DragState() = default;
 
-        void initialize(nodeShPtr node, environmentShPtr environment, const Rectangle &bounds);
+        void initialize(nodeShPtr node, const Rectangle &bounds);
+        void setViewSpace(const Matrix4 &viewSpace);
         bool handleEvent(const IOEvent &event);
     };
 

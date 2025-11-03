@@ -4,16 +4,13 @@
 #include <unordered_map>
 #include <list>
 #include <vector_font_atlas.hpp>
-#include <constants.hpp>
-#include <environment.hpp>
 #include <shape_generator.hpp>
 
 namespace Core
 {
-    void VectorFontAtlas::initialize(environmentShPtr environment)
+    void VectorFontAtlas::initialize(const int deviceWidth, const int deviceHeight)
     {
         name = "VectorFontAtlas";
-        this->environment = environment;
     }
 
     ErrorConditions VectorFontAtlas::configure(const std::unordered_map<char, std::list<float>> &fontData)
@@ -202,17 +199,17 @@ namespace Core
             return ErrorConditions::GLUniformVarNotFound;
         }
 
-        int err = 0;
-        Matrix4 pm = projection.getMatrix();
-        glUniformMatrix4fv(projLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, pm.data());
-        err = checkGLError(name + "::configureUniforms:glUniformMatrix4fv(1)");
-        if (err < 0)
-            return ErrorConditions::GLFunctionError;
+        // int err = 0;
+        // Matrix4 pm = projection.getMatrix();
+        // glUniformMatrix4fv(projLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, pm.data());
+        // err = checkGLError(name + "::configureUniforms:glUniformMatrix4fv(1)");
+        // if (err < 0)
+        //     return ErrorConditions::GLFunctionError;
 
-        glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, environment->camera.viewspace.data());
-        err = checkGLError(name + "::configureUniforms:glUniformMatrix4fv(2)");
-        if (err < 0)
-            return ErrorConditions::GLFunctionError;
+        // glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, environment->camera.viewspace.data());
+        // err = checkGLError(name + "::configureUniforms:glUniformMatrix4fv(2)");
+        // if (err < 0)
+        //     return ErrorConditions::GLFunctionError;
 
         return ErrorConditions::None;
     }
@@ -237,7 +234,7 @@ namespace Core
 
     ErrorConditions VectorFontAtlas::_loadShaders()
     {
-        shader.initialize(environment);
+        shader.initialize();
         ErrorConditions buildStatus = shader.build();
 
         return buildStatus;

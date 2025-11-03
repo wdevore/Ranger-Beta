@@ -3,7 +3,7 @@
 #include <vector3.hpp>
 #include <matrix4.hpp>
 
-#include <constants.hpp>
+#include <global_data.hpp>
 
 namespace Core
 {

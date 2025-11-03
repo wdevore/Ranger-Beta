@@ -2,7 +2,6 @@
 
 #include <basic_scene_node.hpp>
 #include <static_mono_atlas.hpp>
-#include <environment.hpp>
 
 namespace Game
 {
@@ -21,10 +20,10 @@ namespace Game
 
     void BasicScene::render(const Core::Matrix4 &model)
     {
-        // glClearColor(bgClearColor.r, bgClearColor.g, bgClearColor.b, bgClearColor.a);
-        // Core::checkGLError(name + "::render:glClearColor");
-        // glClear(GL_COLOR_BUFFER_BIT);
-        // Core::checkGLError(name + "::render:glClear");
+        glClearColor(bgClearColor.r, bgClearColor.g, bgClearColor.b, bgClearColor.a);
+        Core::checkGLError(name + "::render:glClearColor");
+        glClear(GL_COLOR_BUFFER_BIT);
+        Core::checkGLError(name + "::render:glClear");
     }
 
     bool BasicScene::handleEvent(const Core::IOEvent &event)

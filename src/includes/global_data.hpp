@@ -3,6 +3,8 @@
 #include <cmath>
 #include <iostream>
 
+#include <matrix4.hpp>
+
 namespace Core
 {
     static const double EPSILON = 0.00001;
@@ -28,6 +30,18 @@ namespace Core
         GLFunctionError,
     };
 
+    extern unsigned int deviceWidth;
+    extern unsigned int deviceHeight;
+
+    // DECLARATION ONLY: 'extern' prevents the compiler from allocating memory here.
+    extern Matrix4 viewSpace;
+    extern Matrix4 intViewSpace;
+    extern Matrix4 projection;
+
+    extern const std::string rootPath;
+    extern const std::string examplePath;
+    extern const std::string shadersPath;
+
     std::ostream &operator<<(std::ostream &os, ErrorConditions s);
 
     /// @brief Indicates how many parts to a vertex (ex: vector font)
@@ -49,5 +63,7 @@ namespace Core
     };
 
     // ------------------------- OpenGL specific -----------------
+    extern const unsigned int UnBindID;
+
     int checkGLError(const std::string &funcName);
 }

@@ -2,21 +2,19 @@
 #include <algorithm> // For std::find or std::find_if
 
 #include <dynamic_mono_atlas.hpp>
-#include <constants.hpp>
-#include <environment.hpp>
 
 namespace Core
 {
-    void DynamicMonoAtlas::initialize(environmentShPtr environment)
+    void DynamicMonoAtlas::initialize(const int deviceWidth, const int deviceHeight)
     {
-        BaseAtlas::initialize(environment);
+        BaseAtlas::initialize(deviceWidth, deviceHeight);
         name = "DynamicMonoAtlas";
     }
 
     ErrorConditions DynamicMonoAtlas::configure()
     {
         // Load shader pograms
-        shader.initialize(environment);
+        shader.initialize();
         ErrorConditions buildStatus = shader.build();
         if (buildStatus != ErrorConditions::None)
             return buildStatus;
@@ -150,10 +148,10 @@ namespace Core
             return ErrorConditions::GLUniformVarNotFound;
         }
 
-        Matrix4 pm = projection.getMatrix();
-        glUniformMatrix4fv(projLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, pm.data());
+        // Matrix4 pm = projection.getMatrix();
+        // glUniformMatrix4fv(projLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, pm.data());
 
-        glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, environment->camera.viewspace.data());
+        // glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, environment->camera.viewspace.data());
 
         return ErrorConditions::None;
     }
@@ -178,9 +176,9 @@ namespace Core
 
     ErrorConditions DynamicMonoAtlas::burn()
     {
-        ErrorConditions configureStatus = configure();
-        if (configureStatus != ErrorConditions::None)
-            return configureStatus;
+        // ErrorConditions configureStatus = configure();
+        // if (configureStatus != ErrorConditions::None)
+        //     return configureStatus;
 
         shake();
 

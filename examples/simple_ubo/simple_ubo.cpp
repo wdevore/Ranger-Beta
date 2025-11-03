@@ -1,7 +1,11 @@
 #include <glad/gl.h>
 
+#include "global_data.hpp"
 #include "simple_ubo.hpp"
 #include "misc.hpp"
+
+extern const unsigned int SCR_WIDTH;
+extern const unsigned int SCR_HEIGHT;
 
 namespace Game
 {
@@ -13,11 +17,11 @@ namespace Game
     {
     }
 
-    void SimpleUbo::configure(gameEnvironmentShPtr environment)
+    void SimpleUbo::configure()
     {
-        this->environment = environment;
+        // this->environment = environment;
 
-        shader.initialize(environment);
+        shader.initialize();
         Core::ErrorConditions buildStatus = shader.build();
 
         if (buildStatus != Core::ErrorConditions::None)
@@ -51,8 +55,8 @@ namespace Game
         // -----------------------------------------------------------
         const float near{-1.0};
         const float far{1.0};
-        const float w = static_cast<float>(environment->deviceWidth);
-        const float h = static_cast<float>(environment->deviceHeight);
+        const float w = static_cast<float>(SCR_WIDTH);
+        const float h = static_cast<float>(SCR_HEIGHT);
 
         projection.setProjection(h, 0.0, // bottom-left
                                  0.0, w, // top-right

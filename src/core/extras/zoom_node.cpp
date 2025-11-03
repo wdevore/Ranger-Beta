@@ -97,7 +97,7 @@ namespace Core
 
                 if (lockedPtr)
                 {
-                    mapDeviceToNode(*env, event.x, event.y, shared_from_this(), zoomPoint);
+                    mapDeviceToNode(_viewSpace, event.x, event.y, shared_from_this(), zoomPoint);
 
                     setFocalPoint(zoomPoint.x, zoomPoint.y);
                 }

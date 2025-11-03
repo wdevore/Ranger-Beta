@@ -13,7 +13,7 @@ set(MATHS_SOURCES
 )
 
 # Add library as a ".a" file
-add_library(MathsLib OBJECT
+add_library(MathsLib STATIC
     ${MATHS_SOURCES}
 )
 

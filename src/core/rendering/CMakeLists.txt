@@ -11,7 +11,8 @@ add_subdirectory(vectors)
 # simply create a blank variable. I should use INTERFACEs but
 # I can't get it to work.
 set(RENDERING_SOURCES
-    color.cpp
+    atlas.cpp
+    color4.cpp 
 )
 
 # Add library as a ".a" file
@@ -23,6 +24,4 @@ add_library(RenderLib STATIC
 target_link_libraries(RenderLib
     PUBLIC ShadersLib
     PUBLIC VectorsLib
-    # We need to include CoreLib because of deps on constants.cpp
-    PUBLIC CoreLib
 )

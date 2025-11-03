@@ -3,7 +3,6 @@
 #include <memory>
 
 #include <node.hpp>
-#include <environment.hpp>
 #include <matrix4.hpp>
 #include <node_manager.hpp>
 #include <color4.hpp>
@@ -18,15 +17,14 @@ namespace Game
     {
     private:
         /* data */
-        Color4 bgClearColor{0.2f, 0.2f, 0.2f, 1.0f};
+        Core::Color4 bgClearColor{0.2f, 0.2f, 0.2f, 1.0f};
 
     public:
         BasicScene() = default;
-        explicit BasicScene(std::string name, Core::environmentShPtr environment, nodeWkPtr parent = std::weak_ptr<Node>{})
+        explicit BasicScene(std::string name, nodeWkPtr parent = std::weak_ptr<Node>{})
             : Core::Node(name, parent)
         {
             std::cout << "BasicScene Node Constructor: '" << name << "'" << id << std::endl;
-            env = environment;
         };
         ~BasicScene() = default;
 

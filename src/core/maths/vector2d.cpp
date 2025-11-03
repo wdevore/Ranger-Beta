@@ -2,7 +2,7 @@
 #include <cmath>
 
 #include <vector2d.hpp>
-#include <constants.hpp>
+#include <global_data.hpp>
 #include <matrix4.hpp>
 
 namespace Core

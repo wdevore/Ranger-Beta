@@ -4,8 +4,11 @@
 
 #include <glad/gl.h>
 
-#include "environment.hpp"
+#include "global_data.hpp"
 #include "matrix4.hpp"
+#include "shader.hpp"
+#include "ortho_projection.hpp"
+#include <shape_generator.hpp>
 
 namespace Game
 {
@@ -14,20 +17,14 @@ namespace Game
     {
     private:
         /* data */
-        std::vector<float> vertices{
-            -0.5f, -0.5f, 0.0f, // left
-            0.5f, -0.5f, 0.0f,  // right
-            0.0f, 0.5f, 0.0f    // top
-        };
-        std::vector<unsigned int> indices{
-            0, 1, 2 //
-        };
+        Core::ShapeGenerator generator{};
+
+        std::vector<float> vertices{};
+        std::vector<unsigned int> indices{};
 
         std::string name = "SimpleTriangle";
-        Core::environmentShPtr environment;
 
-        Core::BasicShader shader{"mono_vertex.glsl", "mono_fragment.glsl"};
-        // Core::BasicShader shader{"basic.vs", "basic.frag"};
+        Core::Shader shader{};
         std::string lastError{};
 
         unsigned int VBO, VAO, EBO;
@@ -57,17 +54,21 @@ namespace Game
         SimpleTriangle(/* args */);
         ~SimpleTriangle();
 
-        void configure(Core::environmentShPtr environment);
+        void configure();
         void loadCompileLinkShaders();
         void bind();
         Core::ErrorConditions configureUniforms();
 
-        void setColor(const std::array<GLfloat, 4> &color);
-        void begin();
+        GLuint getProgram() { return shader.program(); }
+        void setProjectionView();
+        GLint fetchUniformVar(GLuint program, const std::string &programName);
 
-        void render(const Core::Matrix4 &model);
+        void begin();
         void use();
+        void setColor(const std::array<GLfloat, 4> &color);
+        void render(const Core::Matrix4 &model);
         void unUse();
+        void dispose();
     };
 
 } // namespace Game

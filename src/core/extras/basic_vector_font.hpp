@@ -24,7 +24,7 @@ This example uses a bottom-left aligned style for easier positioning.
 (0,0) .--------------------. (1,0)  +X
 
 */
-namespace Game
+namespace Core
 {
     namespace VectorFont
     {

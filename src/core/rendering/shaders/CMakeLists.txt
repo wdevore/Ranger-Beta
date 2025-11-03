@@ -6,17 +6,21 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SHADER_SOURCES
     shader.cpp
-    basic_shader.cpp
+    # basic_shader.cpp
 )
 
 # Add library as a ".o" file
-add_library(ShadersLib OBJECT
+add_library(ShadersLib STATIC
     ${SHADER_SOURCES}
 )
 
 target_include_directories(ShadersLib
- PUBLIC ../../../includes
- PUBLIC ${GLAD_INCLUDES}
- PUBLIC ${glfw_SOURCE_DIR}/deps
- PUBLIC ${glfw_SOURCE_DIR}/include
+    PUBLIC ../../../includes
+    PUBLIC ${GLAD_INCLUDES}
+    PUBLIC ${glfw_SOURCE_DIR}/deps
+    PUBLIC ${glfw_SOURCE_DIR}/include
+)
+
+target_link_libraries(ShadersLib
+    PUBLIC GlobalDataLib
 )

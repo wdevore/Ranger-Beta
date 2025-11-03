@@ -1,19 +1,15 @@
 #pragma once
 
-#include <iostream>
-#include <sstream> // For std::ostringstream
-#include <memory>
+#include <string>
 
 #include <glad/gl.h>
 // We don't need to include opengl <gl.h> because glfw does it already.
 #include <GLFW/glfw3.h>
 
-#include "constants.hpp"
+#include "global_data.hpp"
 
 namespace Core
 {
-    class Environment;
-    using environmentShPtr = std::shared_ptr<Environment>;
 
     class Shader
     {
@@ -32,16 +28,15 @@ namespace Core
         std::string vertexPath_;
         std::string fragmentPath_;
 
-        environmentShPtr environment;
-
-        ErrorConditions build();
-
     public:
         Shader() = default;
         explicit Shader(const std::string &vertexPath, const std::string &fragmentPath) : vertexPath_(vertexPath), fragmentPath_(fragmentPath) {};
         ~Shader() = default;
 
-        void initialize(environmentShPtr environment);
+        void specifyShaderFiles(const std::string &vertexPath, const std::string &fragmentPath);
+
+        void initialize();
+        ErrorConditions build();
 
         // Set by inherited class.
         GLuint program() const { return program_; };

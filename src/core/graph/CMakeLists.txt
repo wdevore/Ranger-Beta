@@ -13,10 +13,15 @@ set(GRAPH_SOURCES
 )
 
 # Add library as a ".a" file
-add_library(GraphLib OBJECT
+add_library(GraphLib STATIC
     ${GRAPH_SOURCES}
 )
 
 target_include_directories(GraphLib
  PUBLIC ../../includes
+)
+
+target_link_libraries(GraphLib
+    PUBLIC GlobalDataLib
+    PUBLIC MathsLib
 )

@@ -11,7 +11,6 @@ namespace Core
     class Environment;
     using environmentShPtr = std::shared_ptr<Environment>;
 
-    const GLuint UnBindID{0};
     const GLuint VertexAttribIndex{0};
 
     class BaseAtlas
@@ -29,10 +28,10 @@ namespace Core
         /// TODO Add docs on this
         const GLboolean GLUniformMatrixTransposed{false};
 
-        /// @brief This sets the project and positions the Origin.
+        /// @brief This sets the projection and positions the Origin.
         OrthoProjection projection{};
 
-        environmentShPtr environment;
+        // environmentShPtr environment;
 
         std::string lastError{};
 
@@ -44,7 +43,7 @@ namespace Core
         BaseAtlas(/* args */) = default;
         ~BaseAtlas() = default;
 
-        virtual void initialize(environmentShPtr environment);
+        virtual void initialize(const int deviceWidth, const int deviceHeight);
     };
 
 } // namespace Core

@@ -2,15 +2,14 @@
 #include <algorithm> // For std::find or std::find_if
 
 #include <static_mono_atlas.hpp>
-#include <constants.hpp>
-#include <environment.hpp>
 
 namespace Core
 {
-    void StaticMonoAtlas::initialize(environmentShPtr environment)
+    void StaticMonoAtlas::initialize(const int deviceWidth, const int deviceHeight)
     {
-        BaseAtlas::initialize(environment);
+        BaseAtlas::initialize(deviceWidth, deviceHeight);
         name = "StaticMonoAtlas";
+        configure();
     }
 
     ErrorConditions StaticMonoAtlas::configure()
@@ -18,7 +17,7 @@ namespace Core
         std::cout << name << "::configure" << std::endl;
 
         // Load shader pograms
-        shader.initialize(environment);
+        shader.initialize();
         ErrorConditions buildStatus = shader.build();
         if (buildStatus != ErrorConditions::None)
             return buildStatus;
@@ -33,9 +32,9 @@ namespace Core
     {
         std::cout << name << "::burn" << std::endl;
 
-        ErrorConditions configureStatus = configure();
-        if (configureStatus != ErrorConditions::None)
-            return configureStatus;
+        // ErrorConditions configureStatus = configure();
+        // if (configureStatus != ErrorConditions::None)
+        //     return configureStatus;
 
         if (andShake)
             shake();
@@ -169,17 +168,17 @@ namespace Core
         }
         std::cout << name << "::configureUniforms: viewLoc: " << viewLoc << std::endl;
 
-        int err = 0;
-        Matrix4 pm = projection.getMatrix();
-        glUniformMatrix4fv(projLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, pm.data());
-        err = checkGLError(name + "::configureUniforms:glUniformMatrix4fv(1)");
-        if (err < 0)
-            return ErrorConditions::GLFunctionError;
+        // int err = 0;
+        // Matrix4 pm = projection.getMatrix();
+        // glUniformMatrix4fv(projLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, pm.data());
+        // err = checkGLError(name + "::configureUniforms:glUniformMatrix4fv(1)");
+        // if (err < 0)
+        //     return ErrorConditions::GLFunctionError;
 
-        glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, environment->camera.viewspace.data());
-        err = checkGLError(name + "::configureUniforms:glUniformMatrix4fv(2)");
-        if (err < 0)
-            return ErrorConditions::GLFunctionError;
+        // glUniformMatrix4fv(viewLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, environment->camera.viewspace.data());
+        // err = checkGLError(name + "::configureUniforms:glUniformMatrix4fv(2)");
+        // if (err < 0)
+        //     return ErrorConditions::GLFunctionError;
 
         return ErrorConditions::None;
     }
@@ -318,6 +317,7 @@ namespace Core
     void StaticMonoAtlas::use()
     {
         glBindVertexArray(vaoID);
+        Core::checkGLError("StaticMonoAtlas::use glBindVertexArray vao");
 
         // See opengl wiki as to why "glBindVertexArray(0)" isn't really necessary here:
         // https://www.opengl.org/wiki/Vertex_Specification#Vertex_Buffer_Object
@@ -345,6 +345,7 @@ namespace Core
     void StaticMonoAtlas::setColor(const std::array<GLfloat, 4> &color)
     {
         glUniform4fv(colorLoc, Uniform4vColorCompCount, color.data());
+        Core::checkGLError("StaticMonoAtlas::setColor glUniform4fv color");
     }
 
     void StaticMonoAtlas::render(int shapeId, const Matrix4 &model)
@@ -354,7 +355,9 @@ namespace Core
         {
             // model.data() ==> (const GLfloat *)&model.e[0]
             glUniformMatrix4fv(modelLoc, GLUniformMatrixCount, GLUniformMatrixTransposed, model.data());
+            Core::checkGLError("StaticMonoAtlas::render glUniformMatrix4fv model");
             glDrawElements(shape->primitiveMode, shape->indicesCount, GL_UNSIGNED_INT, shape->dataIndicesOffset());
+            Core::checkGLError("StaticMonoAtlas::render glDrawElements");
         }
     }
 

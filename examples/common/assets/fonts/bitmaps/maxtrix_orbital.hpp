@@ -3,7 +3,7 @@
 
 namespace Core
 {
-	namespace BitmapFonts
+	namespace DarkroseFont
 	{
 		// Matrix orbital
 		static uint8_t const matrixOrbital_font[240][5] = {

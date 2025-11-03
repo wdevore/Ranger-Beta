@@ -51,10 +51,18 @@ namespace Core
         {
             // The top-left vertex is at 0,0 and bottom-right is 1,-1
             shape.vertices = {
-                1.0f, 0.0f, 0.0f,  // top right
-                1.0f, -1.0f, 0.0f, // bottom right
-                0.0f, -1.0f, 0.0f, // bottom left
-                0.0f, 0.0f, 0.0f,  // top left
+                1.0f,
+                0.0f,
+                0.0f, // top right
+                1.0f,
+                -1.0f,
+                0.0f, // bottom right
+                0.0f,
+                -1.0f,
+                0.0f, // bottom left
+                0.0f,
+                0.0f,
+                0.0f, // top left
             };
         }
 
@@ -74,7 +82,10 @@ namespace Core
         {
             // CCW
             shape.indices = {
-                0, 3, 2, 1, // Outside edges
+                0,
+                3,
+                2,
+                1, // Outside edges
             };
             shape.primitiveMode = GL_LINE_LOOP;
         }
@@ -89,26 +100,44 @@ namespace Core
         if (alignment == ShapeControls::Centered)
         {
             shape.vertices = {
-                -0.5, -0.5, 0.0,      // lower-left
-                0.5, -0.5, 0.0,       // lower-right
-                0.0, M_PI / 6.3, 0.0, // top-center
+                -0.5,
+                -0.5,
+                0.0, // lower-left
+                0.5,
+                -0.5,
+                0.0, // lower-right
+                0.0,
+                M_PI / 6.3,
+                0.0, // top-center
             };
         }
         else if (alignment == ShapeControls::TopXAxis)
         {
             // The top-left vertex is at 0,0 --> TopXAxis
             shape.vertices = {
-                -0.5, -1.0, 0.0, // lower-left
-                0.5, -1.0, 0.0,  // lower-right
-                0.0, 0.0, 0.0,   // top-center as zero
+                -0.5,
+                -1.0,
+                0.0, // lower-left
+                0.5,
+                -1.0,
+                0.0, // lower-right
+                0.0,
+                0.0,
+                0.0, // top-center as zero
             };
         }
         else
         {
             shape.vertices = {
-                -0.5, 0.0, 0.0, // lower-left as zero
-                0.5, 0.0, 0.0,  // lower-right as zero
-                0.0, 1.0, 0.0,  // top-center as 1
+                -0.5,
+                0.0,
+                0.0, // lower-left as zero
+                0.5,
+                0.0,
+                0.0, // lower-right as zero
+                0.0,
+                1.0,
+                0.0, // top-center as 1
             };
         }
 
@@ -119,7 +148,9 @@ namespace Core
             // CCW
             // Technically we could use a quad here.
             shape.indices = {
-                0, 1, 2, // Single triangle
+                0,
+                1,
+                2, // Single triangle
             };
             shape.primitiveMode = GL_TRIANGLES;
         }
@@ -127,7 +158,9 @@ namespace Core
         {
             // CCW
             shape.indices = {
-                0, 1, 2, // Outside edges
+                0,
+                1,
+                2, // Outside edges
             };
             shape.primitiveMode = GL_LINE_LOOP;
         }
@@ -140,12 +173,17 @@ namespace Core
         shape.id = nextId++;
 
         shape.vertices = {
-            -0.5f, 0.0f, 0.0f, // left
-            0.5f, 0.0f, 0.0f,  // right
+            -0.5f,
+            0.0f,
+            0.0f, // left
+            0.5f,
+            0.0f,
+            0.0f, // right
         };
 
         shape.indices = {
-            0, 1, // Single line
+            0,
+            1, // Single line
         };
 
         shape.primitiveMode = GL_LINES;
@@ -158,12 +196,17 @@ namespace Core
         shape.id = nextId++;
 
         shape.vertices = {
-            0.0f, -0.5f, 0.0f, // bottom
-            0.0f, 0.5f, 0.0f,  // top
+            0.0f,
+            -0.5f,
+            0.0f, // bottom
+            0.0f,
+            0.5f,
+            0.0f, // top
         };
 
         shape.indices = {
-            0, 1, // Single line
+            0,
+            1, // Single line
         };
 
         shape.primitiveMode = GL_LINES;
@@ -176,14 +219,25 @@ namespace Core
         shape.id = nextId++;
 
         shape.vertices = {
-            -0.5, 0.0, 0.0, // left
-            0.5, 0.0, 0.0,  // right
-            0.0, -0.5, 0.0, // bottom
-            0.0, 0.5, 0.0,  // top
+            -0.5,
+            0.0,
+            0.0, // left
+            0.5,
+            0.0,
+            0.0, // right
+            0.0,
+            -0.5,
+            0.0, // bottom
+            0.0,
+            0.5,
+            0.0, // top
         };
 
         shape.indices = {
-            0, 1, 2, 3, // Two lines
+            0,
+            1,
+            2,
+            3, // Two lines
         };
 
         shape.primitiveMode = GL_LINES;
@@ -272,7 +326,7 @@ namespace Core
         generateFontVertices(8, gapSize, ShapeControls::Filled);
         shape.name = GeneratedShapeNames::BitMapFontX; // overwrite
 
-        generateFontIndices(character, shape.indices, indicesOffsets, '!');
+        generateBitmapFontIndices(character, shape.indices, indicesOffsets, '!');
 
         // CCW
         if (fillType == ShapeControls::Filled)
@@ -356,10 +410,10 @@ namespace Core
         shape.primitiveMode = fillType == ShapeControls::Filled ? GL_TRIANGLES : GL_LINE_LOOP;
     }
 
-    int ShapeGenerator::generateFontIndices(uint64_t char8x8,
-                                            std::vector<GLuint> &indices,
-                                            std::unordered_map<char, std::pair<int, int>> &indicesGroupCounts,
-                                            char charSymbol)
+    int ShapeGenerator::generateBitmapFontIndices(uint64_t char8x8,
+                                                  std::vector<GLuint> &indices,
+                                                  std::unordered_map<char, std::pair<int, int>> &indicesGroupCounts,
+                                                  char charSymbol)
     {
         // std::ios_base::fmtflags originalFlags = std::cout.flags();
         // std::cout << "char '" << charSymbol << "': 0x" << std::hex << std::setw(16) << std::setfill('0') << char8x8 << std::dec << std::endl;

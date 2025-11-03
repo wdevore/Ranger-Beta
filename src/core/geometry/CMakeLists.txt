@@ -10,7 +10,7 @@ set(GEOM_SOURCES
 )
 
 # Add library as a ".a" file
-add_library(GeometryLib OBJECT
+add_library(GeometryLib STATIC
     ${GEOM_SOURCES}
 )
 

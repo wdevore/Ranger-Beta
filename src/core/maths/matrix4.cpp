@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include <constants.hpp>
+#include <global_data.hpp>
 #include <matrix4.hpp>
 #include <vector3.hpp>
 #include <affinetransform.hpp>

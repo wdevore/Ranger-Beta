@@ -5,28 +5,32 @@
 // #include <unistd.h> // For readlink (POSIX)
 
 #include <shader.hpp>
-#include <environment.hpp>
 
 namespace Core
 {
-    void Shader::initialize(environmentShPtr environment)
+    void Shader::specifyShaderFiles(const std::string &vertexPath, const std::string &fragmentPath)
     {
-        this->environment = environment;
+        vertexPath_ = vertexPath;
+        fragmentPath_ = fragmentPath;
+    }
 
-        // TODO Set paths
+    void Shader::initialize()
+    {
         std::ostringstream oss;
 
-        oss << environment->rootPath << environment->shadersPath << vertexPath_;
-        std::cout << "Shader::Shader vp: " << oss.str() << std::endl;
-
+        // Augment the constructed vertex path with root and shaders paths.
+        oss << rootPath << shadersPath << vertexPath_;
         vertexPath_ = oss.str();
+
+        std::cout << "Shader::Shader vp: " << vertexPath_ << std::endl;
 
         oss.str("");
         oss.clear();
 
-        oss << environment->rootPath << environment->shadersPath << fragmentPath_;
-        std::cout << "Shader::Shader fp: " << oss.str() << std::endl;
+        oss << rootPath << shadersPath << fragmentPath_;
         fragmentPath_ = oss.str();
+
+        std::cout << "Shader::Shader fp: " << fragmentPath_ << std::endl;
     }
 
     ErrorConditions Shader::read()
@@ -185,6 +189,7 @@ namespace Core
     void Shader::use()
     {
         glUseProgram(program_);
+        Core::checkGLError("Shader::use glUseProgram");
     }
 
 } // namespace Core

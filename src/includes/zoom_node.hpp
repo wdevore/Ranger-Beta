@@ -21,17 +21,19 @@ namespace Core
         ZoomTransform zoom{};
         int debug{};
 
+        Matrix4 _viewSpace;
+
     public:
         ZoomNode(/* args */) = default;
-        explicit ZoomNode(std::string name, environmentShPtr environment, nodeWkPtr parent = std::weak_ptr<Node>{})
+        explicit ZoomNode(std::string name, nodeWkPtr parent = std::weak_ptr<Node>{})
             : Node(name, parent)
         {
             std::cout << "ZoomNode Node Constructor: '" << name << "'" << id << std::endl;
-            env = environment;
         };
         ~ZoomNode() = default;
 
         int build(Core::NodeManager &nodeMan) override;
+        void setViewSpace(const Matrix4 &viewSpace) { _viewSpace = viewSpace; }
 
         /// @brief Sets the sensitivity of the zoom. If the view area
         /// is very tight then you want smaller values so that zooming

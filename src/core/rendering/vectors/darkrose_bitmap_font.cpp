@@ -7,7 +7,7 @@
 #include <dark_rose.hpp>
 #include <shape_generator.hpp>
 
-namespace Game
+namespace Core
 {
     void DarkroseBitmapFont::build()
     {
@@ -30,19 +30,36 @@ namespace Game
 
         // By reserving memory we improve efficiency and minimize any kind
         // scrambling by the allocator. I shouldn't rely on this strategy.
-        indicesGroupCounts.reserve(BitmapFonts::darkRose_font.size());
+        indicesGroupCounts.reserve(DarkroseFont::darkRose_font.size());
+        charToIndexMap.reserve(DarkroseFont::darkRose_chars.size());
 
-        for (auto &&char8x8 : BitmapFonts::darkRose_font)
+        for (int i = 0; i < DarkroseFont::darkRose_chars.size(); ++i)
         {
-            char charSymbol = BitmapFonts::darkRose_chars[charIndex];
+            charToIndexMap[DarkroseFont::darkRose_chars[i]] = i;
+        }
 
-            int indicesCount = generator.generateFontIndices(char8x8,
-                                                             generator.shape.indices,
-                                                             indicesGroupCounts,
-                                                             charSymbol);
+        for (auto &&char8x8 : DarkroseFont::darkRose_font)
+        {
+            char charSymbol = DarkroseFont::darkRose_chars[charIndex];
+
+            generator.generateBitmapFontIndices(char8x8,
+                                                generator.shape.indices,
+                                                indicesGroupCounts,
+                                                charSymbol);
 
             charIndex++;
         }
+    }
+
+    uint64_t DarkroseBitmapFont::getCharBitmap(char c)
+    {
+        auto it = charToIndexMap.find(c);
+        if (it != charToIndexMap.end())
+        {
+            return DarkroseFont::darkRose_font[it->second];
+        }
+
+        return 0; // Return 0 for characters not in the font
     }
 
     void DarkroseBitmapFont::_printBitmap(std::vector<uint8_t> bytes) const
@@ -61,4 +78,4 @@ namespace Game
             std::cout << "byte: " << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte) << " = " << std::bitset<8>(byte) << std::endl;
         }
     }
-} // namespace Game
+} // namespace Core

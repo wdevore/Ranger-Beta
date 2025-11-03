@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(COMMON_SOURCES
     src/app.cpp
-    src/color4.cpp
     src/primitive_ebo_test.cpp
+    src/ubo_buffer.cpp
 )
 
 # Add library as a ".a" file

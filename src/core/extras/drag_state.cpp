@@ -5,11 +5,15 @@
 
 namespace Core
 {
-    void DragState::initialize(nodeShPtr node, environmentShPtr environment, const Rectangle &bounds)
+    void DragState::initialize(nodeShPtr node, const Rectangle &bounds)
     {
         this->node = node;
-        this->env = environment;
         this->bounds = bounds;
+    }
+
+    void DragState::setViewSpace(const Matrix4 &viewSpace)
+    {
+        this->viewSpace = viewSpace;
     }
 
     bool DragState::handleEvent(const IOEvent &event)
@@ -52,7 +56,7 @@ namespace Core
                     isDragLocked = true;
                     panStartNodePosition_ = node->getPosition(); // Node's current position (relative to its parent)
                     // Map current global mouse coords to the parent's local coordinate space
-                    mapDeviceToNode(*env, event.x, event.y, lockedParent, panStartMouseInParentSpace_);
+                    mapDeviceToNode(viewSpace, event.x, event.y, lockedParent, panStartMouseInParentSpace_);
 
                     // std::cout << "onPanDown on " << node
                     //           << " at Global: (" << event.x << "," << event.y << ")"
@@ -63,7 +67,7 @@ namespace Core
                 else if (isDragLocked && event.type == IOEvent::Type::Moved)
                 {
                     // Map device coords into Node's parent space.
-                    mapDeviceToNode(*env, event.x, event.y, lockedParent, currentMouseInParentSpace_);
+                    mapDeviceToNode(viewSpace, event.x, event.y, lockedParent, currentMouseInParentSpace_);
 
                     panDeltaInParentSpace_.set(currentMouseInParentSpace_.x - panStartMouseInParentSpace_.x,
                                                currentMouseInParentSpace_.y - panStartMouseInParentSpace_.y);
@@ -95,7 +99,7 @@ namespace Core
 
     bool DragState::isPointInside_(double x, double y)
     {
-        mapDeviceToNode(*env, x, y, node, localPosition);
+        mapDeviceToNode(viewSpace, x, y, node, localPosition);
         return bounds.pointInside(localPosition);
     }
 } // namespace Core

@@ -23,7 +23,7 @@
 
 // and once all shapes are added you call a "burn" method which would
 // shake and bake them into the atlas. This
-namespace Game
+namespace Core
 {
     /// @brief A gap size of 0.06 works well for a font scaler of 25.0.
     ///
@@ -39,9 +39,11 @@ namespace Game
 
     /// @brief A single character is defined as 8*8 byte shape that is
     ///        compacted into a uInt64
-    class DarkroseBitmapFont final : public Core::BitmapFontBase
+    class DarkroseBitmapFont // final : public Core::BitmapFontBase
     {
     private:
+        float fontScale{1.0};
+
         /* data */
         Color4 fgColor{1.0, 0.5, 0.0, 1.0};
         Color4 bgColor{0.2, 0.2, 0.2, 1.0};
@@ -58,32 +60,17 @@ namespace Game
         ///                  Group count----|     |------ Group Offset
         std::unordered_map<char, std::pair<int, int>> indicesGroupCounts{};
 
+        std::unordered_map<char, int> charToIndexMap{};
+
     public:
         DarkroseBitmapFont(/* args */) = default;
         ~DarkroseBitmapFont() = default;
 
-        void build() override;
+        void build();
 
-        Core::ShapeGenerator getGenerator() override { return generator; }
-        std::unordered_map<char, std::pair<int, int>> getIndicesGroupData() override { return indicesGroupCounts; }
+        Core::ShapeGenerator getGenerator() { return generator; }
+        std::unordered_map<char, std::pair<int, int>> getIndicesGroupData() { return indicesGroupCounts; }
+
+        uint64_t getCharBitmap(char c);
     };
-
-    static void generateIndices(uint64_t char8x8,
-                                std::vector<GLuint> &indices,
-                                std::unordered_map<char, int> &indicesOffsets);
-
-    /// @brief Calculates the 6 EBO indices for a specific square in a grid.
-    ///
-    /// @param grid_x The 0-indexed column of the target square.
-    /// @param grid_y The 0-indexed row of the target square.
-    /// @param squaresPerSide The number of squares along one side of the grid (e.g., 8 for an 8x8 grid).
-    /// @param out_indices A reference to a std::vector<GLuint> where the 6 calculated indices will be stored.
-    ///                    The vector will be cleared before adding new indices.
-    /// @throws std::out_of_range if grid_x or grid_y are out of bounds
-    static void getSubSquareEboIndices(
-        int grid_x,
-        int grid_y,
-        int squaresPerSide,
-        std::vector<GLuint> &out_indices);
-
-} // namespace Game
+} // namespace Core

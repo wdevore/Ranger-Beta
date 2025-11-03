@@ -9,14 +9,14 @@ add_subdirectory(geometry)
 add_subdirectory(graph)
 add_subdirectory(extras)
 add_subdirectory(rendering)
+add_subdirectory(global_data)
+
 
 # This kind of a hack. I don't list any actual sources, but
 # simply create a blank variable. I should use INTERFACEs but
 # I can't get it to work.
 # Update, I decided to move constants here
 set(CORE_SOURCES
-    constants.cpp
-    environment.cpp
     io_event.cpp
 )
 
@@ -36,4 +36,5 @@ target_link_libraries(CoreLib
     PUBLIC GraphLib
     PUBLIC ExtrasLib
     PUBLIC RenderLib
+    PUBLIC GlobalDataLib
 )

@@ -4,9 +4,12 @@
 
 #include <glad/gl.h>
 
-#include "environment.hpp"
 #include "matrix4.hpp"
+#include "shader.hpp"
+#include "ortho_projection.hpp"
+#include <shape_generator.hpp>
 
+// Simple Square is a complete Atlas (buffers and shader)
 namespace Game
 {
     /// @brief A simple triangle that doesn't use a shader
@@ -14,35 +17,56 @@ namespace Game
     {
     private:
         /* data */
-        std::vector<float> vertices{
-            0.5f, 0.5f, 0.0f,   // top right
-            0.5f, -0.5f, 0.0f,  // bottom right
-            -0.5f, -0.5f, 0.0f, // bottom left
-            -0.5f, 0.5f, 0.0f   // top left
-        };
-        std::vector<unsigned int> indices{
-            0, 1, 3, // first triangle
-            1, 2, 3  // second triangle
-        };
+        Core::ShapeGenerator generator{};
+
+        std::vector<float> vertices{};
+        std::vector<unsigned int> indices{};
 
         std::string name = "SimpleSquare";
-        Core::environmentShPtr environment;
 
-        // Core::BasicShader shader{"mono_vertex.glsl", "mono_fragment.glsl"};
-        Core::BasicShader shader{"basic.vs", "basic.frag"};
+        Core::Shader shader{};
         std::string lastError{};
 
         unsigned int VBO, VAO, EBO;
+
+        GLint modelLoc{};
+        GLint colorLoc{};
+
+        // ------- Uniforms ---------------
+        // Fragment vars
+        const std::string uniColor{"fragColor"};
+        const std::string uniModel{"model"}; // \x00
+        const std::string uniProjection{"projection"};
+        const std::string uniView{"view"};
+
+        const GLsizei Uniform4vColorCompCount{1};
+
+        /// TODO Add docs on this
+        const GLsizei GLUniformMatrixCount{1};
+        /// TODO Add docs on this
+        const GLboolean GLUniformMatrixTransposed{false};
+
+        /// @brief This sets the project and positions the Origin.
+        Core::OrthoProjection projection{};
 
     public:
         SimpleSquare(/* args */);
         ~SimpleSquare();
 
-        void configure(Core::environmentShPtr environment);
+        void configure();
         void loadCompileLinkShaders();
         void bind();
+        Core::ErrorConditions configureUniforms();
 
+        GLuint getProgram() { return shader.program(); }
+        void setProjectionView();
+        GLint fetchUniformVar(GLuint program, const std::string &programName);
+
+        void begin();
+        void use();
+        void setColor(const std::array<GLfloat, 4> &color);
         void render(const Core::Matrix4 &model);
+        void dispose();
     };
 
 } // namespace Game

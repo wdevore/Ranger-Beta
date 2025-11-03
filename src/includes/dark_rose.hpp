@@ -79,9 +79,9 @@ top                    bottom
 
 */
 
-namespace Game
+namespace Core
 {
-    namespace BitmapFonts
+    namespace DarkroseFont
     {
         static std::array<char, 95> darkRose_chars{
             '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/',
@@ -193,4 +193,4 @@ namespace Game
 
     } // namespace BitFonts
 
-} // namespace Game
+} // namespace Core

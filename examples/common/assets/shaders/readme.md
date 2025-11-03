@@ -1,0 +1,1 @@
+particle_fragment_smooth2.glsl smooths the best.

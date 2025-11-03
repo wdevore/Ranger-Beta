@@ -6,8 +6,7 @@
 #include <glad/gl.h>
 
 #include "shape.hpp"
-#include "basic_shader.hpp"
-#include "constants.hpp"
+#include "shader.hpp"
 #include "base_atlas.hpp"
 
 namespace Core
@@ -52,7 +51,7 @@ namespace Core
         GLuint vboID{};
         GLuint eboID{};
 
-        BasicShader shader{"mono_vertex.glsl", "mono_fragment.glsl"};
+        Shader shader{"mono_vertex.glsl", "mono_fragment.glsl"};
 
         DynamicMonoAtlas(/* args */) = default;
         ~DynamicMonoAtlas() = default;
@@ -61,7 +60,7 @@ namespace Core
         /// @return
         ErrorConditions burn();
 
-        void initialize(environmentShPtr environment) override;
+        void initialize(const int deviceWidth, const int deviceHeight) override;
 
         int addShape(std::string name,
                      const std::vector<GLfloat> &vertices,

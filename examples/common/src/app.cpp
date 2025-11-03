@@ -1,8 +1,10 @@
 
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 
 #include "app.hpp"
-#include <constants.hpp>
+#include "global_data.hpp"
 
 namespace Game
 {
@@ -37,6 +39,89 @@ namespace Game
         return initialized;
     }
 
+    int App::configure()
+    {
+        std::cout << "App::configure" << std::endl;
+
+        setCallbacks();
+
+        loadGlad();
+
+        showOpenGLInfo();
+
+        setViewport();
+
+        return 0;
+    }
+
+    int App::setCallbacks()
+    {
+        // Set the required callback functions
+        glfwSetKeyCallback(window_, key_callback);
+        glfwSetCursorPosCallback(window_, cursor_position_callback);
+        glfwSetMouseButtonCallback(window_, mouse_button_callback);
+        glfwSetScrollCallback(window_, scroll_callback);
+        glfwSetCursorEnterCallback(window_, cursor_enter_callback);
+
+        return 0;
+    }
+
+    int App::loadGlad()
+    {
+        // Load OpenGL functions, gladLoadGL returns the loaded version, 0 on error.
+        int version = gladLoadGL(glfwGetProcAddress);
+        if (version == 0)
+        {
+            glfwTerminate();
+            return -1;
+        }
+
+        // Successfully loaded OpenGL
+        std::cout << "App::configure Loaded GLAD version:"
+                  << GLAD_VERSION_MAJOR(version) << "." << GLAD_VERSION_MINOR(version) << std::endl
+                  << "--------------------------"
+                  << " GL calls can now be made "
+                  << "--------------------------"
+                  << std::endl;
+
+        return 0;
+    }
+
+    void App::showOpenGLInfo()
+    {
+        // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+        // ---- Anything GL wise can be called after this point. -----
+        // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+
+        const GLubyte *glVersion = glGetString(GL_VERSION);
+        const GLubyte *glVendor = glGetString(GL_VENDOR);
+        const GLubyte *glRenderer = glGetString(GL_RENDERER);
+
+        if (glVersion && glVendor && glRenderer)
+        {
+            std::cout << "OpenGL Version: " << glVersion << std::endl;
+            std::cout << "OpenGL Vendor: " << glVendor << std::endl;
+            std::cout << "OpenGL Renderer: " << glRenderer << std::endl;
+        }
+        else
+        {
+            std::cerr << "Failed to retrieve OpenGL information." << std::endl;
+        }
+    }
+
+    int App::setViewport()
+    {
+        glViewport(0, 0, width, height);
+        int err = Core::checkGLError("App::createWindow:glViewport");
+        if (err < 0)
+        {
+            glfwTerminate();
+            return -1;
+        }
+
+        return 0;
+    }
+
     bool App::createWindow(const std::string &title)
     {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -66,61 +151,26 @@ namespace Game
         return true;
     }
 
-    int App::configure()
+    void App::dispose()
     {
-        std::cout << "App::configure" << std::endl;
+        std::cout << "App::dispose" << std::endl;
 
-        // Set the required callback functions
-        glfwSetKeyCallback(window_, key_callback);
-        glfwSetCursorPosCallback(window_, cursor_position_callback);
-        glfwSetMouseButtonCallback(window_, mouse_button_callback);
-        glfwSetScrollCallback(window_, scroll_callback);
-        glfwSetCursorEnterCallback(window_, cursor_enter_callback);
+        pressedKeys.clear();
 
-        // Load OpenGL functions, gladLoadGL returns the loaded version, 0 on error.
-        int version = gladLoadGL(glfwGetProcAddress);
-        if (version == 0)
-        {
-            glfwTerminate();
-            return -1;
-        }
+        // optional: de-allocate all resources once they've outlived their purpose:
+        // ------------------------------------------------------------------------
+        // Call any deconstructions on classes that implemented deconstruct().
+        int deconstructStatus = deconstruct();
 
-        // Successfully loaded OpenGL
-        std::cout << "App::configure Loaded GLAD version:"
-                  << GLAD_VERSION_MAJOR(version) << "." << GLAD_VERSION_MINOR(version) << std::endl
-                  << "--------------------------"
-                  << " GL calls can now be made "
-                  << "--------------------------"
-                  << std::endl;
+        // Detach callbacks
+        glfwSetKeyCallback(window_, nullptr);
+        glfwSetCursorPosCallback(window_, nullptr);
+        glfwSetMouseButtonCallback(window_, nullptr);
+        glfwSetScrollCallback(window_, nullptr);
+        glfwSetCursorEnterCallback(window_, nullptr);
 
-        // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-        // ---- Anything GL wise can be called after this point. -----
-        // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-
-        const GLubyte *glVersion = glGetString(GL_VERSION);
-        const GLubyte *glVendor = glGetString(GL_VENDOR);
-        const GLubyte *glRenderer = glGetString(GL_RENDERER);
-
-        if (glVersion && glVendor && glRenderer)
-        {
-            std::cout << "OpenGL Version: " << glVersion << std::endl;
-            std::cout << "OpenGL Vendor: " << glVendor << std::endl;
-            std::cout << "OpenGL Renderer: " << glRenderer << std::endl;
-        }
-        else
-        {
-            std::cerr << "Failed to retrieve OpenGL information." << std::endl;
-        }
-
-        glViewport(0, 0, width, height);
-        int err = Core::checkGLError("App::createWindow:glViewport");
-        if (err < 0)
-        {
-            glfwTerminate();
-            return -1;
-        }
-
-        return 0;
+        // Terminates GLFW, clearing any resources allocated by GLFW.
+        glfwTerminate();
     }
 
     int App::run()
@@ -161,7 +211,15 @@ namespace Game
                 lastFPSTime = currentTime;
 
                 // Now 'currentFPS' holds the frames per second
-                // std::cout << "currentFPS: " << currentFPS << std::endl;
+                std::stringstream ss;
+                // Set formatting flags:
+                // 1. std::fixed: Forces fixed-point notation (ensures a decimal point is always shown).
+                // 2. std::setprecision(2): Sets the number of digits *after the decimal point* to exactly 2.
+                ss << std::fixed << std::setprecision(2);
+
+                ss << "FPS: " << currentFPS;
+                currentFPSText = ss.str();
+                // std::cout << currentFPSText << std::endl;
             }
 
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -173,20 +231,6 @@ namespace Game
             // Optional: Limit frame rate (if needed)
             // std::this_thread::sleep_for(targetFrameDuration - deltaTime);
         }
-
-        // optional: de-allocate all resources once they've outlived their purpose:
-        // ------------------------------------------------------------------------
-        int deconstructStatus = deconstruct();
-
-        // Detach callbacks
-        glfwSetKeyCallback(window_, nullptr);
-        glfwSetCursorPosCallback(window_, nullptr);
-        glfwSetMouseButtonCallback(window_, nullptr);
-        glfwSetScrollCallback(window_, nullptr);
-        glfwSetCursorEnterCallback(window_, nullptr);
-
-        // Terminates GLFW, clearing any resources allocated by GLFW.
-        glfwTerminate();
 
         return 0;
     }
@@ -200,6 +244,15 @@ namespace Game
         // make sure the viewport matches the new window dimensions; note that width and
         // height will be significantly larger than specified on retina displays.
         glViewport(0, 0, width, height);
+    }
+
+    void App::setupSmoothing()
+    {
+        glEnable(GL_BLEND);
+        Core::checkGLError("App::glEnable(GL_BLEND)");
+
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        Core::checkGLError("App::glBlendFunc");
     }
 
     // --------------------------------------------------------------------
@@ -280,11 +333,11 @@ namespace Game
         {
             if (action == GLFW_PRESS || action == GLFW_REPEAT)
             {
-                app->environment->registerKeyPressed(key);
+                app->registerKeyPressed(key);
             }
             else if (action == GLFW_RELEASE)
             {
-                app->environment->registerKeyReleased(key);
+                app->registerKeyReleased(key);
             }
 
             app->ioEvent.setKeyboardEvent(key, scancode, app->actionToEnum(action), app->modifierToEnum(mode));

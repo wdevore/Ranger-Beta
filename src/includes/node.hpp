@@ -45,8 +45,6 @@ namespace Core
         Transform transform_;
 
     protected:
-        Core::environmentShPtr env;
-
     public:
         int id{0};
         std::string name{};

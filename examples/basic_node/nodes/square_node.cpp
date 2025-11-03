@@ -2,7 +2,6 @@
 #include <shape_generator.hpp>
 #include <environment.hpp>
 #include <shader.hpp>
-#include <shape_generator.hpp>
 #include <spaces.hpp>
 #include <vector2d.hpp>
 

@@ -6,8 +6,7 @@
 #include <glad/gl.h>
 
 #include "shape.hpp"
-#include "basic_shader.hpp"
-#include "constants.hpp"
+#include "shader.hpp"
 #include "base_atlas.hpp"
 
 namespace Core
@@ -63,7 +62,7 @@ namespace Core
         GLuint vboID{};
         GLuint eboID{};
 
-        BasicShader shader{"mono_vertex.glsl", "mono_fragment.glsl"};
+        Shader shader{"mono_vertex.glsl", "mono_fragment.glsl"};
 
         std::string lastError{};
 
@@ -73,7 +72,7 @@ namespace Core
 
         ~StaticMonoAtlas() = default;
 
-        void initialize(environmentShPtr environment) override;
+        void initialize(const int deviceWidth, const int deviceHeight) override;
 
         /// @brief Main method to call to load and compile.
         /// @return

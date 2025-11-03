@@ -6,7 +6,7 @@
 
 #include "transform_stack.hpp"
 #include "node.hpp"
-#include "constants.hpp"
+#include "global_data.hpp"
 #include "io_event.hpp"
 
 namespace Core
